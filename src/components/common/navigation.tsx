@@ -22,7 +22,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/utils";
 import { ThemeToggle } from "./theme-toggle";
 
 // Navigation items for the survey platform
