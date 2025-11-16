@@ -18,6 +18,11 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.1.1] - 2025-11-16
+### Fixed
+- fixed some minor bugs and change some structure.
+
+
 ## [0.1.0] - 2025-11-14
 ### Added
 - **Redux Toolkit Integration**

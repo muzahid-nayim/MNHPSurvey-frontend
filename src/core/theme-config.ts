@@ -1,4 +1,4 @@
-// lib/theme-config.ts
+// frontend/src/core/theme-config.ts
 export const themeConfig = {
   // Base colors - you can change these later
   colors: {

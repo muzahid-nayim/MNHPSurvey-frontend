@@ -1,4 +1,4 @@
-// src/lib/store.ts
+// frontend/src/core/store/index.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import authReducer from "@/core/store/slices/authSlice";

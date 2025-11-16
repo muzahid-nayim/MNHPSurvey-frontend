@@ -1,4 +1,4 @@
-// src/lib/api/baseQueryWithReauth.ts
+// frontend/src/core/api/baseQuery.ts
 import {
 	BaseQueryFn,
 	FetchArgs,
