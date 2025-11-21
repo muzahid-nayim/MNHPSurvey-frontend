@@ -49,19 +49,19 @@ export default function DashboardLayout({
 	const handleLogout = async () => {
 		try {
 			if (typeof window !== "undefined") {
-				const storedAuth = sessionStorage.getItem("auth");
+				const storedAuth = localStorage.getItem("auth");
 				if (storedAuth) {
 					const { refreshToken } = JSON.parse(storedAuth);
 					await logoutMutation({ refresh_token: refreshToken });
 				}
 			}
 			dispatch(logout());
-			sessionStorage.removeItem("auth");
+			localStorage.removeItem("auth");
 			router.push("/login");
 		} catch (error) {
 			console.error("Logout failed:", error);
 			dispatch(logout());
-			sessionStorage.removeItem("auth");
+			localStorage.removeItem("auth");
 			router.push("/login");
 		}
 	};

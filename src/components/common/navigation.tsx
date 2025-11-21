@@ -24,6 +24,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/core/utils";
 import { ThemeToggle } from "./theme-toggle";
+import { useSelector } from "react-redux";
+import { RootState } from "@/core/store";
 
 // Navigation items for the survey platform
 const navItems = {
@@ -60,16 +62,19 @@ const navItems = {
 
 export function Navbar() {
 	const [isOpen, setIsOpen] = React.useState(false);
-
+	
+	const { isAuthenticated, user, loading } = useSelector(
+		(state: RootState) => state.auth
+	);
 	return (
-		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80">
 			<div className="container mx-auto flex h-16 items-center justify-between">
 				{/* Logo/Brand */}
 				<Link href="/" className="flex items-center space-x-2 z-10">
-					<div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+					<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 						<SquarePen className="h-4 w-4 text-white" />
 					</div>
-					<span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+					<span className="font-bold text-lg bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 						MNHPSurvey
 					</span>
 				</Link>
@@ -110,20 +115,32 @@ export function Navbar() {
 				</div>
 
 				{/* Desktop User Actions - Hidden on mobile */}
+
 				<div className="hidden lg:flex items-center space-x-4">
 					<ThemeToggle />
-					<Link
-						href="/login"
-						className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-					>
-						Sign In
-					</Link>
-					<Link
-						href="/signup"
-						className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm hover:shadow-md"
-					>
-						Get Started
-					</Link>
+					{isAuthenticated ? (
+						<Link
+							href="/dashboard"
+							className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+						>
+							Dashboard
+						</Link>
+					) : (
+						<>
+							<Link
+								href="/login"
+								className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+							>
+								Sign In
+							</Link>
+							<Link
+								href="/signup"
+								className="bg-linear-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm hover:shadow-md"
+							>
+								Get Started
+							</Link>
+						</>
+					)}
 				</div>
 
 				{/* Mobile Menu Button - Hidden on desktop */}
@@ -145,10 +162,10 @@ export function Navbar() {
 						>
 							<SheetHeader className="text-left">
 								<SheetTitle className="flex items-center space-x-2">
-									<div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-md">
+									<div className="flex items-center justify-center w-6 h-6 bg-linear-to-br from-blue-600 to-purple-600 rounded-md">
 										<SquarePen className="h-3 w-3 text-white" />
 									</div>
-									<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+									<span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 										MNHPSurvey
 									</span>
 								</SheetTitle>
@@ -198,20 +215,32 @@ export function Navbar() {
 									<div className="flex justify-center">
 										<ThemeToggle />
 									</div>
-									<Link
-										href="/login"
-										className="block w-full text-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
-										onClick={() => setIsOpen(false)}
-									>
-										Sign In
-									</Link>
-									<Link
-										href="/signup"
-										className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm"
-										onClick={() => setIsOpen(false)}
-									>
-										Get Started
-									</Link>
+									{isAuthenticated ? (
+										<Link
+											href="/dashboard"
+											className="block w-full text-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
+											onClick={() => setIsOpen(false)}
+										>
+											Dash
+										</Link>
+									) : (
+										<>
+											<Link
+												href="/login"
+												className="block w-full text-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
+												onClick={() => setIsOpen(false)}
+											>
+												Sign In
+											</Link>
+											<Link
+												href="/signup"
+												className="block w-full text-center bg-linear-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm"
+												onClick={() => setIsOpen(false)}
+											>
+												Get Started
+											</Link>
+										</>
+									)}
 								</div>
 							</div>
 						</SheetContent>

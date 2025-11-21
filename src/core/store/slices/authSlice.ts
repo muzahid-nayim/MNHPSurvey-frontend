@@ -24,19 +24,19 @@ const initialState: AuthState = {
 // Load from session storage on client side only
 if (typeof window !== "undefined") {
 	try {
-		const storedAuth = sessionStorage.getItem("auth");
+		const storedAuth = localStorage.getItem("auth");
 		if (storedAuth) {
 			const parsed = JSON.parse(storedAuth);
 			Object.assign(initialState, parsed);
 
 			// Verify the tokens are still valid by checking if they exist
 			if (!parsed.accessToken || !parsed.refreshToken) {
-				sessionStorage.removeItem("auth");
+				localStorage.removeItem("auth");
 			}
 		}
 	} catch (e) {
 		console.error("Failed to parse stored auth:", e);
-		sessionStorage.removeItem("auth");
+		localStorage.removeItem("auth");
 	}
 }
 
@@ -61,7 +61,7 @@ const authSlice = createSlice({
 
 			// Save to session storage immediately
 			if (typeof window !== "undefined") {
-				sessionStorage.setItem(
+				localStorage.setItem(
 					"auth",
 					JSON.stringify({
 						user: action.payload.user,
@@ -79,12 +79,12 @@ const authSlice = createSlice({
 
 			// Update session storage
 			if (typeof window !== "undefined" && state.isAuthenticated) {
-				const storedAuth = sessionStorage.getItem("auth");
+				const storedAuth = localStorage.getItem("auth");
 				if (storedAuth) {
 					try {
 						const parsed = JSON.parse(storedAuth);
 						parsed.accessToken = action.payload;
-						sessionStorage.setItem("auth", JSON.stringify(parsed));
+						localStorage.setItem("auth", JSON.stringify(parsed));
 					} catch (e) {
 						console.error(
 							"Failed to update access token in storage:",
@@ -99,12 +99,12 @@ const authSlice = createSlice({
 
 			// Update session storage
 			if (typeof window !== "undefined" && state.isAuthenticated) {
-				const storedAuth = sessionStorage.getItem("auth");
+				const storedAuth = localStorage.getItem("auth");
 				if (storedAuth) {
 					try {
 						const parsed = JSON.parse(storedAuth);
 						parsed.user = action.payload;
-						sessionStorage.setItem("auth", JSON.stringify(parsed));
+						localStorage.setItem("auth", JSON.stringify(parsed));
 					} catch (e) {
 						console.error("Failed to update user in storage:", e);
 					}
@@ -121,7 +121,7 @@ const authSlice = createSlice({
 
 			// Clear from session storage
 			if (typeof window !== "undefined") {
-				sessionStorage.removeItem("auth");
+				localStorage.removeItem("auth");
 			}
 		},
 		setLoading: (state, action: PayloadAction<boolean>) => {

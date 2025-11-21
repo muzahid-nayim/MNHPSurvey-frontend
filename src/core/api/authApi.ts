@@ -1,7 +1,7 @@
 // frontend/src/core/api/authApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
-import { baseQueryWithReauth } from "./baseQuery";
+import { authBaseQuery } from "./baseQuery";
 
 
 export interface User {
@@ -73,7 +73,7 @@ export interface DeleteAccountRequest {
 
 export const authApi = createApi({
 	reducerPath: "authApi",
-	baseQuery: baseQueryWithReauth,
+	baseQuery: authBaseQuery,
 	tagTypes: ["User"],
 	endpoints: (builder) => ({
 		login: builder.mutation<LoginResponse, LoginRequest>({
