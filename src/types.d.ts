@@ -73,8 +73,8 @@ export interface CreateQuestionRequest {
   order: number;
   is_required: boolean;
   options: {
-    option_text: string;
-    order: number;
+	option_text: string;
+	order: number;
   }[];
 }
 
@@ -114,7 +114,7 @@ export interface SurveyResponse {
 
 export interface SubmitSurveyRequest {
   answers: {
-    question_id: string;
-    selected_options: string[];
+	question_id: string;
+	selected_options: string[];
   }[];
 }

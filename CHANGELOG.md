@@ -1,4 +1,3 @@
-
 ---
 
 ## 📝 `CHANGELOG.md`
@@ -17,6 +16,22 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+
+## [0.1.3] - 2025-12-03
+### Added
+- Modular survey editing components
+- Question and option management (CRUD)
+- Survey status transitions
+- Active survey editing capability
+
+### Fixed
+- Edit question button not working
+- Input field dark mode styling
+- Dropdown theme support
+
+### Changed
+- Refactored survey edit page into modular components
+- Inlined state management directly into page component
 
 ## [0.1.2] - 2025-11-21
 ### Added

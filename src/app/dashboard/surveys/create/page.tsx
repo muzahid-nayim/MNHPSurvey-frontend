@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { AccessType, DisplayMode } from "@/types";
+import type { AccessType, CreateSurveyRequest, DisplayMode } from "@/types";
 
 export default function CreateSurveyPage() {
 	const router = useRouter();
 	const [createSurvey, { isLoading }] = useCreateSurveyMutation();
 
-	const [formData, setFormData] = useState({
+	const [formData, setFormData] = useState<CreateSurveyRequest>({
 		title: "",
 		description: "",
 		access_type: "public_anonymous" as AccessType,
@@ -29,7 +29,7 @@ export default function CreateSurveyPage() {
 
 		try {
 			const result = await createSurvey(formData).unwrap();
-			router.push(`/dashboard/surveys/${result.id}`);
+			router.push(`/dashboard/surveys/`);
 		} catch (error) {
 			console.error("Failed to create survey:", error);
 			alert("Failed to create survey");
