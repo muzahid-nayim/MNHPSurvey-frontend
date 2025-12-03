@@ -17,6 +17,25 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.1.4] - 2025-12-03
+### Added
+- Enhanced dialog and form styling for better UX
+- Improved global CSS styling
+
+### Fixed
+- Option editing background color styling in dark mode
+- Input field focus/hover states
+- Dropdown select styling for dark mode
+- QuestionForm component type safety improvements
+
+### Changed
+- Updated QuestionsList component with better dark mode support
+- Enhanced SurveyEditForm styling and behavior
+- Refactored survey listing page layout
+- Updated TypeScript configuration for better type checking
+- Updated package dependencies and lock file
+- Backend URL routing formatting consistency (tabs instead of spaces)
+
 ## [0.1.3] - 2025-12-03
 ### Added
 - Modular survey editing components

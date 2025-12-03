@@ -41,7 +41,7 @@ export function QuestionForm({
 	onCancel,
 }: QuestionFormProps) {
 	return (
-		<Card>
+		<Card className="my-4">
 			<CardHeader>
 				<CardTitle>
 					{isEditing ? "Edit Question" : "Add New Question"}

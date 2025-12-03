@@ -27,6 +27,15 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "react-toastify";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LinkIcon, MoreHorizontal, Trash2 } from "lucide-react";
 
 export default function SurveysPage() {
 	const { data: surveys, isLoading, error } = useGetSurveysQuery();
@@ -79,7 +88,7 @@ export default function SurveysPage() {
 
 			{/* Survey List */}
 			{surveys && surveys.length === 0 ? (
-				<Card>
+				<Card className="max-w-md mx-auto">
 					<CardContent className="py-12 text-center">
 						<p className="text-muted-foreground mb-4">
 							No surveys yet
@@ -90,93 +99,145 @@ export default function SurveysPage() {
 					</CardContent>
 				</Card>
 			) : (
-				<div className="grid gap-4">
-					{surveys?.map((survey) => (
-						<Card key={survey.id}>
-							<CardHeader>
-								<div className="flex justify-between items-start">
-									<div>
-										<CardTitle>{survey.title}</CardTitle>
-										<CardDescription>
-											{survey.description ||
-												"No description"}
-										</CardDescription>
-									</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					{surveys?.map((survey) => {
+						const publicUrl = `${window.location.origin}/survey/${survey.id}`;
+
+						return (
+							<Card
+								key={survey.id}
+								className="overflow-hidden group hover:shadow-md transition-shadow cursor-pointer relative"
+								onClick={() =>
+									(window.location.href = `/dashboard/surveys/${survey.id}`)
+								}
+							>
+								{/* Status badge */}
+								<div className="absolute top-3 right-3 z-10">
 									<span
-										className={`px-2 py-1 rounded text-xs ${
-											survey.status === "active"
-												? "bg-green-100 text-green-800"
-												: survey.status === "draft"
-												? "bg-gray-100 text-gray-800"
-												: "bg-red-100 text-red-800"
-										}`}
+										className={`
+													  px-2 py-1 rounded-full text-xs font-medium
+													  ${
+															survey.status === "active"
+																? "bg-green-100 text-green-800"
+																: survey.status === "draft"
+																? "bg-gray-100 text-gray-800"
+																: "bg-red-100 text-red-800"
+														}
+													`}
 									>
 										{survey.status}
 									</span>
 								</div>
-							</CardHeader>
-							<CardContent>
-								<div className="flex justify-between items-center">
-									<div className="space-y-1 text-sm">
-										<p>
-											Questions: {survey.question_count}
-										</p>
-										<p>
-											Responses: {survey.response_count}
-										</p>
-										<p className="text-muted-foreground">
-											Created:{" "}
-											{new Date(
-												survey.created_at
-											).toLocaleDateString()}
-										</p>
+
+								<CardHeader className="pb-3">
+									<div>
+										<CardTitle className="truncate group-hover:text-primary">
+											{survey.title}
+										</CardTitle>
+										<CardDescription className="truncate">
+											{survey.description ||
+												"No description"}
+										</CardDescription>
 									</div>
-									<div className="flex gap-2">
-										<Link
-											href={`/dashboard/surveys/${survey.id}`}
-										>
-											<Button variant="outline">
-												Edit
-											</Button>
-										</Link>
+								</CardHeader>
+
+								<CardContent className="pt-0">
+									{/* Stats */}
+									<div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+										<div className="space-y-1">
+											<p className="font-medium">
+												Questions
+											</p>
+											<p className="text-2xl font-bold">
+												{survey.question_count}
+											</p>
+										</div>
+										<div className="space-y-1">
+											<p className="font-medium">
+												Responses
+											</p>
+											<p className="text-2xl font-bold">
+												{survey.response_count}
+											</p>
+										</div>
+									</div>
+
+									<p className="text-sm text-muted-foreground mb-4">
+										Created:{" "}
+										{new Date(
+											survey.created_at
+										).toLocaleDateString()}
+									</p>
+
+									{/* 3 Action Buttons */}
+									<div
+										className="flex gap-2"
+										onClick={(e) => e.stopPropagation()}
+									>
+										{/* Responses Button */}
 										<Link
 											href={`/dashboard/surveys/${survey.id}/responses`}
+											className="flex-1"
 										>
-											<Button variant="outline">
+											<Button
+												variant="outline"
+												size="sm"
+												className="w-full h-8 text-xs"
+												onClick={(e) =>
+													e.stopPropagation()
+												}
+											>
 												Responses
 											</Button>
 										</Link>
+
+										{/* Copy Link Button (only for active surveys) */}
 										{survey.status === "active" && (
 											<Button
 												variant="outline"
-												onClick={() => {
-													const url = `${window.location.origin}/survey/${survey.id}`;
+												size="sm"
+												className="h-8 px-3 text-xs flex-1"
+												onClick={(e) => {
+													e.stopPropagation();
 													navigator.clipboard.writeText(
-														url
+														publicUrl
 													);
-													alert(
-														"Survey link copied!"
+													toast.success(
+														"Link copied"
 													);
 												}}
 											>
 												Copy Link
 											</Button>
 										)}
+
+										{/* Delete Button */}
 										<AlertDialog>
 											<AlertDialogTrigger asChild>
-												<Button variant="destructive">
+												<Button
+													variant="destructive"
+													size="sm"
+													className="h-8 px-3 text-xs flex-1"
+													onClick={(e) =>
+														e.stopPropagation()
+													}
+												>
 													Delete
 												</Button>
 											</AlertDialogTrigger>
-											<AlertDialogContent>
+											<AlertDialogContent
+												onClick={(e) =>
+													e.stopPropagation()
+												}
+											>
 												<AlertDialogHeader>
 													<AlertDialogTitle>
 														Delete Survey
 													</AlertDialogTitle>
 													<AlertDialogDescription>
 														Are you sure? This will
-														permanently delete the
-														survey and all
+														permanently delete "
+														{survey.title}" and all
 														responses.
 													</AlertDialogDescription>
 												</AlertDialogHeader>
@@ -185,11 +246,12 @@ export default function SurveysPage() {
 														Cancel
 													</AlertDialogCancel>
 													<AlertDialogAction
-														onClick={() =>
+														onClick={(e) => {
+															e.stopPropagation();
 															handleDelete(
 																survey.id
-															)
-														}
+															);
+														}}
 													>
 														Delete
 													</AlertDialogAction>
@@ -197,10 +259,10 @@ export default function SurveysPage() {
 											</AlertDialogContent>
 										</AlertDialog>
 									</div>
-								</div>
-							</CardContent>
-						</Card>
-					))}
+								</CardContent>
+							</Card>
+						);
+					})}
 				</div>
 			)}
 		</div>

@@ -385,14 +385,7 @@ export default function EditSurveyPage() {
 						onSaveOption={handleSaveOption}
 						onDeleteOption={handleDeleteOption}
 						onCancelOptionEdit={cancelOptionEdit}
-						onEditingOptionTextChange={(text) =>
-							updateQuestionForm({
-								...questionForm,
-								options: questionForm.options.map((opt) =>
-									opt === editingOptionText ? text : opt
-								),
-							})
-						}
+						onEditingOptionTextChange={setEditingOptionText}
 					/>
 
 					{/* Add Question Button - Only show in draft status */}
@@ -401,7 +394,7 @@ export default function EditSurveyPage() {
 						survey?.status === "draft" && (
 							<Button
 								onClick={() => setShowAddQuestion(true)}
-								className="w-full mb-6 bg-blue-600 hover:bg-blue-700"
+								className="w-full mb-6 bg-blue-600 hover:bg-blue-700 my-4"
 							>
 								+ Add Question
 							</Button>
