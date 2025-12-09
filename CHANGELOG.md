@@ -17,6 +17,28 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.1.5] - 2025-12-09
+### Added
+- Private survey email management system (AllowedEmail model)
+- ManageAllowedEmails component for user profile to manage allowed emails
+- SurveyInvitationManager component for survey-specific email access control
+- Email selection during private survey creation
+- Email access verification for private survey responses
+- Professional documentation with section markers and inline comments
+- Survey creation form with shadcn Select components (replaced raw HTML selects)
+
+### Fixed
+- Survey page dark mode styling consistency
+- Response display card styling in responses page
+
+### Changed
+- Replaced HTML select elements with shadcn Select components for consistency
+- Enhanced survey creation form with professional section markers and comments
+- Updated API types (removed SurveyInvitation, added AllowedEmail)
+- Improved form validation and error handling with toast notifications
+- Refactored survey creation with better state organization and comments
+- Updated surveyApi RTK Query endpoints for email management
+
 ## [0.1.4] - 2025-12-03
 ### Added
 - Enhanced dialog and form styling for better UX

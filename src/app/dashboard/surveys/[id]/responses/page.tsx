@@ -53,9 +53,9 @@ export default function SurveyResponsesPage() {
 					</Link>
 				</div>
 				<div className="flex gap-4 text-sm">
-					<div className="px-4 py-2 bg-blue-100 rounded">
+					<Card className="px-4 py-2  rounded">
 						Total Responses: {responses?.length || 0}
-					</div>
+					</Card>
 				</div>
 			</div>
 

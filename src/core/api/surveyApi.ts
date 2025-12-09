@@ -8,7 +8,7 @@ import type {
 	Question,
 	CreateQuestionRequest,
 	QuestionOption,
-	SurveyInvitation,
+	AllowedEmail,
 	SurveyResponse,
 	SubmitSurveyRequest,
 } from "@/types";
@@ -213,28 +213,73 @@ export const surveyApi = createApi({
 		}),
 
 		// ==========================================
-		// INVITATION ENDPOINTS
+		// ALLOWED EMAILS ENDPOINTS
 		// ==========================================
 
 		/**
-		 * Send invitations
+		 * Get all allowed emails for current user
 		 */
-		sendInvitations: builder.mutation<
-			{ message: string; invitations: SurveyInvitation[] },
-			{ surveyId: string; emails: string[] }
-		>({
-			query: ({ surveyId, emails }) => ({
-				url: `/${surveyId}/invite/`,
+		getAllowedEmails: builder.query<AllowedEmail[], void>({
+			query: () => "/allowed-emails/",
+			providesTags: ["Survey"],
+		}),
+
+		/**
+		 * Create new allowed email
+		 */
+		createAllowedEmail: builder.mutation<AllowedEmail, { email: string }>({
+			query: (data) => ({
+				url: "/allowed-emails/",
 				method: "POST",
-				body: { emails },
+				body: data,
+			}),
+			invalidatesTags: ["Survey"],
+		}),
+
+		/**
+		 * Delete allowed email
+		 */
+		deleteAllowedEmail: builder.mutation<void, string>({
+			query: (id) => ({
+				url: `/allowed-emails/${id}/`,
+				method: "DELETE",
+			}),
+			invalidatesTags: ["Survey"],
+		}),
+
+		/**
+		 * Get allowed emails for a survey
+		 */
+		getSurveyAllowedEmails: builder.query<AllowedEmail[], string>({
+			query: (surveyId) => `/${surveyId}/allowed-emails/`,
+		}),
+
+		/**
+		 * Add allowed emails to survey
+		 */
+		addSurveyAllowedEmails: builder.mutation<
+			{ message: string; allowed_emails: AllowedEmail[] },
+			{ surveyId: string; allowed_email_ids: string[] }
+		>({
+			query: ({ surveyId, allowed_email_ids }) => ({
+				url: `/${surveyId}/allowed-emails/`,
+				method: "POST",
+				body: { allowed_email_ids },
 			}),
 		}),
 
 		/**
-		 * Get invitations for survey
+		 * Remove allowed email from survey
 		 */
-		getInvitations: builder.query<SurveyInvitation[], string>({
-			query: (surveyId) => `/${surveyId}/invitations/`,
+		removeSurveyAllowedEmail: builder.mutation<
+			{ message: string },
+			{ surveyId: string; allowed_email_id: string }
+		>({
+			query: ({ surveyId, allowed_email_id }) => ({
+				url: `/${surveyId}/allowed-emails/`,
+				method: "DELETE",
+				body: { allowed_email_id },
+			}),
 		}),
 
 		// ==========================================
@@ -310,8 +355,12 @@ export const {
 	useCreateOptionMutation,
 	useUpdateOptionMutation,
 	useDeleteOptionMutation,
-	useSendInvitationsMutation,
-	useGetInvitationsQuery,
+	useGetAllowedEmailsQuery,
+	useCreateAllowedEmailMutation,
+	useDeleteAllowedEmailMutation,
+	useGetSurveyAllowedEmailsQuery,
+	useAddSurveyAllowedEmailsMutation,
+	useRemoveSurveyAllowedEmailMutation,
 	useGetResponsesQuery,
 	useGetResponseQuery,
 	useGetTakeSurveyQuery,

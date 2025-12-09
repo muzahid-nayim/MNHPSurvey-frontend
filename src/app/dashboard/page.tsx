@@ -11,6 +11,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import ManageAllowedEmails from "@/components/survey/ManageAllowedEmails";
+import SurveyAllowedEmailsManager from "@/components/survey/SurveyInvitationManager";
 
 export default function DashboardPage() {
 	const { data: surveys } = useGetSurveysQuery();
@@ -80,6 +82,12 @@ export default function DashboardPage() {
 					</Link>
 				</CardContent>
 			</Card>
+
+			<div className="mt-8">
+				<ManageAllowedEmails />
+			</div>
+
+			
 		</div>
 	);
 }

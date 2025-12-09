@@ -21,6 +21,7 @@ import { SurveyHeader } from "@/components/survey/SurveyHeader";
 import { SurveyEditForm } from "@/components/survey/SurveyEditForm";
 import { QuestionsList } from "@/components/survey/QuestionsList";
 import { QuestionForm } from "@/components/survey/QuestionForm";
+import SurveyAllowedEmailsManager from "@/components/survey/SurveyInvitationManager";
 // ============END IMPORTS============
 
 // Question Form State Interface
@@ -447,6 +448,8 @@ export default function EditSurveyPage() {
 					)}
 				</>
 			)}
+
+			
 		</div>
 	);
 	// ============END MAIN RENDER============
