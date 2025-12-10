@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 			try {
 				if (typeof window !== "undefined") {
-					const storedAuth = sessionStorage.getItem("auth");
+					const storedAuth = localStorage.getItem("auth");
 
 					if (storedAuth) {
 						try {
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 										refreshError
 									);
 									dispatch(logout());
-									sessionStorage.removeItem("auth");
+									localStorage.removeItem("auth");
 								}
 							}
 						} catch (parseError) {
@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 								parseError
 							);
 							dispatch(logout());
-							sessionStorage.removeItem("auth");
+							localStorage.removeItem("auth");
 						}
 					}
 				}

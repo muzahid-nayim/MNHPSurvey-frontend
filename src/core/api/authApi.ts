@@ -1,10 +1,8 @@
-// src/lib/api/authApi.ts
+// frontend/src/core/api/authApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
-import { baseQueryWithReauth } from "./baseQuery";
+import { authBaseQuery } from "./baseQuery";
 
-const API_BASE_URL =
-	process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/users";
 
 export interface User {
 	id: string;
@@ -75,7 +73,7 @@ export interface DeleteAccountRequest {
 
 export const authApi = createApi({
 	reducerPath: "authApi",
-	baseQuery: baseQueryWithReauth,
+	baseQuery: authBaseQuery,
 	tagTypes: ["User"],
 	endpoints: (builder) => ({
 		login: builder.mutation<LoginResponse, LoginRequest>({
@@ -85,12 +83,11 @@ export const authApi = createApi({
 				body: credentials,
 			}),
 		}),
-		// In authApi.ts – add inside endpoints:
 		refreshToken: builder.mutation<{ access: string }, void>({
 			query: () => ({
 				url: "/token/refresh/",
 				method: "POST",
-				body: {}, // body will be filled by interceptor if needed
+				body: {}, 
 			}),
 		}),
 		register: builder.mutation<RegisterResponse, RegisterRequest>({

@@ -1,9 +1,8 @@
-
 ---
 
 ## 📝 `CHANGELOG.md`
 
-This file documents all notable changes to your project. Here's a template based on Semantic Versioning:
+
 
 ```markdown
 # Changelog
@@ -17,6 +16,87 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+## [0.1.6] - 2025-12-09
+### Fixed
+- moved ManageAllowedEmails component to a dialog
+- Fix some ui issues
+
+
+
+## [0.1.5] - 2025-12-09
+### Added
+- Private survey email management system (AllowedEmail model)
+- ManageAllowedEmails component for user profile to manage allowed emails
+- SurveyInvitationManager component for survey-specific email access control
+- Email selection during private survey creation
+- Email access verification for private survey responses
+- Professional documentation with section markers and inline comments
+- Survey creation form with shadcn Select components (replaced raw HTML selects)
+
+### Fixed
+- Survey page dark mode styling consistency
+- Response display card styling in responses page
+
+### Changed
+- Replaced HTML select elements with shadcn Select components for consistency
+- Enhanced survey creation form with professional section markers and comments
+- Updated API types (removed SurveyInvitation, added AllowedEmail)
+- Improved form validation and error handling with toast notifications
+- Refactored survey creation with better state organization and comments
+- Updated surveyApi RTK Query endpoints for email management
+
+## [0.1.4] - 2025-12-03
+### Added
+- Enhanced dialog and form styling for better UX
+- Improved global CSS styling
+
+### Fixed
+- Option editing background color styling in dark mode
+- Input field focus/hover states
+- Dropdown select styling for dark mode
+- QuestionForm component type safety improvements
+
+### Changed
+- Updated QuestionsList component with better dark mode support
+- Enhanced SurveyEditForm styling and behavior
+- Refactored survey listing page layout
+- Updated TypeScript configuration for better type checking
+- Updated package dependencies and lock file
+- Backend URL routing formatting consistency (tabs instead of spaces)
+
+## [0.1.3] - 2025-12-03
+### Added
+- Modular survey editing components
+- Question and option management (CRUD)
+- Survey status transitions
+- Active survey editing capability
+
+### Fixed
+- Edit question button not working
+- Input field dark mode styling
+- Dropdown theme support
+
+### Changed
+- Refactored survey edit page into modular components
+- Inlined state management directly into page component
+
+## [0.1.2] - 2025-11-21
+### Added
+- Implemented basic survey creation system (public and login-required surveys).
+- Added initial logic flow for survey visibility and participation.
+
+### Changed
+- Switched authentication persistence from `sessionStorage` to `localStorage`.
+- Updated auth slice to correctly rehydrate authentication state after reload.
+
+### Fixed
+- Minor UI and logic issues in the updated survey and auth modules.
+
+
+## [0.1.1] - 2025-11-16
+### Fixed
+- fixed some minor bugs and change some structure.
+
 
 ## [0.1.0] - 2025-11-14
 ### Added

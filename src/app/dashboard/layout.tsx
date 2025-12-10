@@ -49,19 +49,19 @@ export default function DashboardLayout({
 	const handleLogout = async () => {
 		try {
 			if (typeof window !== "undefined") {
-				const storedAuth = sessionStorage.getItem("auth");
+				const storedAuth = localStorage.getItem("auth");
 				if (storedAuth) {
 					const { refreshToken } = JSON.parse(storedAuth);
 					await logoutMutation({ refresh_token: refreshToken });
 				}
 			}
 			dispatch(logout());
-			sessionStorage.removeItem("auth");
+			localStorage.removeItem("auth");
 			router.push("/login");
 		} catch (error) {
 			console.error("Logout failed:", error);
 			dispatch(logout());
-			sessionStorage.removeItem("auth");
+			localStorage.removeItem("auth");
 			router.push("/login");
 		}
 	};
@@ -76,27 +76,27 @@ export default function DashboardLayout({
 		},
 		{
 			name: "Surveys",
-			href: "/surveys",
+			href: "/dashboard/surveys",
 			icon: FileText,
-			current: pathname.startsWith("/surveys"),
+			current: pathname.startsWith("/dashboard/surveys"),
 		},
 		{
 			name: "Analytics",
-			href: "/analytics",
+			href: "/dashboard/analytics",
 			icon: BarChart3,
-			current: pathname.startsWith("/analytics"),
+			current: pathname.startsWith("/dashboard/analytics"),
 		},
 		{
 			name: "Profile",
-			href: "/profile",
+			href: "/dashboard/profile",
 			icon: User,
-			current: pathname === "/profile",
+			current: pathname === "/dashboard/profile",
 		},
 		{
 			name: "Settings",
-			href: "/settings",
+			href: "/dashboard/settings",
 			icon: Settings,
-			current: pathname === "/settings",
+			current: pathname === "/dashboard/settings",
 		},
 	];
 
@@ -139,17 +139,17 @@ export default function DashboardLayout({
 				<div className="flex flex-col flex-1 border-r border-border bg-card/50 backdrop-blur-sm">
 					{/* Sidebar Header */}
 					<div className="flex items-center gap-3 p-6 border-b border-border">
-						<div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+						<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 							<SquarePen className="h-4 w-4 text-white" />
 						</div>
-						<span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<span className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							MNHPSurvey
 						</span>
 					</div>
 
 					{/* User Info */}
 					<div className="flex items-center gap-3 p-6 border-b border-border">
-						<div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium">
+						<div className="h-10 w-10 rounded-full bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium">
 							{user?.username?.charAt(0).toUpperCase() || "U"}
 						</div>
 						<div className="flex-1 min-w-0">
@@ -221,17 +221,17 @@ export default function DashboardLayout({
 								<div className="flex flex-col h-full">
 									{/* Mobile Sidebar Header */}
 									<div className="flex items-center gap-3 p-6 border-b border-border">
-										<div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+										<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 											<SquarePen className="h-4 w-4 text-white" />
 										</div>
-										<span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+										<span className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
 											MNHPSurvey
 										</span>
 									</div>
 
 									{/* Mobile User Info */}
 									<div className="flex items-center gap-3 p-6 border-b border-border">
-										<div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium">
+										<div className="h-10 w-10 rounded-full bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium">
 											{user?.username
 												?.charAt(0)
 												.toUpperCase() || "U"}
@@ -289,10 +289,10 @@ export default function DashboardLayout({
 							</SheetContent>
 						</Sheet>
 						<div className="flex items-center gap-2">
-							<div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded">
+							<div className="flex items-center justify-center w-6 h-6 bg-linear-to-br from-blue-600 to-purple-600 rounded">
 								<SquarePen className="h-3 w-3 text-white" />
 							</div>
-							<span className="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</div>

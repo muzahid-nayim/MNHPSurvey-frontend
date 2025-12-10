@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "react-toastify/dist/ReactToastify.css"; // Add this line
+import "react-toastify/dist/ReactToastify.css"; 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReduxProvider } from "@/components/providers/redux-provider";
 // import { AuthProvider } from "@/components/providers/auth-provider";
