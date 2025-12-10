@@ -355,6 +355,8 @@ export default function EditSurveyPage() {
 				<SurveyEditForm
 					surveyForm={editingSurveyForm}
 					isLoading={isUpdatingSurvey}
+					surveyId={surveyId}
+					accessType={survey.access_type}
 					onUpdate={(field, value) =>
 						updateSurveyForm({ [field]: value })
 					}
@@ -371,6 +373,8 @@ export default function EditSurveyPage() {
 					onStatusChange={handleStatusChange}
 				/>
 			)}
+
+			
 
 			{/* Questions Section - Hide edit form when showing survey edit */}
 			{!editingSurvey && survey && (
@@ -448,8 +452,6 @@ export default function EditSurveyPage() {
 					)}
 				</>
 			)}
-
-			
 		</div>
 	);
 	// ============END MAIN RENDER============
