@@ -40,14 +40,21 @@
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-ring: var(--sidebar-ring);
 }
-
 :root {
 	--radius: 0.625rem;
-	--background: oklch(1 0 0);
+	
+	/* ========== WHITE SHADE VARIABLES ========== */
+	/* Change these 3 variables to adjust all white shades */
+	--white-pure: oklch(100% 0.00011 271.152);               /* Pure white (for cards, popovers) */
+	--white-off: oklch(88.738% 0.11644 133.512);  /* Off-white (for sidebar) */
+	--background-light: oklch(95.514% 0.00011 271.152); /* Light gray background */
+	
+	/* ========== LIGHT THEME USING VARIABLES ========== */
+	--background: var(--background-light);    /* Uses light gray background */
 	--foreground: oklch(0.13 0.028 261.692);
-	--card: oklch(1 0 0);
+	--card: var(--white-pure);                /* Uses pure white */
 	--card-foreground: oklch(0.13 0.028 261.692);
-	--popover: oklch(1 0 0);
+	--popover: var(--white-pure);             /* Uses pure white */
 	--popover-foreground: oklch(0.13 0.028 261.692);
 	--primary: oklch(0.21 0.034 264.665);
 	--primary-foreground: oklch(0.985 0.002 247.839);
@@ -66,7 +73,7 @@
 	--chart-3: oklch(0.398 0.07 227.392);
 	--chart-4: oklch(0.828 0.189 84.429);
 	--chart-5: oklch(0.769 0.188 70.08);
-	--sidebar: oklch(0.985 0.002 247.839);
+	--sidebar: var(--white-off);              /* Uses off-white */
 	--sidebar-foreground: oklch(0.13 0.028 261.692);
 	--sidebar-primary: oklch(0.21 0.034 264.665);
 	--sidebar-primary-foreground: oklch(0.985 0.002 247.839);
@@ -77,11 +84,16 @@
 }
 
 .dark {
+	/* ========== DARK THEME VARIABLES ========== */
+	--dark-pure: oklch(0.21 0.034 264.665);   /* Dark mode "white" equivalent */
+	--dark-off: oklch(0.23 0.034 264.665);    /* Slightly lighter dark */
+	
+	/* ========== DARK THEME USING VARIABLES ========== */
 	--background: oklch(0.13 0.028 261.692);
 	--foreground: oklch(0.985 0.002 247.839);
-	--card: oklch(0.21 0.034 264.665);
+	--card: var(--dark-pure);                 /* Uses dark pure */
 	--card-foreground: oklch(0.985 0.002 247.839);
-	--popover: oklch(0.21 0.034 264.665);
+	--popover: var(--dark-pure);              /* Uses dark pure */
 	--popover-foreground: oklch(0.985 0.002 247.839);
 	--primary: oklch(0.928 0.006 264.531);
 	--primary-foreground: oklch(0.21 0.034 264.665);
@@ -100,7 +112,7 @@
 	--chart-3: oklch(0.769 0.188 70.08);
 	--chart-4: oklch(0.627 0.265 303.9);
 	--chart-5: oklch(0.645 0.246 16.439);
-	--sidebar: oklch(0.21 0.034 264.665);
+	--sidebar: var(--dark-pure);              /* Uses dark pure */
 	--sidebar-foreground: oklch(0.985 0.002 247.839);
 	--sidebar-primary: oklch(0.488 0.243 264.376);
 	--sidebar-primary-foreground: oklch(0.985 0.002 247.839);

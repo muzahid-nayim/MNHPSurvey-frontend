@@ -20,7 +20,7 @@ import {
 	Menu,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/core/utils";
 import { logout } from "@/core/store/slices/authSlice";
 
@@ -218,6 +218,10 @@ export default function DashboardLayout({
 								side="left"
 								className="w-64 p-0 bg-card/95 backdrop-blur-md"
 							>
+								<SheetHeader>
+									<SheetTitle>Navigation Menu</SheetTitle>{" "}
+									{/* ← ADD THIS */}
+								</SheetHeader>
 								<div className="flex flex-col h-full">
 									{/* Mobile Sidebar Header */}
 									<div className="flex items-center gap-3 p-6 border-b border-border">
