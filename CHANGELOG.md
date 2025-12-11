@@ -9,6 +9,11 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.1.8] - 2025-12-11
+### Fixed
+- fixed theme toggle button issue .
+
+
 ## [0.1.7] - 2025-12-10
 ### Fixed
 - fixed sheet releted issue by adding SheetHeader and SheetTitle components.

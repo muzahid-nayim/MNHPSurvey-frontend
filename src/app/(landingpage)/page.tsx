@@ -54,13 +54,13 @@ export default function HomePage() {
 	];
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20">
+		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20">
 			{/* Hero Section */}
 			<section className="container mx-auto px-4 py-24">
 				<div className="max-w-4xl mx-auto text-center">
 					<h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground mb-6">
 						Create Powerful Surveys in{" "}
-						<span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<span className="bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							Minutes
 						</span>
 					</h1>
@@ -166,7 +166,7 @@ export default function HomePage() {
 			{/* CTA Section */}
 			<section className="container mx-auto px-4 py-16">
 				<div className="max-w-3xl mx-auto text-center">
-					<Card className="border-0 shadow-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white dark:from-blue-700 dark:to-purple-800">
+					<Card className="border-0 shadow-xl bg-linear-to-br from-blue-600 to-purple-600 text-white dark:from-blue-700 dark:to-purple-800">
 						<CardContent className="p-12">
 							<h3 className="text-2xl md:text-3xl font-bold mb-4">
 								Ready to Get Started?
@@ -196,10 +196,10 @@ export default function HomePage() {
 				<div className="container mx-auto px-4 py-8">
 					<div className="flex flex-col md:flex-row justify-between items-center">
 						<div className="flex items-center space-x-2 mb-4 md:mb-0">
-							<div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-md">
+							<div className="flex items-center justify-center w-6 h-6 bg-linear-to-br from-blue-600 to-purple-600 rounded-md">
 								<Smartphone className="h-3 w-3 text-white" />
 							</div>
-							<span className="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</div>

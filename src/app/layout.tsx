@@ -38,10 +38,6 @@ export default function RootLayout({
 						theme="colored"
 					/>
 					<ThemeProvider
-						attribute="class"
-						defaultTheme="system"
-						enableSystem
-						disableTransitionOnChange
 					>
 						<AuthProvider>{children}</AuthProvider>
 					</ThemeProvider>
