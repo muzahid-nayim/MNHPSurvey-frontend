@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
 	useGetTakeSurveyQuery,
 	useSubmitSurveyMutation,
@@ -16,17 +16,26 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "react-toastify";
+import { SerializedError } from "@reduxjs/toolkit";
 
+import {
+	SurveyErrorCard,
+	SurveyNotFoundCard,
+	SurveySubmittedCard,
+} from "@/components/survey/SurveyStatusCard";
 export default function TakeSurveyPage() {
 	const params = useParams();
 	const searchParams = useSearchParams();
 	const surveyId = params.id as string;
 	const token = searchParams.get("token") || undefined;
-
+	const router = useRouter();
+	const pathname = usePathname();
 	const {
 		data: survey,
 		isLoading,
 		error,
+		refetch,
 	} = useGetTakeSurveyQuery({ surveyId, token });
 	const [submitSurvey, { isLoading: isSubmitting }] =
 		useSubmitSurveyMutation();
@@ -81,7 +90,8 @@ export default function TakeSurveyPage() {
 		);
 
 		if (missingAnswers.length > 0) {
-			alert("Please answer all required questions");
+			// alert("Please answer all required questions");
+			toast.error("Please answer all required questions");
 			return;
 		}
 
@@ -101,7 +111,8 @@ export default function TakeSurveyPage() {
 			}).unwrap();
 			setSubmitted(true);
 		} catch (error: any) {
-			alert(error?.data?.error || "Failed to submit survey");
+			// alert(error?.data?.error || "Failed to submit survey");
+			toast.error(error?.data?.error || "Failed to submit survey");
 		}
 	};
 
@@ -115,46 +126,33 @@ export default function TakeSurveyPage() {
 
 	if (error) {
 		return (
-			<div className="container mx-auto py-8 max-w-3xl">
-				<Card>
-					<CardContent className="py-12 text-center">
-						<p className="text-red-500">
-							Failed to load survey. You may not have access to
-							this survey.
-						</p>
-					</CardContent>
-				</Card>
-			</div>
+			<SurveyErrorCard
+				error={error}
+				title="Oops! Failed to Load"
+				
+			/>
 		);
 	}
 
 	if (!survey) {
 		return (
-			<div className="container mx-auto py-8 max-w-3xl">
-				<Card>
-					<CardContent className="py-12 text-center">
-						<p>Survey not found</p>
-					</CardContent>
-				</Card>
-			</div>
+			<SurveyNotFoundCard
+				message="This survey has been deleted by the creator"
+			/>
 		);
 	}
 
 	if (submitted) {
 		return (
-			<div className="container mx-auto py-8 max-w-3xl">
-				<Card>
-					<CardContent className="py-12 text-center">
-						<h2 className="text-2xl font-bold mb-4">Thank You!</h2>
-						<p className="text-muted-foreground">
-							Your response has been submitted successfully.
-						</p>
-					</CardContent>
-				</Card>
-			</div>
+			<SurveySubmittedCard
+				message="Thank you for your valuable feedback!"
+				onCopyLink={() => {
+					navigator.clipboard.writeText(pathname);
+					toast.success("Link copied to clipboard!");
+				}}
+			/>
 		);
 	}
-
 	// Calculate questions to show based on display mode
 	const getQuestionsToShow = () => {
 		if (!survey.questions) return [];

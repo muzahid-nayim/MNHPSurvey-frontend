@@ -22,6 +22,7 @@ import { SurveyEditForm } from "@/components/survey/SurveyEditForm";
 import { QuestionsList } from "@/components/survey/QuestionsList";
 import { QuestionForm } from "@/components/survey/QuestionForm";
 import SurveyAllowedEmailsManager from "@/components/survey/SurveyInvitationManager";
+import { toast } from "react-toastify";
 // ============END IMPORTS============
 
 // Question Form State Interface
@@ -190,9 +191,9 @@ export default function EditSurveyPage() {
 				data: editingSurveyForm,
 			}).unwrap();
 			cancelSurveyEdit();
-			alert("Survey updated successfully!");
+			toast.success("Survey updated successfully!");
 		} catch (error) {
-			alert("Failed to update survey");
+			toast.error("Failed to update survey");
 		}
 	};
 
@@ -215,7 +216,7 @@ export default function EditSurveyPage() {
 			(opt) => opt.trim() !== ""
 		);
 		if (validOptions.length < 2) {
-			alert("Add at least 2 options");
+			toast.info("Add at least 2 options");
 			return;
 		}
 
@@ -236,7 +237,7 @@ export default function EditSurveyPage() {
 						})),
 					},
 				}).unwrap();
-				alert("Question updated successfully!");
+				toast.success("Question updated successfully!");
 				cancelQuestionEdit();
 			} else {
 				// Create new question
@@ -258,7 +259,7 @@ export default function EditSurveyPage() {
 				setShowAddQuestion(false);
 			}
 		} catch (error) {
-			alert(
+			toast.error(
 				editingQuestionId
 					? "Failed to update question"
 					: "Failed to create question"
@@ -272,7 +273,7 @@ export default function EditSurveyPage() {
 		try {
 			await deleteQuestion({ surveyId, questionId }).unwrap();
 		} catch (error) {
-			alert("Failed to delete question");
+			toast.error("Failed to delete question");
 		}
 	};
 
@@ -288,9 +289,9 @@ export default function EditSurveyPage() {
 				data: { option_text: editingOptionText },
 			}).unwrap();
 			cancelOptionEdit();
-			alert("Option updated successfully!");
+			toast.success("Option updated successfully!");
 		} catch (error) {
-			alert("Failed to update option");
+			toast.error("Failed to update option");
 		}
 	};
 
@@ -300,7 +301,7 @@ export default function EditSurveyPage() {
 		try {
 			await deleteOption({ surveyId, questionId, optionId }).unwrap();
 		} catch (error) {
-			alert("Failed to delete option");
+			toast.error("Failed to delete option");
 		}
 	};
 
@@ -308,24 +309,24 @@ export default function EditSurveyPage() {
 	const handleStatusChange = async (newStatus: string) => {
 		try {
 			await updateStatus({ id: surveyId, status: newStatus }).unwrap();
-			alert(`Survey status changed to ${newStatus}`);
+			toast.update(`Survey status changed to ${newStatus}`);
 		} catch (error) {
-			alert("Failed to change survey status");
+			toast.error("Failed to change survey status");
 		}
 	};
 
 	// Publish Handler
 	const handlePublish = async () => {
 		if (!survey?.questions || survey.questions.length === 0) {
-			alert("Add at least one question before publishing");
+			toast.info("Add at least one question before publishing");
 			return;
 		}
 
 		try {
 			await updateStatus({ id: surveyId, status: "active" }).unwrap();
-			alert("Survey published!");
+			toast.success("Survey published!");
 		} catch (error) {
-			alert("Failed to publish survey");
+			toast.error("Failed to publish survey");
 		}
 	};
 
@@ -369,7 +370,6 @@ export default function EditSurveyPage() {
 					survey={survey!}
 					onEditClick={handleEditSurvey}
 					onPublish={handlePublish}
-					onChangeStatus={handleStatusChange}
 					onStatusChange={handleStatusChange}
 				/>
 			)}

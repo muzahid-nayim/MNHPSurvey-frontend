@@ -1,11 +1,3 @@
----
-
-## 📝 `CHANGELOG.md`
-
-
-
-```markdown
-# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -16,12 +8,35 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
-## [0.1.6] - 2025-12-09
+
+## [0.1.9] - 2025-12-15
+### Fixed
+- Fixed copy to clipboard issue in SurveyHeader component
+- make survey page card reusable
+- Fixed email is not adding in edit survey section
+- Fixed auth issue (logged out automatically after some time by deleteing auth key and value from localstorage)
+
+### Added
+- Show warning if survey is draft or inactive in survey page
+- Update toster
+- show exact issue in card in survey page
+
+## [0.1.8] - 2025-12-11
+### Fixed
+- fixed theme toggle button issue .
+
+
+## [0.1.7] - 2025-12-10
+### Fixed
+- fixed sheet releted issue by adding SheetHeader and SheetTitle components.
+
+### Changed
+- Change white theme color to little  offwhite 
+
+## [0.1.6] - 2025-12-10
 ### Fixed
 - moved ManageAllowedEmails component to a dialog
 - Fix some ui issues
-
-
 
 ## [0.1.5] - 2025-12-09
 ### Added
@@ -172,4 +187,4 @@ We follow [Semantic Versioning](https://semver.org/):
 - Configured PostgreSQL database connection.
 - Implemented basic user authentication and admin panel.
 
----
+

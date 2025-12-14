@@ -243,7 +243,7 @@ export default function CreateSurveyPage() {
 						{/* (Only visible for private surveys) */}
 						{/* ============================ */}
 						{formData.access_type === "private_invited" && (
-							<div className="space-y-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+							<div className="space-y-3 p-4 border border-blue-200 rounded-lg">
 								<Label className="font-semibold text-blue-900">
 									Select Allowed Emails *
 								</Label>
@@ -255,7 +255,7 @@ export default function CreateSurveyPage() {
 									</div>
 								) : userAllowedEmails.length === 0 ? (
 									/* No emails configured state */
-									<div className="p-3 bg-blue-100 rounded text-sm text-blue-900">
+									<div className="p-3 rounded text-sm text-blue-900">
 										<p className="font-medium">
 											No allowed emails configured yet.
 										</p>
@@ -271,7 +271,7 @@ export default function CreateSurveyPage() {
 											(email: AllowedEmail) => (
 												<div
 													key={email.id}
-													className="flex items-center gap-3 p-3 border rounded hover:bg-blue-100 transition cursor-pointer"
+													className="flex items-center gap-3 p-3 border rounded hover:bg-secondary transition cursor-pointer"
 													onClick={() =>
 														toggleEmailSelection(
 															email.id
@@ -293,7 +293,7 @@ export default function CreateSurveyPage() {
 													/>
 													<label
 														htmlFor={`email-${email.id}`}
-														className="flex-1 font-medium cursor-pointer text-blue-900"
+														className="flex-1 font-medium cursor-pointer "
 													>
 														{email.email}
 													</label>
@@ -313,8 +313,8 @@ export default function CreateSurveyPage() {
 
 								{/* Selection summary */}
 								{selectedEmails.length > 0 && (
-									<div className="mt-3 p-3 bg-green-100 rounded-lg">
-										<p className="text-sm font-medium text-green-900">
+									<div className="mt-3 p-3 bg-secondary  rounded-lg">
+										<p className="text-sm font-medium ">
 											✓ {selectedEmails.length} email(s)
 											selected
 										</p>

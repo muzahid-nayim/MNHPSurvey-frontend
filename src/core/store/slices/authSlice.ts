@@ -1,7 +1,6 @@
-// frontend/src/core/store/slices/authSlice.ts
-import { User } from "@/core/api/authApi";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { User } from "../api/authApi";
+import { User } from "@/core/api/authApi";
+import { loadAuth, saveAuth, clearAuth } from "@/utils/storage";
 
 interface AuthState {
 	user: User | null;
@@ -12,7 +11,8 @@ interface AuthState {
 	error: string | null;
 }
 
-const initialState: AuthState = {
+// 1. load once at boot
+const initialState: AuthState = loadAuth() ?? {
 	user: null,
 	accessToken: null,
 	refreshToken: null,
@@ -20,25 +20,6 @@ const initialState: AuthState = {
 	loading: false,
 	error: null,
 };
-
-// Load from session storage on client side only
-if (typeof window !== "undefined") {
-	try {
-		const storedAuth = localStorage.getItem("auth");
-		if (storedAuth) {
-			const parsed = JSON.parse(storedAuth);
-			Object.assign(initialState, parsed);
-
-			// Verify the tokens are still valid by checking if they exist
-			if (!parsed.accessToken || !parsed.refreshToken) {
-				localStorage.removeItem("auth");
-			}
-		}
-	} catch (e) {
-		console.error("Failed to parse stored auth:", e);
-		localStorage.removeItem("auth");
-	}
-}
 
 const authSlice = createSlice({
 	name: "auth",
@@ -52,83 +33,40 @@ const authSlice = createSlice({
 				refreshToken: string;
 			}>
 		) => {
-			state.user = action.payload.user;
-			state.accessToken = action.payload.accessToken;
-			state.refreshToken = action.payload.refreshToken;
-			state.isAuthenticated = true;
-			state.loading = false;
-			state.error = null;
-
-			// Save to session storage immediately
-			if (typeof window !== "undefined") {
-				localStorage.setItem(
-					"auth",
-					JSON.stringify({
-						user: action.payload.user,
-						accessToken: action.payload.accessToken,
-						refreshToken: action.payload.refreshToken,
-						isAuthenticated: true,
-						loading: false,
-						error: null,
-					})
-				);
-			}
+			const payload = {
+				user: action.payload.user,
+				accessToken: action.payload.accessToken,
+				refreshToken: action.payload.refreshToken,
+				isAuthenticated: true,
+				loading: false,
+				error: null,
+			};
+			Object.assign(state, payload);
+			saveAuth(payload); // <- WRITE
 		},
+
 		updateAccessToken: (state, action: PayloadAction<string>) => {
 			state.accessToken = action.payload;
-
-			// Update session storage
-			if (typeof window !== "undefined" && state.isAuthenticated) {
-				const storedAuth = localStorage.getItem("auth");
-				if (storedAuth) {
-					try {
-						const parsed = JSON.parse(storedAuth);
-						parsed.accessToken = action.payload;
-						localStorage.setItem("auth", JSON.stringify(parsed));
-					} catch (e) {
-						console.error(
-							"Failed to update access token in storage:",
-							e
-						);
-					}
-				}
-			}
+			saveAuth(state); // <- WRITE
 		},
+
 		updateUser: (state, action: PayloadAction<User>) => {
 			state.user = action.payload;
-
-			// Update session storage
-			if (typeof window !== "undefined" && state.isAuthenticated) {
-				const storedAuth = localStorage.getItem("auth");
-				if (storedAuth) {
-					try {
-						const parsed = JSON.parse(storedAuth);
-						parsed.user = action.payload;
-						localStorage.setItem("auth", JSON.stringify(parsed));
-					} catch (e) {
-						console.error("Failed to update user in storage:", e);
-					}
-				}
-			}
+			saveAuth(state); // <- WRITE
 		},
+
 		logout: (state) => {
-			state.user = null;
-			state.accessToken = null;
-			state.refreshToken = null;
-			state.isAuthenticated = false;
-			state.loading = false;
-			state.error = null;
-
-			// Clear from session storage
-			if (typeof window !== "undefined") {
-				localStorage.removeItem("auth");
-			}
+			Object.assign(state, initialState);
+			clearAuth(); // <- CLEAR
 		},
+
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.loading = action.payload;
+			saveAuth(state); // <- optional, keeps loading flag too
 		},
 		setError: (state, action: PayloadAction<string | null>) => {
 			state.error = action.payload;
+			saveAuth(state);
 		},
 	},
 });

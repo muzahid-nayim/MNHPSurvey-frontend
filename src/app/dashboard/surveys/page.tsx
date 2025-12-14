@@ -28,20 +28,15 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "react-toastify";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { LinkIcon, MoreHorizontal, Trash2 } from "lucide-react";
+import { useClipboard } from "@/hooks/useClipboard";
 
 export default function SurveysPage() {
 	const { data: surveys, isLoading, error } = useGetSurveysQuery();
 	const [deleteSurvey] = useDeleteSurveyMutation();
 	const [deleteId, setDeleteId] = useState<string | null>(null);
-
+	const { copyToClipboard } = useClipboard();
 	const handleDelete = async (id: string) => {
 		try {
 			await deleteSurvey(id).unwrap();
@@ -106,7 +101,8 @@ export default function SurveysPage() {
 						return (
 							<Card
 								key={survey.id}
-								className="overflow-hidden group hover:shadow-md transition-shadow cursor-pointer relative"
+								className="overflow-hidden group
+								 hover:shadow-md transition-shadow cursor-pointer relative"
 								onClick={() =>
 									(window.location.href = `/dashboard/surveys/${survey.id}`)
 								}
@@ -199,12 +195,7 @@ export default function SurveysPage() {
 												className="h-8 px-3 text-xs flex-1"
 												onClick={(e) => {
 													e.stopPropagation();
-													navigator.clipboard.writeText(
-														publicUrl
-													);
-													toast.success(
-														"Link copied"
-													);
+													copyToClipboard(publicUrl, "Survey link copied to clipboard!");
 												}}
 											>
 												Copy Link

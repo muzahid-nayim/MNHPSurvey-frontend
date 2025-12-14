@@ -5,8 +5,7 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css"; 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReduxProvider } from "@/components/providers/redux-provider";
-// import { AuthProvider } from "@/components/providers/auth-provider";
-import { ToastContainer } from "react-toastify";
+import { Flip, ToastContainer } from "react-toastify";
 import { AuthProvider } from "@/components/providers/auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -36,12 +35,9 @@ export default function RootLayout({
 						draggable
 						pauseOnHover
 						theme="colored"
+						transition={Flip}
 					/>
 					<ThemeProvider
-						attribute="class"
-						defaultTheme="system"
-						enableSystem
-						disableTransitionOnChange
 					>
 						<AuthProvider>{children}</AuthProvider>
 					</ThemeProvider>

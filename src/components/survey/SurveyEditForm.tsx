@@ -1,4 +1,4 @@
-// src/components/survey/SurveyEditForm.tsx
+// src/components/survey/SurveyEditForm.tsx - COMPLETELY FIXED
 "use client";
 
 import { useState } from "react";
@@ -25,11 +25,6 @@ import {
 	Mail,
 	Users,
 	Lock,
-	X,
-	Plus,
-	Check,
-	Trash2,
-	Send,
 } from "lucide-react";
 import type { Survey } from "@/types";
 import {
@@ -40,10 +35,8 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { toast } from "react-toastify";
+import SurveyAllowedEmailsManager from "./SurveyInvitationManager";
 
 interface SurveyEditFormProps {
 	surveyForm: Partial<Survey> | null;
@@ -87,25 +80,22 @@ export function SurveyEditForm({
 							</CardDescription>
 						</div>
 					</div>
-					
-						<Badge variant="outline" className="gap-1">
-							{accessType}
-						</Badge>
-					
+					<Badge variant="outline" className="gap-1">
+						{accessType}
+					</Badge>
 				</div>
 			</CardHeader>
 
 			<CardContent className="pt-6">
-				{/* Quick Access Card for Private Surveys */}
 				{isPrivateInvited && surveyId && (
-					<div className="mb-6 p-4 border  rounded-lg bg-linear-to-r ">
+					<div className="mb-6 p-4 border rounded-lg bg-linear-to-r">
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-3">
-								<div className="p-2 rounded-lg ">
+								<div className="p-2 rounded-lg bg-white border border-blue-200">
 									<Users className="h-4 w-4 text-blue-600" />
 								</div>
 								<div>
-									<h4 className="font-medium ">
+									<h4 className="font-medium text-blue-900">
 										Private Survey Access
 									</h4>
 									<p className="text-sm text-muted-foreground">
@@ -134,7 +124,6 @@ export function SurveyEditForm({
 				)}
 
 				<form onSubmit={onSave} className="space-y-6">
-					{/* Title Input */}
 					<div className="space-y-3">
 						<div className="flex items-center gap-2">
 							<Type className="h-4 w-4 text-muted-foreground" />
@@ -159,7 +148,6 @@ export function SurveyEditForm({
 						</p>
 					</div>
 
-					{/* Description Input */}
 					<div className="space-y-3">
 						<div className="flex items-center gap-2">
 							<AlignLeft className="h-4 w-4 text-muted-foreground" />
@@ -185,14 +173,12 @@ export function SurveyEditForm({
 						</p>
 					</div>
 
-					{/* Survey Settings Section */}
 					<div className="space-y-4 pt-4 border-t">
 						<h3 className="text-lg font-semibold flex items-center gap-2">
 							<Settings2 className="h-4 w-4" />
 							Survey Settings
 						</h3>
 
-						{/* Allow Multiple Responses */}
 						<div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-accent/50 transition-colors">
 							<Checkbox
 								id="allow_multiple"
@@ -222,7 +208,6 @@ export function SurveyEditForm({
 							</div>
 						</div>
 
-						{/* Show Progress Bar */}
 						<div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-accent/50 transition-colors">
 							<Checkbox
 								id="show_progress"
@@ -247,12 +232,11 @@ export function SurveyEditForm({
 						</div>
 					</div>
 
-					{/* Form Buttons */}
 					<div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
 						<Button
 							type="submit"
 							disabled={isLoading}
-							className="sm:flex-1 h-11 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
+							className="sm:flex-1 h-11 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
 						>
 							{isLoading ? (
 								<>
@@ -279,7 +263,7 @@ export function SurveyEditForm({
 	);
 }
 
-// Simplified Email Access Dialog Component
+// FIXED EmailAccessDialog - RESPONSIVE AND PROPER SIZING
 function EmailAccessDialog({
 	surveyId,
 	onClose,
@@ -287,56 +271,17 @@ function EmailAccessDialog({
 	surveyId: string;
 	onClose: () => void;
 }) {
-	// Mock data - replace with your actual API calls
-	const [selectedEmails, setSelectedEmails] = useState<string[]>(["1", "2"]);
-	const [newEmail, setNewEmail] = useState("");
-	const [isSaving, setIsSaving] = useState(false);
-
-	// Mock data - replace with your API data
-	const userEmails = [
-		{ id: "1", email: "john@example.com" },
-		{ id: "2", email: "jane@example.com" },
-		{ id: "3", email: "alex@company.com" },
-	];
-
-	const handleToggleEmail = (emailId: string) => {
-		setSelectedEmails((prev) =>
-			prev.includes(emailId)
-				? prev.filter((id) => id !== emailId)
-				: [...prev, emailId]
-		);
-	};
-
-	const handleAddEmail = () => {
-		if (!newEmail.trim()) {
-			toast.info("Please enter an email address");
-			return;
-		}
-
-		toast.info(`Email ${newEmail} has been added`);
-		setSelectedEmails((prev) => [...prev, newEmail]);
-		
-		setNewEmail("");
-	};
-
-	const handleSave = () => {
-		setIsSaving(true);
-		setTimeout(() => {
-			toast.info("Survey invitations have been updated");
-			setIsSaving(false);
-			onClose();
-		}, 1000);
-	};
-
 	return (
-		<DialogContent className="sm:max-w-[500px]">
-			<DialogHeader>
+		<DialogContent className="max-w-5xl w-[95vw] h-[90vh] p-0 overflow-hidden">
+			<DialogHeader className="px-6 pt-6">
 				<div className="flex items-center gap-3">
 					<div className="p-2 rounded-lg bg-primary/10">
 						<Shield className="h-5 w-5 text-primary" />
 					</div>
 					<div>
-						<DialogTitle>Manage Email Invitations</DialogTitle>
+						<DialogTitle className="text-xl">
+							Manage Email Invitations
+						</DialogTitle>
 						<DialogDescription>
 							Control who can access this private survey
 						</DialogDescription>
@@ -344,112 +289,13 @@ function EmailAccessDialog({
 				</div>
 			</DialogHeader>
 
-			<div className="space-y-4">
-				{/* Add Email Form */}
-				<div className="space-y-2">
-					<Label>Add New Email</Label>
-					<div className="flex gap-2">
-						<div className="relative flex-1">
-							<Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-							<Input
-								type="email"
-								placeholder="user@example.com"
-								value={newEmail}
-								onChange={(e) => setNewEmail(e.target.value)}
-								onKeyDown={(e) =>
-									e.key === "Enter" && handleAddEmail()
-								}
-								className="pl-9"
-							/>
-						</div>
-						<Button
-							onClick={handleAddEmail}
-							disabled={!newEmail.trim()}
-						>
-							<Plus className="h-4 w-4" />
-						</Button>
-					</div>
-				</div>
-
-				<Separator />
-
-				{/* Email List */}
-				<div className="space-y-3">
-					<div className="flex items-center justify-between">
-						<Label>
-							Select Emails ({selectedEmails.length} selected)
-						</Label>
-						<Badge variant="outline">
-							{userEmails.length} total
-						</Badge>
-					</div>
-
-					<ScrollArea className="h-[300px] border rounded-lg p-2">
-						{userEmails.map((email) => (
-							<div
-								key={email.id}
-								className={`flex items-center justify-between p-3 rounded-lg mb-2 transition-colors ${
-									selectedEmails.includes(email.id)
-										? "bg-primary/5 border border-primary/20"
-										: "hover:bg-muted/50"
-								}`}
-							>
-								<div className="flex items-center gap-3">
-									<Checkbox
-										checked={selectedEmails.includes(
-											email.id
-										)}
-										onCheckedChange={() =>
-											handleToggleEmail(email.id)
-										}
-									/>
-									<div className="flex items-center gap-2">
-										<div className="p-1.5 rounded-md bg-muted">
-											<Mail className="h-3.5 w-3.5" />
-										</div>
-										<span className="text-sm">
-											{email.email}
-										</span>
-									</div>
-								</div>
-								{selectedEmails.includes(email.id) && (
-									<Badge
-										variant="secondary"
-										className="gap-1"
-									>
-										<Check className="h-3 w-3" />
-										Selected
-									</Badge>
-								)}
-							</div>
-						))}
-					</ScrollArea>
-				</div>
-
-				{/* Action Buttons */}
-				<div className="flex gap-3 pt-4">
-					<Button
-						variant="outline"
-						onClick={onClose}
-						className="flex-1"
-					>
-						Cancel
-					</Button>
-					<Button
-						onClick={handleSave}
-						disabled={isSaving}
-						className="flex-1"
-					>
-						{isSaving ? (
-							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Saving...
-							</>
-						) : (
-							"Save Changes"
-						)}
-					</Button>
-				</div>
+			{/* This is the container that allows scrolling */}
+			<div className="px-6 pb-6 h-[calc(90vh-100px)] overflow-y-auto">
+				<SurveyAllowedEmailsManager
+					accessType="private_invited"
+					surveyId={surveyId}
+					className="space-y-4!"
+				/>
 			</div>
 		</DialogContent>
 	);
