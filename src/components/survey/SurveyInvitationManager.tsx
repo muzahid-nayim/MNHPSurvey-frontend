@@ -1,16 +1,6 @@
+// src/components/survey/SurveyInvitationManager.tsx - FIXED FOR DIALOG
 /**
  * SurveyAllowedEmailsManager Component
- *
- * Purpose: Manage email access for private invited surveys
- * Allows users to:
- * - View their saved allowed emails
- * - Select/deselect emails to grant survey access
- * - Add new emails directly within the survey editor
- * - Remove emails from survey access
- *
- * Props:
- *   - surveyId: ID of the survey being edited
- *   - accessType: Survey access type (only renders for "private_invited")
  */
 
 import { useState, useEffect, useRef } from "react";
@@ -55,7 +45,6 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -67,12 +56,10 @@ interface Props {
 export default function SurveyAllowedEmailsManager({
 	surveyId,
 	accessType,
-	className
+	className,
 }: Props) {
-	// Only render for private invited surveys
 	if (accessType !== "private_invited") return null;
 
-	// ============START STATE & HOOKS============
 	const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
 	const [isSaving, setIsSaving] = useState(false);
 	const [newEmail, setNewEmail] = useState("");
@@ -86,9 +73,7 @@ export default function SurveyAllowedEmailsManager({
 	const [addEmails] = useAddSurveyAllowedEmailsMutation();
 	const [removeEmail] = useRemoveSurveyAllowedEmailMutation();
 	const [createAllowedEmail] = useCreateAllowedEmailMutation();
-	// ============END STATE & HOOKS============
 
-	// ============START INITIALIZATION============
 	useEffect(() => {
 		if (!isLoadingSurveyEmails && !initializedRef.current) {
 			const emailIds = surveyAllowedEmails.map((email) => email.id);
@@ -96,9 +81,7 @@ export default function SurveyAllowedEmailsManager({
 			initializedRef.current = true;
 		}
 	}, [isLoadingSurveyEmails, surveyAllowedEmails]);
-	// ============END INITIALIZATION============
 
-	// ============START EVENT HANDLERS============
 	const handleToggleEmail = (emailId: string) => {
 		setSelectedEmails((prev) =>
 			prev.includes(emailId)
@@ -114,14 +97,9 @@ export default function SurveyAllowedEmailsManager({
 				surveyId,
 				allowed_email_ids: selectedEmails,
 			}).unwrap();
-
 			toast.success("Survey access has been updated successfully.");
 		} catch (error: any) {
-			toast.error(
-				error.data?.error || "Failed to update survey access"
-			);
-		
-			
+			toast.error(error.data?.error || "Failed to update survey access");
 			const emailIds = surveyAllowedEmails.map((email) => email.id);
 			setSelectedEmails(emailIds);
 		} finally {
@@ -135,14 +113,10 @@ export default function SurveyAllowedEmailsManager({
 				surveyId,
 				allowed_email_id: emailId,
 			}).unwrap();
-
 			setSelectedEmails((prev) => prev.filter((id) => id !== emailId));
 			toast.info("Email has been removed from survey access.");
 		} catch (error: any) {
-			toast.error(
-				error.data?.error || "Failed to remove email"
-			);
-			
+			toast.error(error.data?.error || "Failed to remove email");
 		}
 	};
 
@@ -163,7 +137,6 @@ export default function SurveyAllowedEmailsManager({
 			const response = await createAllowedEmail({
 				email: newEmail.trim(),
 			}).unwrap();
-
 			setSelectedEmails((prev) => [...prev, response.id]);
 			setNewEmail("");
 			toast.info("Email has been added to your allowed list.");
@@ -177,9 +150,7 @@ export default function SurveyAllowedEmailsManager({
 			setIsAddingEmail(false);
 		}
 	};
-	// ============END EVENT HANDLERS============
 
-	// ============START DERIVED STATE============
 	const isLoading = isLoadingUserEmails || isLoadingSurveyEmails;
 	const hasChanges =
 		JSON.stringify(selectedEmails.sort()) !==
@@ -202,30 +173,9 @@ export default function SurveyAllowedEmailsManager({
 			</div>
 		);
 	}
-	// ============END DERIVED STATE============
 
-	// ============START MAIN RENDER============
 	return (
-		<div className={`space-y-6 ${className || ''}`}>
-			<div className="space-y-2">
-				<div className="flex items-center gap-3">
-					<div className="p-2 rounded-lg bg-primary/10">
-						<Shield className="h-5 w-5 text-primary" />
-					</div>
-					<div>
-						<h3 className="text-lg font-semibold">
-							Private Survey Access
-						</h3>
-						<p className="text-sm text-muted-foreground">
-							Manage who can access this survey by email
-							invitation
-						</p>
-					</div>
-				</div>
-				<Separator />
-			</div>
-
-			{/* ADD NEW EMAIL SECTION */}
+		<div className={`space-y-4 ${className || ""}`}>
 			<Card className="border-primary/20 shadow-sm">
 				<CardHeader className="pb-3">
 					<CardTitle className="text-base flex items-center gap-2">
@@ -238,7 +188,7 @@ export default function SurveyAllowedEmailsManager({
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="flex gap-2">
+					<div className="flex flex-col sm:flex-row gap-2">
 						<div className="relative flex-1">
 							<Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 							<Input
@@ -262,7 +212,7 @@ export default function SurveyAllowedEmailsManager({
 											isAddingEmail || !newEmail.trim()
 										}
 										size="default"
-										className="gap-2"
+										className="gap-2 w-full sm:w-auto"
 									>
 										{isAddingEmail ? (
 											<Loader2 className="h-4 w-4 animate-spin" />
@@ -281,10 +231,9 @@ export default function SurveyAllowedEmailsManager({
 				</CardContent>
 			</Card>
 
-			{/* SELECT ALLOWED EMAILS SECTION */}
 			<Card>
-				<CardHeader>
-					<div className="flex items-center justify-between">
+				<CardHeader className="pb-3">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 						<div className="space-y-1">
 							<CardTitle className="flex items-center gap-2">
 								<Users className="h-5 w-5" />
@@ -331,8 +280,8 @@ export default function SurveyAllowedEmailsManager({
 							</AlertDescription>
 						</Alert>
 					) : (
-						<ScrollArea className="h-[280px] rounded-md border">
-							<div className="p-1 space-y-1">
+						<div className="space-y-2">
+							<div className="grid grid-cols-1  gap-3">
 								{userAllowedEmails.map(
 									(email: AllowedEmail) => {
 										const isSelected =
@@ -340,13 +289,13 @@ export default function SurveyAllowedEmailsManager({
 										return (
 											<div
 												key={email.id}
-												className={`flex items-center justify-between p-3 rounded-lg transition-all ${
+												className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
 													isSelected
-														? "bg-primary/5 border border-primary/20"
-														: "hover:bg-muted/50"
+														? "bg-primary/5 border-primary/20"
+														: "border-border hover:bg-muted/50"
 												}`}
 											>
-												<div className="flex items-center gap-3 flex-1">
+												<div className="flex items-center gap-3 flex-1 min-w-0">
 													<Checkbox
 														id={`email-${email.id}`}
 														checked={isSelected}
@@ -355,17 +304,17 @@ export default function SurveyAllowedEmailsManager({
 																email.id
 															)
 														}
-														className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+														className="data-[state=checked]:bg-primary data-[state=checked]:border-primary shrink-0"
 													/>
 													<Label
 														htmlFor={`email-${email.id}`}
-														className={`font-normal cursor-pointer flex-1 flex items-center gap-2 ${
+														className={`font-normal cursor-pointer flex-1 flex items-center gap-2 min-w-0 ${
 															isSelected
 																? "text-primary"
 																: ""
 														}`}
 													>
-														<div className="p-1.5 rounded-md bg-muted">
+														<div className="p-1.5 rounded-md bg-muted shrink-0">
 															<Mail className="h-3.5 w-3.5" />
 														</div>
 														<span className="truncate">
@@ -376,7 +325,7 @@ export default function SurveyAllowedEmailsManager({
 												{isSelected && (
 													<Badge
 														variant="secondary"
-														className="gap-1"
+														className="gap-1 ml-2 shrink-0"
 													>
 														<Check className="h-3 w-3" />
 														Selected
@@ -387,20 +336,19 @@ export default function SurveyAllowedEmailsManager({
 									}
 								)}
 							</div>
-						</ScrollArea>
+						</div>
 					)}
 				</CardContent>
 			</Card>
 
-			{/* CURRENTLY SELECTED EMAILS SECTION */}
 			{selectedEmailObjects.length > 0 && (
-				<Card className="border-green-600  to-transparent">
-					<CardHeader>
+				<Card className="border-green-200 bg-linear-to-b">
+					<CardHeader className="pb-3">
 						<CardTitle className="text-base flex items-center gap-2">
 							<div className="p-1.5 rounded-md bg-green-100">
 								<Check className="h-4 w-4 text-green-600" />
 							</div>
-							<span className="text-green-800">
+							<span>
 								Active Access
 							</span>
 							<Badge
@@ -410,22 +358,22 @@ export default function SurveyAllowedEmailsManager({
 								{selectedEmailObjects.length}
 							</Badge>
 						</CardTitle>
-						<CardDescription className="text-green-700/70">
+						<CardDescription className="">
 							These emails will receive invitations to this survey
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid gap-2 sm:grid-cols-2">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-2">
 							{selectedEmailObjects.map((email) => (
 								<div
 									key={email.id}
-									className="flex items-center justify-between p-3 bg-white border border-green-100 rounded-lg hover:bg-green-50/50 transition-all group"
+									className="flex items-center justify-between p-3 bg-card border border-green-200 rounded-lg hover:bg-green-50/50 transition-all group"
 								>
 									<div className="flex items-center gap-2 min-w-0">
 										<div className="p-1 rounded bg-green-50">
 											<Mail className="h-3.5 w-3.5 text-green-600" />
 										</div>
-										<span className="text-sm font-medium text-green-900 truncate">
+										<span className="text-sm font-medium truncate">
 											{email.email}
 										</span>
 									</div>
@@ -440,7 +388,7 @@ export default function SurveyAllowedEmailsManager({
 															email.id
 														)
 													}
-													className="h-7 w-7 text-muted-foreground hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+													className="h-7 w-7 text-muted-foreground hover:text-red-600 hover:bg-red-50 shrink-0"
 												>
 													<Trash2 className="h-3.5 w-3.5" />
 													<span className="sr-only">
@@ -459,34 +407,6 @@ export default function SurveyAllowedEmailsManager({
 					</CardContent>
 				</Card>
 			)}
-
-			{/* FOOTER INFO */}
-			<div className="rounded-lg border bg-muted/30 p-4">
-				<div className="flex items-start gap-3">
-					<AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
-					<div className="space-y-1">
-						<p className="text-sm font-medium">How it works</p>
-						<ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-							<li>
-								Add emails to your allowed list first using the
-								form above
-							</li>
-							<li>
-								Select which emails should have access to this
-								specific survey
-							</li>
-							<li>
-								Selected emails will receive invitations when
-								the survey is published
-							</li>
-							<li>
-								Changes are saved automatically when you click
-								"Save Changes"
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
 		</div>
 	);
 }

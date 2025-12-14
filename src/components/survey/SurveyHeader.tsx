@@ -2,14 +2,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useClipboard } from "@/hooks/useClipboard";
 import type { Survey } from "@/types";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface SurveyHeaderProps {
 	survey: Survey;
 	onEditClick: () => void;
 	onPublish: () => void;
-	onChangeStatus: (status: string) => void;
 	onStatusChange: (newStatus: string) => void | Promise<void>;
 	isLoading?: boolean;
 }
@@ -18,12 +19,11 @@ export function SurveyHeader({
 	survey,
 	onEditClick,
 	onPublish,
-	onChangeStatus,
 	onStatusChange,
 	isLoading = false,
 }: SurveyHeaderProps) {
 	const router = useRouter();
-
+	const { copyToClipboard } = useClipboard();
 	const getStatusColor = (status: string) => {
 		switch (status) {
 			case "active":
@@ -39,15 +39,17 @@ export function SurveyHeader({
 
 	const handleCopySurveyLink = () => {
 		const url = `${window.location.origin}/survey/${survey.id}`;
-		navigator.clipboard.writeText(url);
-		alert("Survey link copied to clipboard!");
+		copyToClipboard(url, "Survey link copied to clipboard!");
+		// console.log(url);// link is getting here and working well
+		// navigator.clipboard.writeText(url);
+		// alert("Survey link copied to clipboard!");
 	};
 
 	const handleCloseStatus = async () => {
 		try {
 			onStatusChange("closed");
 		} catch (error) {
-			alert("Failed to close survey");
+			toast.error("Failed to close survey");
 		}
 	};
 
@@ -55,7 +57,7 @@ export function SurveyHeader({
 		try {
 			onStatusChange(newStatus);
 		} catch (error) {
-			alert(`Failed to change survey status to ${newStatus}`);
+			toast.error(`Failed to change survey status to ${newStatus}`);
 		}
 	};
 
@@ -135,6 +137,22 @@ export function SurveyHeader({
 					Back to Surveys
 				</Button>
 			</div>
+
+			{survey?.status === "draft" ? (
+				<p className="mt-4 text-base text-orange-500">
+					Note: The survey is currently in draft mode and not visible
+					to respondents.
+				</p>
+			) : survey?.status === "closed" ? (
+				<p className="mt-4 text-base text-red-600">
+					Note: The survey is closed and no longer accepting
+					responses.
+				</p>
+			) : (
+				<p className="mt-4 text-base text-green-600">
+					Note: The survey is active and accepting responses.
+				</p>
+			)}
 		</div>
 	);
 }

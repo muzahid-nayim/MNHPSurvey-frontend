@@ -9,6 +9,18 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.1.9] - 2025-12-15
+### Fixed
+- Fixed copy to clipboard issue in SurveyHeader component
+- make survey page card reusable
+- Fixed email is not adding in edit survey section
+- Fixed auth issue (logged out automatically after some time by deleteing auth key and value from localstorage)
+
+### Added
+- Show warning if survey is draft or inactive in survey page
+- Update toster
+- show exact issue in card in survey page
+
 ## [0.1.8] - 2025-12-11
 ### Fixed
 - fixed theme toggle button issue .
