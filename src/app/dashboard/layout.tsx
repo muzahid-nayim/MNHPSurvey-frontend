@@ -142,9 +142,9 @@ export default function DashboardLayout({
 						<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 							<SquarePen className="h-4 w-4 text-white" />
 						</div>
-						<span className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<Link href={"/"} className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							MNHPSurvey
-						</span>
+						</Link>
 					</div>
 
 					{/* User Info */}
