@@ -8,6 +8,9 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+## [0.1.10] - 2025-12-24
+### Changed
+- Move function to different component for individual survey page. 
 
 ## [0.1.9] - 2025-12-15
 ### Fixed
