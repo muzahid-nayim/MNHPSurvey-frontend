@@ -29,6 +29,8 @@ export default function DashboardLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	
+	const [logoutMutation] = useLogoutMutation();
 	const router = useRouter();
 	const pathname = usePathname();
 	const dispatch = useDispatch();
@@ -36,8 +38,6 @@ export default function DashboardLayout({
 	const { isAuthenticated, user, loading } = useSelector(
 		(state: RootState) => state.auth
 	);
-	const [logoutMutation] = useLogoutMutation();
-
 	// Redirect if not authenticated
 	useEffect(() => {
 		if (!loading && !isAuthenticated) {

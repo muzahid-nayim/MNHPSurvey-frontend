@@ -72,7 +72,7 @@ export default function CreateSurveyPage() {
 	const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
 
 	// Main form data state with initial configuration
-	const [formData, setFormData] = useState<CreateSurveyRequest>({
+	const [formState, setFormState] = useState<CreateSurveyRequest>({
 		title: "",
 		description: "",
 		access_type: "public_anonymous" as AccessType,
@@ -95,10 +95,10 @@ export default function CreateSurveyPage() {
 		e.preventDefault();
 
 		try {
-			const result = await createSurvey(formData).unwrap();
+			const result = await createSurvey(formState).unwrap();
 
 			// Configure email access for private surveys
-			if (formData.access_type === "private_invited") {
+			if (formState.access_type === "private_invited") {
 				if (selectedEmails.length === 0) {
 					toast.error(
 						"Please select at least one email for private survey"
@@ -142,8 +142,8 @@ export default function CreateSurveyPage() {
 	const isSubmitDisabled =
 		isCreating ||
 		isAddingEmails ||
-		!formData.title.trim() ||
-		(formData.access_type === "private_invited" &&
+		!formState.title.trim() ||
+		(formState.access_type === "private_invited" &&
 			selectedEmails.length === 0);
 
 	return (
@@ -163,10 +163,10 @@ export default function CreateSurveyPage() {
 							<Label htmlFor="title">Survey Title *</Label>
 							<Input
 								id="title"
-								value={formData.title}
+								value={formState.title}
 								onChange={(e) =>
-									setFormData({
-										...formData,
+									setFormState({
+										...formState,
 										title: e.target.value,
 									})
 								}
@@ -180,10 +180,10 @@ export default function CreateSurveyPage() {
 							<Label htmlFor="description">Description</Label>
 							<textarea
 								id="description"
-								value={formData.description}
+								value={formState.description}
 								onChange={(e) =>
-									setFormData({
-										...formData,
+									setFormState({
+										...formState,
 										description: e.target.value,
 									})
 								}
@@ -200,10 +200,10 @@ export default function CreateSurveyPage() {
 						<div className="space-y-2">
 							<Label htmlFor="access_type">Access Type *</Label>
 							<Select
-								value={formData.access_type}
+								value={formState.access_type}
 								onValueChange={(value) =>
-									setFormData({
-										...formData,
+									setFormState({
+										...formState,
 										access_type: value as AccessType,
 									})
 								}
@@ -228,12 +228,12 @@ export default function CreateSurveyPage() {
 
 							{/* Contextual help text based on selected access type */}
 							<p className="text-sm text-muted-foreground">
-								{formData.access_type === "public_anonymous" &&
+								{formState.access_type === "public_anonymous" &&
 									"Anyone with link can respond anonymously"}
-								{formData.access_type ===
+								{formState.access_type ===
 									"public_authenticated" &&
 									"User must login to respond"}
-								{formData.access_type === "private_invited" &&
+								{formState.access_type === "private_invited" &&
 									"Only users with selected emails can access"}
 							</p>
 						</div>
@@ -242,7 +242,7 @@ export default function CreateSurveyPage() {
 						{/* EMAIL SELECTION SECTION */}
 						{/* (Only visible for private surveys) */}
 						{/* ============================ */}
-						{formData.access_type === "private_invited" && (
+						{formState.access_type === "private_invited" && (
 							<div className="space-y-3 p-4 border border-blue-200 rounded-lg">
 								<Label className="font-semibold text-blue-900">
 									Select Allowed Emails *
@@ -331,10 +331,10 @@ export default function CreateSurveyPage() {
 						<div className="space-y-2">
 							<Label htmlFor="display_mode">Display Mode *</Label>
 							<Select
-								value={formData.display_mode}
+								value={formState.display_mode}
 								onValueChange={(value) =>
-									setFormData({
-										...formData,
+									setFormState({
+										...formState,
 										display_mode: value as DisplayMode,
 									})
 								}
@@ -359,26 +359,41 @@ export default function CreateSurveyPage() {
 						</div>
 
 						{/* Questions Per Page - Only visible for paginated mode */}
-						{formData.display_mode === "paginated" && (
+						{formState.display_mode === "paginated" && (
 							<div className="space-y-2">
 								<Label htmlFor="questions_per_page">
 									Questions Per Page
 								</Label>
-								<Input
-									id="questions_per_page"
-									type="number"
-									min="1"
-									max="20"
-									value={formData.questions_per_page}
-									onChange={(e) =>
-										setFormData({
-											...formData,
-											questions_per_page: parseInt(
-												e.target.value
-											),
+								<Select
+									value={
+										formState.questions_per_page?.toString() ||
+										"5"
+									}
+									onValueChange={(value) =>
+										setFormState({
+											...formState,
+											questions_per_page: parseInt(value),
 										})
 									}
-								/>
+								>
+									<SelectTrigger className="w-full">
+										<SelectValue placeholder="Question per page" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectGroup>
+											<SelectItem value="3">3</SelectItem>
+											<SelectItem value="5">5</SelectItem>
+											<SelectItem value="7">7</SelectItem>
+											<SelectItem value="10">
+												10
+											</SelectItem>
+
+											<SelectItem value="15">
+												15
+											</SelectItem>
+										</SelectGroup>
+									</SelectContent>
+								</Select>
 							</div>
 						)}
 
@@ -391,10 +406,10 @@ export default function CreateSurveyPage() {
 								<input
 									type="checkbox"
 									id="allow_multiple_responses"
-									checked={formData.allow_multiple_responses}
+									checked={formState.allow_multiple_responses}
 									onChange={(e) =>
-										setFormData({
-											...formData,
+										setFormState({
+											...formState,
 											allow_multiple_responses:
 												e.target.checked,
 										})
@@ -410,10 +425,10 @@ export default function CreateSurveyPage() {
 								<input
 									type="checkbox"
 									id="show_progress_bar"
-									checked={formData.show_progress_bar}
+									checked={formState.show_progress_bar}
 									onChange={(e) =>
-										setFormData({
-											...formData,
+										setFormState({
+											...formState,
 											show_progress_bar: e.target.checked,
 										})
 									}

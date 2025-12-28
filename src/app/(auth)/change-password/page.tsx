@@ -18,7 +18,7 @@ import { Eye, EyeOff, Lock, SquarePen, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 export default function ChangePasswordPage() {
-	const [formData, setFormData] = useState({
+	const [formState, setFormState] = useState({
 		old_password: "",
 		new_password: "",
 		new_password2: "",
@@ -35,7 +35,7 @@ export default function ChangePasswordPage() {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData((prev) => ({
+		setFormState((prev) => ({
 			...prev,
 			[name]: value,
 		}));
@@ -50,11 +50,11 @@ export default function ChangePasswordPage() {
 	};
 
 	const validateForm = () => {
-		if (formData.new_password !== formData.new_password2) {
+		if (formState.new_password !== formState.new_password2) {
 			setPasswordError("New passwords do not match");
 			return false;
 		}
-		if (formData.new_password.length < 8) {
+		if (formState.new_password.length < 8) {
 			setPasswordError("New password must be at least 8 characters");
 			return false;
 		}
@@ -67,11 +67,11 @@ export default function ChangePasswordPage() {
 
 		try {
 			await changePassword({
-				old_password: formData.old_password,
-				new_password: formData.new_password,
-				new_password2: formData.new_password2,
+				old_password: formState.old_password,
+				new_password: formState.new_password,
+				new_password2: formState.new_password2,
 			}).unwrap();
-			setFormData({
+			setFormState({
 				old_password: "",
 				new_password: "",
 				new_password2: "",
@@ -187,7 +187,7 @@ export default function ChangePasswordPage() {
 														: "password"
 												}
 												placeholder="Enter current password"
-												value={formData.old_password}
+												value={formState.old_password}
 												onChange={handleChange}
 												className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 												required
@@ -232,7 +232,7 @@ export default function ChangePasswordPage() {
 														: "password"
 												}
 												placeholder="Enter new password"
-												value={formData.new_password}
+												value={formState.new_password}
 												onChange={handleChange}
 												className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 												required
@@ -277,7 +277,7 @@ export default function ChangePasswordPage() {
 														: "password"
 												}
 												placeholder="Confirm new password"
-												value={formData.new_password2}
+												value={formState.new_password2}
 												onChange={handleChange}
 												className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 												required

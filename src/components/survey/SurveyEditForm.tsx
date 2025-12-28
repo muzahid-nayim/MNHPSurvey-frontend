@@ -26,7 +26,7 @@ import {
 	Users,
 	Lock,
 } from "lucide-react";
-import type { Survey, AccessType } from "@/types";
+import type { Survey, AccessType, DisplayMode } from "@/types";
 import {
 	Dialog,
 	DialogContent,
@@ -35,6 +35,15 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import SurveyAllowedEmailsManager from "./SurveyInvitationManager";
 import { useUpdateSurveyMutation } from "@/core/api/surveyApi";
@@ -65,6 +74,8 @@ export function SurveyEditForm({
 	const [formState, setFormState] = useState<Partial<Survey>>({
 		title: survey.title,
 		description: survey.description,
+		display_mode: survey.display_mode,
+		questions_per_page: survey.questions_per_page,
 		allow_multiple_responses: survey.allow_multiple_responses,
 		show_progress_bar: survey.show_progress_bar,
 	});
@@ -74,6 +85,8 @@ export function SurveyEditForm({
 		setFormState({
 			title: survey.title,
 			description: survey.description,
+			display_mode: survey.display_mode,
+			questions_per_page: survey.questions_per_page,
 			allow_multiple_responses: survey.allow_multiple_responses,
 			show_progress_bar: survey.show_progress_bar,
 		});
@@ -89,16 +102,17 @@ export function SurveyEditForm({
 		e.preventDefault();
 
 		try {
-			const payload = {
-				title: formState.title,
-				description: formState.description,
-				allow_multiple_responses: formState.allow_multiple_responses,
-				show_progress_bar: formState.show_progress_bar,
-			};
+			// const payload = {
+			// 	title: formState.title,
+			// 	description: formState.description,
+			// 	question_per_page: formState.questions_per_page,
+			// 	allow_multiple_responses: formState.allow_multiple_responses,
+			// 	show_progress_bar: formState.show_progress_bar,
+			// };
 
 			await updateSurvey({
 				id: surveyId,
-				data: payload,
+				data: formState,
 			}).unwrap();
 
 			toast.success("Survey updated successfully!");
@@ -227,6 +241,76 @@ export function SurveyEditForm({
 							<Settings2 className="h-4 w-4" />
 							Survey Settings
 						</h3>
+
+						<div className="space-y-2">
+							<Label htmlFor="display_mode">Display Mode *</Label>
+							<Select
+								value={formState.display_mode}
+								onValueChange={(value) =>
+									setFormState({
+										...formState,
+										display_mode: value as DisplayMode,
+									})
+								}
+							>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Select display mode" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem value="show_all">
+											Show All Questions
+										</SelectItem>
+										<SelectItem value="one_by_one">
+											One Question at a Time
+										</SelectItem>
+										<SelectItem value="paginated">
+											Custom Pages
+										</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</div>
+						{formState.display_mode === "paginated" && (
+							<div className="space-y-2">
+								<Label htmlFor="questions_per_page">
+									Questions Per Page
+								</Label>
+								<Select
+								value={formState.questions_per_page?.toString() || "5"}
+								onValueChange={(value) =>
+									setFormState({
+										...formState,
+										questions_per_page: parseInt(value),
+									})
+								}
+							>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Question per page" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem value="3">
+											3
+										</SelectItem>
+										<SelectItem value="5">
+											5
+										</SelectItem>
+										<SelectItem value="7">
+											7
+										</SelectItem>
+										<SelectItem value="10">
+											10
+										</SelectItem>
+
+										<SelectItem value="15">
+											15
+										</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+							</div>
+						)}
 
 						<div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-accent/50 transition-colors">
 							<Checkbox
