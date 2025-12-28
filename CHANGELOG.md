@@ -9,6 +9,21 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.1.11] - 2025-12-28
+### Fixed 
+-fixed pagination issue on survey taking page.
+
+### Added
+- survey taker can edit question per page number.
+
+### Changed
+- cahged questioin per page input to select component.
+- Chaned variable neme formData to formState all over the 
+
+## [0.1.10] - 2025-12-24
+### Changed
+- Move function to different component for individual survey page. 
+
 ## [0.1.9] - 2025-12-15
 ### Fixed
 - Fixed copy to clipboard issue in SurveyHeader component

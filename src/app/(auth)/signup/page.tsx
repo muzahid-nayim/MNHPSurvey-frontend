@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 
 export default function RegisterPage() {
-	const [formData, setFormData] = useState({
+	const [formState, setFormState] = useState({
 		username: "",
 		email: "",
 		password: "",
@@ -62,7 +62,7 @@ export default function RegisterPage() {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData((prev) => ({
+		setFormState((prev) => ({
 			...prev,
 			[name]: value,
 		}));
@@ -74,11 +74,11 @@ export default function RegisterPage() {
 	};
 
 	const validatePassword = () => {
-		if (formData.password !== formData.password2) {
+		if (formState.password !== formState.password2) {
 			setPasswordError("Passwords do not match");
 			return false;
 		}
-		if (formData.password.length < 8) {
+		if (formState.password.length < 8) {
 			setPasswordError("Password must be at least 8 characters");
 			return false;
 		}
@@ -95,12 +95,12 @@ export default function RegisterPage() {
 
 		try {
 			await register({
-				username: formData.username,
-				email: formData.email,
-				password: formData.password,
-				password2: formData.password2,
-				first_name: formData.firstName || undefined,
-				last_name: formData.lastName || undefined,
+				username: formState.username,
+				email: formState.email,
+				password: formState.password,
+				password2: formState.password2,
+				first_name: formState.firstName || undefined,
+				last_name: formState.lastName || undefined,
 			}).unwrap();
 			router.push("/verify-email");
 		} catch (err: any) {
@@ -110,12 +110,12 @@ export default function RegisterPage() {
 
 	// Password strength indicator
 	const getPasswordStrength = () => {
-		if (!formData.password) return 0;
+		if (!formState.password) return 0;
 		let strength = 0;
-		if (formData.password.length >= 8) strength++;
-		if (/[A-Z]/.test(formData.password)) strength++;
-		if (/[0-9]/.test(formData.password)) strength++;
-		if (/[^A-Za-z0-9]/.test(formData.password)) strength++;
+		if (formState.password.length >= 8) strength++;
+		if (/[A-Z]/.test(formState.password)) strength++;
+		if (/[0-9]/.test(formState.password)) strength++;
+		if (/[^A-Za-z0-9]/.test(formState.password)) strength++;
 		return strength;
 	};
 
@@ -203,7 +203,7 @@ export default function RegisterPage() {
 										name="firstName"
 										type="text"
 										placeholder="First name"
-										value={formData.firstName}
+										value={formState.firstName}
 										onChange={handleChange}
 										className="bg-background/50 border-border/50 focus:border-primary"
 										disabled={isLoading}
@@ -221,7 +221,7 @@ export default function RegisterPage() {
 										name="lastName"
 										type="text"
 										placeholder="Last name"
-										value={formData.lastName}
+										value={formState.lastName}
 										onChange={handleChange}
 										className="bg-background/50 border-border/50 focus:border-primary"
 										disabled={isLoading}
@@ -244,7 +244,7 @@ export default function RegisterPage() {
 										name="username"
 										type="text"
 										placeholder="Choose a username"
-										value={formData.username}
+										value={formState.username}
 										onChange={handleChange}
 										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
@@ -268,7 +268,7 @@ export default function RegisterPage() {
 										name="email"
 										type="email"
 										placeholder="Enter your email"
-										value={formData.email}
+										value={formState.email}
 										onChange={handleChange}
 										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
@@ -294,7 +294,7 @@ export default function RegisterPage() {
 											showPassword ? "text" : "password"
 										}
 										placeholder="Create a password"
-										value={formData.password}
+										value={formState.password}
 										onChange={handleChange}
 										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
@@ -319,7 +319,7 @@ export default function RegisterPage() {
 								</div>
 
 								{/* Password Strength Indicator */}
-								{formData.password && (
+								{formState.password && (
 									<div className="space-y-2">
 										<div className="flex gap-1">
 											{[0, 1, 2, 3, 4].map((index) => (
@@ -338,7 +338,7 @@ export default function RegisterPage() {
 										</div>
 										<div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
 											<div className="flex items-center gap-1">
-												{formData.password.length >=
+												{formState.password.length >=
 												8 ? (
 													<Check className="h-3 w-3 text-green-500" />
 												) : (
@@ -348,7 +348,7 @@ export default function RegisterPage() {
 											</div>
 											<div className="flex items-center gap-1">
 												{/[A-Z]/.test(
-													formData.password
+													formState.password
 												) ? (
 													<Check className="h-3 w-3 text-green-500" />
 												) : (
@@ -358,7 +358,7 @@ export default function RegisterPage() {
 											</div>
 											<div className="flex items-center gap-1">
 												{/[0-9]/.test(
-													formData.password
+													formState.password
 												) ? (
 													<Check className="h-3 w-3 text-green-500" />
 												) : (
@@ -390,7 +390,7 @@ export default function RegisterPage() {
 												: "password"
 										}
 										placeholder="Confirm your password"
-										value={formData.password2}
+										value={formState.password2}
 										onChange={handleChange}
 										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required

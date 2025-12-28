@@ -1,7 +1,7 @@
-// src/components/survey/SurveyEditForm.tsx - COMPLETELY FIXED
+// src/components/survey/SurveyEditForm.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -26,7 +26,7 @@ import {
 	Users,
 	Lock,
 } from "lucide-react";
-import type { Survey } from "@/types";
+import type { Survey, AccessType, DisplayMode } from "@/types";
 import {
 	Dialog,
 	DialogContent,
@@ -35,33 +35,93 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import SurveyAllowedEmailsManager from "./SurveyInvitationManager";
+import { useUpdateSurveyMutation } from "@/core/api/surveyApi";
+import { toast } from "react-toastify";
 
 interface SurveyEditFormProps {
-	surveyForm: Partial<Survey> | null;
-	isLoading?: boolean;
-	surveyId?: string | null;
-	accessType?: string | null;
-	onUpdate: (field: string, value: any) => void;
-	onSave: (e: React.FormEvent) => void;
+	survey: Survey;
+	surveyId: string;
+	accessType: AccessType;
+	onSaveComplete: () => void;
 	onCancel: () => void;
 }
 
 export function SurveyEditForm({
-	surveyForm,
-	isLoading = false,
+	survey,
 	surveyId,
 	accessType,
-	onUpdate,
-	onSave,
+	onSaveComplete,
 	onCancel,
 }: SurveyEditFormProps) {
 	const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
-
-	if (!surveyForm) return null;
-
 	const isPrivateInvited = accessType === "private_invited";
+
+	const [updateSurvey, { isLoading: isUpdatingSurvey }] =
+		useUpdateSurveyMutation();
+
+	// ✅ ONLY ONE STATE SOURCE - initialized from props
+	const [formState, setFormState] = useState<Partial<Survey>>({
+		title: survey.title,
+		description: survey.description,
+		display_mode: survey.display_mode,
+		questions_per_page: survey.questions_per_page,
+		allow_multiple_responses: survey.allow_multiple_responses,
+		show_progress_bar: survey.show_progress_bar,
+	});
+
+	// ✅ Sync state when survey prop changes (like if parent refetches)
+	useEffect(() => {
+		setFormState({
+			title: survey.title,
+			description: survey.description,
+			display_mode: survey.display_mode,
+			questions_per_page: survey.questions_per_page,
+			allow_multiple_responses: survey.allow_multiple_responses,
+			show_progress_bar: survey.show_progress_bar,
+		});
+	}, [survey]);
+
+	// ✅ INTERNAL STATE UPDATER - no more prop dependencies
+	const updateField = (field: keyof Survey, value: any) => {
+		setFormState((prev) => ({ ...prev, [field]: value }));
+	};
+
+	// ✅ PROPER SAVE HANDLER - handles API call internally
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		try {
+			// const payload = {
+			// 	title: formState.title,
+			// 	description: formState.description,
+			// 	question_per_page: formState.questions_per_page,
+			// 	allow_multiple_responses: formState.allow_multiple_responses,
+			// 	show_progress_bar: formState.show_progress_bar,
+			// };
+
+			await updateSurvey({
+				id: surveyId,
+				data: formState,
+			}).unwrap();
+
+			toast.success("Survey updated successfully!");
+			onSaveComplete(); // Notify parent to exit edit mode
+		} catch (error) {
+			console.error("Failed to update survey:", error);
+			toast.error("Failed to update survey. Please try again.");
+		}
+	};
 
 	return (
 		<Card className="border-2 border-primary/20 shadow-lg">
@@ -123,7 +183,8 @@ export function SurveyEditForm({
 					</div>
 				)}
 
-				<form onSubmit={onSave} className="space-y-6">
+				{/* ✅ FIXED FORM - uses internal handler */}
+				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="space-y-3">
 						<div className="flex items-center gap-2">
 							<Type className="h-4 w-4 text-muted-foreground" />
@@ -136,8 +197,10 @@ export function SurveyEditForm({
 						</div>
 						<Input
 							id="survey_title"
-							value={surveyForm.title || ""}
-							onChange={(e) => onUpdate("title", e.target.value)}
+							value={formState.title || ""}
+							onChange={(e) =>
+								updateField("title", e.target.value)
+							}
 							placeholder="What's your survey about?"
 							className="h-11 text-base border-2 focus:border-primary"
 							required
@@ -160,9 +223,9 @@ export function SurveyEditForm({
 						</div>
 						<Textarea
 							id="survey_description"
-							value={surveyForm.description || ""}
+							value={formState.description || ""}
 							onChange={(e) =>
-								onUpdate("description", e.target.value)
+								updateField("description", e.target.value)
 							}
 							placeholder="Add more details about your survey (optional)"
 							className="min-h-[100px] border-2 focus:border-primary resize-y"
@@ -179,14 +242,84 @@ export function SurveyEditForm({
 							Survey Settings
 						</h3>
 
+						<div className="space-y-2">
+							<Label htmlFor="display_mode">Display Mode *</Label>
+							<Select
+								value={formState.display_mode}
+								onValueChange={(value) =>
+									setFormState({
+										...formState,
+										display_mode: value as DisplayMode,
+									})
+								}
+							>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Select display mode" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem value="show_all">
+											Show All Questions
+										</SelectItem>
+										<SelectItem value="one_by_one">
+											One Question at a Time
+										</SelectItem>
+										<SelectItem value="paginated">
+											Custom Pages
+										</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</div>
+						{formState.display_mode === "paginated" && (
+							<div className="space-y-2">
+								<Label htmlFor="questions_per_page">
+									Questions Per Page
+								</Label>
+								<Select
+								value={formState.questions_per_page?.toString() || "5"}
+								onValueChange={(value) =>
+									setFormState({
+										...formState,
+										questions_per_page: parseInt(value),
+									})
+								}
+							>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Question per page" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem value="3">
+											3
+										</SelectItem>
+										<SelectItem value="5">
+											5
+										</SelectItem>
+										<SelectItem value="7">
+											7
+										</SelectItem>
+										<SelectItem value="10">
+											10
+										</SelectItem>
+
+										<SelectItem value="15">
+											15
+										</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+							</div>
+						)}
+
 						<div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-accent/50 transition-colors">
 							<Checkbox
 								id="allow_multiple"
 								checked={
-									surveyForm.allow_multiple_responses || false
+									formState.allow_multiple_responses || false
 								}
 								onCheckedChange={(checked) =>
-									onUpdate(
+									updateField(
 										"allow_multiple_responses",
 										checked
 									)
@@ -211,9 +344,9 @@ export function SurveyEditForm({
 						<div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-accent/50 transition-colors">
 							<Checkbox
 								id="show_progress"
-								checked={surveyForm.show_progress_bar || false}
+								checked={formState.show_progress_bar || false}
 								onCheckedChange={(checked) =>
-									onUpdate("show_progress_bar", checked)
+									updateField("show_progress_bar", checked)
 								}
 								className="mt-1 h-5 w-5"
 							/>
@@ -235,10 +368,10 @@ export function SurveyEditForm({
 					<div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
 						<Button
 							type="submit"
-							disabled={isLoading}
-							className="sm:flex-1 h-11 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
+							disabled={isUpdatingSurvey}
+							className="sm:flex-1 h-11 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
 						>
-							{isLoading ? (
+							{isUpdatingSurvey ? (
 								<>
 									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 									Saving Changes...
@@ -252,7 +385,7 @@ export function SurveyEditForm({
 							variant="outline"
 							onClick={onCancel}
 							className="sm:flex-1 h-11 border-2"
-							disabled={isLoading}
+							disabled={isUpdatingSurvey}
 						>
 							Cancel
 						</Button>
@@ -263,7 +396,7 @@ export function SurveyEditForm({
 	);
 }
 
-// FIXED EmailAccessDialog - RESPONSIVE AND PROPER SIZING
+// EmailAccessDialog remains the same - no changes needed
 function EmailAccessDialog({
 	surveyId,
 	onClose,
@@ -289,7 +422,6 @@ function EmailAccessDialog({
 				</div>
 			</DialogHeader>
 
-			{/* This is the container that allows scrolling */}
 			<div className="px-6 pb-6 h-[calc(90vh-100px)] overflow-y-auto">
 				<SurveyAllowedEmailsManager
 					accessType="private_invited"

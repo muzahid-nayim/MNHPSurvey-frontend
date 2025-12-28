@@ -37,6 +37,8 @@ export default function SurveysPage() {
 	const [deleteSurvey] = useDeleteSurveyMutation();
 	const [deleteId, setDeleteId] = useState<string | null>(null);
 	const { copyToClipboard } = useClipboard();
+	// const url = window.location.origin;
+	// console.log(url);
 	const handleDelete = async (id: string) => {
 		try {
 			await deleteSurvey(id).unwrap();

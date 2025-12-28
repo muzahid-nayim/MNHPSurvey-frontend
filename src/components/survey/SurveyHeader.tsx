@@ -2,6 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useUpdateSurveyStatusMutation } from "@/core/api/surveyApi";
 import { useClipboard } from "@/hooks/useClipboard";
 import type { Survey } from "@/types";
 import { useRouter } from "next/navigation";
@@ -10,16 +11,12 @@ import { toast } from "react-toastify";
 interface SurveyHeaderProps {
 	survey: Survey;
 	onEditClick: () => void;
-	onPublish: () => void;
-	onStatusChange: (newStatus: string) => void | Promise<void>;
 	isLoading?: boolean;
 }
 
 export function SurveyHeader({
 	survey,
 	onEditClick,
-	onPublish,
-	onStatusChange,
 	isLoading = false,
 }: SurveyHeaderProps) {
 	const router = useRouter();
@@ -36,7 +33,7 @@ export function SurveyHeader({
 				return "bg-gray-100 text-gray-800";
 		}
 	};
-
+	const [updateStatus] = useUpdateSurveyStatusMutation();
 	const handleCopySurveyLink = () => {
 		const url = `${window.location.origin}/survey/${survey.id}`;
 		copyToClipboard(url, "Survey link copied to clipboard!");
@@ -45,17 +42,41 @@ export function SurveyHeader({
 		// alert("Survey link copied to clipboard!");
 	};
 
+	const handleStatusChange = async (newStatus: string) => {
+		try {
+			await updateStatus({ id: survey.id, status: newStatus }).unwrap();
+			toast.update(`Survey status changed to ${newStatus}`);
+		} catch (error) {
+			toast.error("Failed to change survey status");
+		}
+	};
+
 	const handleCloseStatus = async () => {
 		try {
-			onStatusChange("closed");
+			handleStatusChange("closed");
 		} catch (error) {
 			toast.error("Failed to close survey");
 		}
 	};
 
+	// Publish Handler
+	const handlePublish = async () => {
+		if (!survey?.questions || survey.questions.length === 0) {
+			toast.info("Add at least one question before publishing");
+			return;
+		}
+
+		try {
+			await updateStatus({ id: survey.id, status: "active" }).unwrap();
+			toast.success("Survey published!");
+		} catch (error) {
+			toast.error("Failed to publish survey");
+		}
+	};
+
 	const handleChangeStatus = async (newStatus: "active" | "draft") => {
 		try {
-			onStatusChange(newStatus);
+			handleStatusChange(newStatus);
 		} catch (error) {
 			toast.error(`Failed to change survey status to ${newStatus}`);
 		}
@@ -85,7 +106,7 @@ export function SurveyHeader({
 				{survey?.status === "draft" && (
 					<>
 						<Button
-							onClick={onPublish}
+							onClick={handlePublish}
 							className="bg-green-600 hover:bg-green-700"
 						>
 							Publish Survey

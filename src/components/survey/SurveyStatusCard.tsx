@@ -26,7 +26,7 @@ export interface SurveyStatusCardProps {
 	message?: string;
 	error?: any;
 	onLogin?: () => void;
-	
+
 	onCopyLink?: () => void;
 }
 
@@ -36,7 +36,6 @@ export function SurveyStatusCard({
 	message,
 	error,
 	onLogin,
-	
 	onCopyLink,
 }: SurveyStatusCardProps) {
 	// Get error message if error prop is provided
@@ -55,19 +54,20 @@ export function SurveyStatusCard({
 		return message || "An error occurred";
 	};
 
-
 	const router = useRouter();
 
 	const displayMessage = type === "error" ? getErrorMessage() : message;
- // Safe defaults using Next.js router
-	  const handleGoBack =  (() => router.back());
-	  const handleGoHome = (() => router.push("/"));
-	  const handleTryAgain =  (() => router.refresh());
-	  
-	  const handleLogin = onLogin || (() => {
-	    const redirectUrl = window.location.href;
-	    router.push(`/login?returnTo=${encodeURIComponent(redirectUrl)}`);
-	  });
+	// Safe defaults using Next.js router
+	const handleGoBack = () => router.back();
+	const handleGoHome = () => router.push("/");
+	const handleTryAgain = () => router.refresh();
+
+	const handleLogin =
+		onLogin ||
+		(() => {
+			const redirectUrl = window.location.href;
+			router.push(`/login?returnTo=${encodeURIComponent(redirectUrl)}`);
+		});
 
 	// Card styling based on type
 	const cardStyles = {
@@ -286,7 +286,6 @@ export function SurveyStatusCard({
 												<Home className="h-4 w-4" />
 												Return Home
 											</Button>
-											
 										</div>
 
 										{/* Share option */}

@@ -23,7 +23,7 @@ function ResetPasswordContent() {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
 
-	const [formData, setFormData] = useState({
+	const [formState, setFormState] = useState({
 		password: "",
 		password2: "",
 	});
@@ -36,7 +36,7 @@ function ResetPasswordContent() {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData((prev) => ({
+		setFormState((prev) => ({
 			...prev,
 			[name]: value,
 		}));
@@ -50,11 +50,11 @@ function ResetPasswordContent() {
 			);
 			return false;
 		}
-		if (formData.password !== formData.password2) {
+		if (formState.password !== formState.password2) {
 			setPasswordError("Passwords do not match");
 			return false;
 		}
-		if (formData.password.length < 8) {
+		if (formState.password.length < 8) {
 			setPasswordError("Password must be at least 8 characters");
 			return false;
 		}
@@ -68,8 +68,8 @@ function ResetPasswordContent() {
 		try {
 			await passwordResetConfirm({
 				token: token!,
-				password: formData.password,
-				password2: formData.password2,
+				password: formState.password,
+				password2: formState.password2,
 			}).unwrap();
 		} catch (err) {
 			console.error("Password reset failed:", err);
@@ -236,7 +236,7 @@ function ResetPasswordContent() {
 											showPassword ? "text" : "password"
 										}
 										placeholder="Enter new password"
-										value={formData.password}
+										value={formState.password}
 										onChange={handleChange}
 										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
@@ -279,7 +279,7 @@ function ResetPasswordContent() {
 												: "password"
 										}
 										placeholder="Confirm new password"
-										value={formData.password2}
+										value={formState.password2}
 										onChange={handleChange}
 										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required

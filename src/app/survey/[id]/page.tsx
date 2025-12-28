@@ -17,7 +17,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "react-toastify";
-import { SerializedError } from "@reduxjs/toolkit";
 
 import {
 	SurveyErrorCard,
@@ -29,6 +28,7 @@ export default function TakeSurveyPage() {
 	const searchParams = useSearchParams();
 	const surveyId = params.id as string;
 	const token = searchParams.get("token") || undefined;
+
 	const router = useRouter();
 	const pathname = usePathname();
 	const {
@@ -37,6 +37,7 @@ export default function TakeSurveyPage() {
 		error,
 		refetch,
 	} = useGetTakeSurveyQuery({ surveyId, token });
+
 	const [submitSurvey, { isLoading: isSubmitting }] =
 		useSubmitSurveyMutation();
 
@@ -60,10 +61,11 @@ export default function TakeSurveyPage() {
 		optionId: string,
 		isMultiple: boolean
 	) => {
+		console.log(answers);
 		if (isMultiple) {
 			// Multiple choice - toggle option
 			setAnswers((prev) => {
-				const current = prev[questionId] || [];
+				const current = prev[questionId] || [];//keeping current selected options
 				if (current.includes(optionId)) {
 					return {
 						...prev,
@@ -178,7 +180,7 @@ export default function TakeSurveyPage() {
 			: Math.ceil(
 					(survey.questions?.length || 0) / survey.questions_per_page
 			  );
-	const isLastPage = currentPage >= totalPages - 1;
+	const isLastPage = currentPage === totalPages - 1;
 
 	return (
 		<div className="container mx-auto py-8 max-w-3xl">
@@ -289,8 +291,11 @@ export default function TakeSurveyPage() {
 									<Button
 										type="button"
 										variant="outline"
-										onClick={() =>
+										onClick={(e) =>
+										{
+											e.preventDefault() ;
 											setCurrentPage((prev) => prev - 1)
+										}
 										}
 									>
 										Previous
@@ -301,9 +306,10 @@ export default function TakeSurveyPage() {
 							!isLastPage ? (
 								<Button
 									type="button"
-									onClick={() =>
+									onClick={(e) => {
+										e.preventDefault();
 										setCurrentPage((prev) => prev + 1)
-									}
+									}}
 									className="ml-auto"
 								>
 									Next
