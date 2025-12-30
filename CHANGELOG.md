@@ -8,6 +8,16 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+## [0.1.12] - 2025-12-30
+### Fixed
+	Fixed question option not adding issue while editing question.
+- Changed option format from string[] to {id?: string, text: string}[]
+- Fixed initQuestionEdit to preserve option IDs during edit
+- Updated submit handler to send option IDs for existing options
+- Fixed add/remove/update option functions to work with new format
+- Ensures backend can distinguish between new and existing options
+
+
 
 ## [0.1.11] - 2025-12-28
 ### Fixed 
