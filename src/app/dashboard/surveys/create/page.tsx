@@ -51,6 +51,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 
 export default function CreateSurveyPage() {
 	// ==========================
@@ -244,7 +245,7 @@ export default function CreateSurveyPage() {
 						{/* ============================ */}
 						{formState.access_type === "private_invited" && (
 							<div className="space-y-3 p-4 border border-blue-200 rounded-lg">
-								<Label className="font-semibold text-blue-900">
+								<Label className="font-semibold">
 									Select Allowed Emails *
 								</Label>
 
@@ -255,12 +256,12 @@ export default function CreateSurveyPage() {
 									</div>
 								) : userAllowedEmails.length === 0 ? (
 									/* No emails configured state */
-									<div className="p-3 rounded text-sm text-blue-900">
+									<div className="p-3 rounded text-sm">
 										<p className="font-medium">
 											No allowed emails configured yet.
 										</p>
-										<p className="text-xs mt-1">
-											Go to your profile dashboard to add
+										<p className="text-sm mt-1">
+											Go to <span><Link href="/dashboard/settings" className="underline  text-blue-600">Dashboard Settings</Link></span> to add
 											emails first.
 										</p>
 									</div>

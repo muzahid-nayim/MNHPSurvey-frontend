@@ -1,13 +1,10 @@
 // src/components/providers/auth-provider.tsx
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/core/store";
-import {
-	useGetProfileQuery,
-	useRefreshTokenMutation,
-} from "@/core/api/authApi";
+import { useRefreshTokenMutation } from "@/core/api/authApi";
 import { LoadingSpinner } from "../ui/loading-spinner";
 import { logout, setLoading } from "@/core/store/slices/authSlice";
 
@@ -23,16 +20,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 	const [isRehydrating, setIsRehydrating] = useState(true);
 	const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
-
-	// Get profile to verify authentication
-	const {
-		data: profile,
-		error,
-		isLoading: profileLoading,
-	} = useGetProfileQuery(undefined, {
-		skip: !accessToken || !isAuthenticated,
-		refetchOnMountOrArgChange: true,
-	});
+	const redirectedRef = useRef(false); // ← Prevent redirect loops
 
 	const [refreshTokenMutation, { isLoading: refreshTokenLoading }] =
 		useRefreshTokenMutation();
@@ -92,12 +80,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 	}, [dispatch, hasCheckedAuth, refreshTokenMutation]);
 
-	// Handle authentication redirects
+	// Handle authentication redirects - with loop prevention
 	useEffect(() => {
 		if (
 			isRehydrating ||
 			loading ||
-			profileLoading ||
 			refreshTokenLoading ||
 			!hasCheckedAuth
 		) {
@@ -128,32 +115,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		// Redirect unauthenticated users from protected routes
 		if (!isAuthenticated && !isPublicRoute && isProtectedRoute) {
-			const redirect = pathname !== "/login" ? pathname : "/dashboard";
-			router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
+			// Only redirect once - prevent infinite loops
+			if (!redirectedRef.current) {
+				redirectedRef.current = true;
+				const redirect =
+					pathname !== "/login" ? pathname : "/dashboard";
+				router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
+			}
 			return;
 		}
 
 		// Redirect authenticated users from auth routes to dashboard
 		if (isAuthenticated && isAuthRoute) {
-			const redirect = searchParams.get("redirect") || "/dashboard";
-			router.push(redirect);
+			// Only redirect once
+			if (!redirectedRef.current) {
+				redirectedRef.current = true;
+				const redirect = searchParams.get("redirect") || "/dashboard";
+				router.push(redirect);
+			}
 			return;
 		}
 
-		// Handle 401 errors (token expired/invalid)
-		if (error && "status" in error && error.status === 401) {
-			dispatch(logout());
-			const redirect = pathname !== "/login" ? pathname : "/dashboard";
-			router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
+		// Reset redirect flag when user is on appropriate page
+		// (authenticated on protected/public routes, or unauthenticated on auth routes)
+		if (
+			(isAuthenticated && (isProtectedRoute || isPublicRoute)) ||
+			(!isAuthenticated && (isAuthRoute || isPublicRoute))
+		) {
+			redirectedRef.current = false;
 		}
 	}, [
 		isAuthenticated,
 		isRehydrating,
 		loading,
-		profileLoading,
 		refreshTokenLoading,
 		hasCheckedAuth,
-		error,
 		pathname,
 		router,
 		dispatch,
@@ -161,13 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	]);
 
 	// Show loading spinner while rehydrating or checking auth
-	if (
-		isRehydrating ||
-		loading ||
-		profileLoading ||
-		refreshTokenLoading ||
-		!hasCheckedAuth
-	) {
+	if (isRehydrating || loading || refreshTokenLoading || !hasCheckedAuth) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
 				<LoadingSpinner size="lg" />

@@ -23,6 +23,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, SquarePen } from "lucide-react";
 import { setCredentials } from "@/core/store/slices/authSlice";
 import { useAppDispatch } from "@/core/store/hooks";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -60,7 +61,8 @@ export default function LoginPage() {
 			const redirectTo = searchParams.get("redirect") || "/dashboard";
 			router.push(redirectTo);
 		} catch (err) {
-			console.error("Login failed:", err);
+			// console.error("Login failed:", err);
+			toast.error( err as string);
 		}
 	};
 

@@ -102,7 +102,8 @@ export default function RegisterPage() {
 				first_name: formState.firstName || undefined,
 				last_name: formState.lastName || undefined,
 			}).unwrap();
-			router.push("/verify-email");
+			// router.push("/verify-email");
+			router.push(`/verify-email-sent?email=${encodeURIComponent(formState.email)}`);
 		} catch (err: any) {
 			console.error("Registration failed:", err);
 		}
@@ -125,7 +126,6 @@ export default function RegisterPage() {
 		"bg-orange-500",
 		"bg-yellow-500",
 		"bg-green-500",
-		"bg-green-600",
 	];
 
 	// Extract error message from RTK Query error
@@ -322,7 +322,7 @@ export default function RegisterPage() {
 								{formState.password && (
 									<div className="space-y-2">
 										<div className="flex gap-1">
-											{[0, 1, 2, 3, 4].map((index) => (
+											{[0, 1, 2, 3].map((index) => (
 												<div
 													key={index}
 													className={`h-1 flex-1 rounded-full transition-all ${
@@ -365,6 +365,16 @@ export default function RegisterPage() {
 													<X className="h-3 w-3 text-red-500" />
 												)}
 												<span>Number</span>
+											</div>
+											<div className="flex items-center gap-1">
+												{/[^A-Za-z0-9]/.test(
+													formState.password
+												) ? (
+													<Check className="h-3 w-3 text-green-500" />
+												) : (
+													<X className="h-3 w-3 text-red-500" />
+												)}
+												<span>Special Character</span>
 											</div>
 										</div>
 									</div>

@@ -83,12 +83,6 @@ export default function DashboardPage() {
 				</CardContent>
 			</Card>
 
-			<div className="mt-8">
-				<ManageAllowedEmails />
-			</div>
-
-			
-
 			
 		</div>
 	);

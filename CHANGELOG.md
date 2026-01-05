@@ -8,6 +8,23 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+
+## [0.2.0] - 2026-1-05
+### Added
+- Added profile and profile settings pages with comprehensive user management
+- Implemented RTK Query caching for user profile data (keepUnusedDataFor: 300s)
+
+### Fixed
+- Fixed logout infinite redirect loop in AuthProvider
+- Fixed login looping issue with proper redirect state management
+- Fixed few minor UI issues in profile components
+
+### Changed
+- Refactored UserAvatar as separate component in dashboard layout
+- Moved email management section to dashboard settings page
+
+
+
 ## [0.1.12] - 2025-12-30
 ### Fixed
 	Fixed question option not adding issue while editing question.

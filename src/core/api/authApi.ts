@@ -11,7 +11,7 @@ export interface User {
 	first_name?: string;
 	last_name?: string;
 	is_email_verified: boolean;
-	date_joined: string;
+	created_at: string;
 }
 
 export interface LoginRequest {
@@ -159,6 +159,7 @@ export const authApi = createApi({
 		getProfile: builder.query<User, void>({
 			query: () => "/profile/",
 			providesTags: ["User"],
+			keepUnusedDataFor: 300,
 		}),
 		updateProfile: builder.mutation<User, Partial<User>>({
 			query: (body) => ({

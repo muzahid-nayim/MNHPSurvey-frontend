@@ -31,6 +31,10 @@ export default function TakeSurveyPage() {
 
 	const router = useRouter();
 	const pathname = usePathname();
+	const fullUrl =
+	  typeof window !== 'undefined'
+	    ? `${window.location.origin}${pathname}`
+	    : '';
 	const {
 		data: survey,
 		isLoading,
@@ -149,7 +153,7 @@ export default function TakeSurveyPage() {
 			<SurveySubmittedCard
 				message="Thank you for your valuable feedback!"
 				onCopyLink={() => {
-					navigator.clipboard.writeText(pathname);
+					navigator.clipboard.writeText(fullUrl);
 					toast.success("Link copied to clipboard!");
 				}}
 			/>
