@@ -60,13 +60,13 @@ function VerifyEmailContent() {
 			setStatus("success");
 			setMessage(
 				result.message ||
-					"Your email has been successfully verified. You can now access all features of MNHPSurvey."
+					"Your email has been successfully verified. You can now access all features of MNHPSurvey.",
 			);
 		} catch (err: any) {
 			setStatus("error");
 			setMessage(
 				err?.data?.error ||
-					"Verification failed. The token may be invalid or expired."
+					"Verification failed. The token may be invalid or expired.",
 			);
 		}
 	};
@@ -77,13 +77,13 @@ function VerifyEmailContent() {
 			const result = await resendVerification({ email }).unwrap();
 			setMessage(
 				result.message ||
-					"Verification email sent successfully. Please check your inbox."
+					"Verification email sent successfully. Please check your inbox.",
 			);
 			setStatus("success");
 		} catch (err: any) {
 			setMessage(
 				err?.data?.error ||
-					"Failed to resend verification email. Please try again."
+					"Failed to resend verification email. Please try again.",
 			);
 		}
 	};
@@ -91,7 +91,7 @@ function VerifyEmailContent() {
 	// Loading State
 	if (status === "verifying") {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
@@ -99,10 +99,10 @@ function VerifyEmailContent() {
 							href="/"
 							className="inline-flex items-center space-x-2 mb-4"
 						>
-							<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 								<SquarePen className="h-5 w-5 text-white" />
 							</div>
-							<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</Link>
@@ -131,7 +131,7 @@ function VerifyEmailContent() {
 	// Success State
 	if (status === "success") {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
@@ -139,10 +139,10 @@ function VerifyEmailContent() {
 							href="/"
 							className="inline-flex items-center space-x-2 mb-4"
 						>
-							<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 								<SquarePen className="h-5 w-5 text-white" />
 							</div>
-							<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</Link>
@@ -169,7 +169,7 @@ function VerifyEmailContent() {
 							<div className="space-y-3">
 								<Button
 									onClick={() => router.push("/login")}
-									className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+									className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
 									size="lg"
 								>
 									Continue to Login
@@ -193,7 +193,7 @@ function VerifyEmailContent() {
 	// Error State
 	if (status === "error") {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
@@ -201,10 +201,10 @@ function VerifyEmailContent() {
 							href="/"
 							className="inline-flex items-center space-x-2 mb-4"
 						>
-							<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 								<SquarePen className="h-5 w-5 text-white" />
 							</div>
-							<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</Link>
@@ -237,7 +237,7 @@ function VerifyEmailContent() {
 							<div className="space-y-3">
 								<Button
 									onClick={() => setStatus("resend")}
-									className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+									className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
 									size="lg"
 								>
 									Request New Verification Link
@@ -260,7 +260,7 @@ function VerifyEmailContent() {
 
 	// Resend Verification Form
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
@@ -268,10 +268,10 @@ function VerifyEmailContent() {
 						href="/"
 						className="inline-flex items-center space-x-2 mb-4"
 					>
-						<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 							<SquarePen className="h-5 w-5 text-white" />
 						</div>
-						<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							MNHPSurvey
 						</span>
 					</Link>
@@ -337,7 +337,7 @@ function VerifyEmailContent() {
 
 							<Button
 								type="submit"
-								className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+								className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
 								disabled={isResending}
 								size="lg"
 							>
@@ -393,7 +393,7 @@ export default function VerifyEmailPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center">
+				<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center">
 					<div className="text-center">
 						<Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
 						<p className="text-muted-foreground">Loading...</p>

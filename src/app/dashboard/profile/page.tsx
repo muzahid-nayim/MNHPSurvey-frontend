@@ -12,11 +12,17 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, FileText, MessageSquare } from "lucide-react";
+import { useGetProfileQuery } from "@/core/api/authApi";
 
 export default function ProfilePage() {
-	const { isAuthenticated, user, loading } = useSelector(
-		(state: RootState) => state.auth
-	);
+	// const { isAuthenticated, user, loading } = useSelector(
+	// 	(state: RootState) => state.auth
+	// );
+
+	const { data: user, isLoading: loading, isLoading, error } = useGetProfileQuery();
+
+	console.log("user data in profile page:", user);
+
 
 	if (loading) {
 		return (
@@ -38,7 +44,7 @@ export default function ProfilePage() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* Main Profile Card */}
 				<div className="lg:col-span-2">
-					<ProfileInfoCard user={user} loading={loading} />
+					{ user && <ProfileInfoCard user={user} loading={loading} /> }
 				</div>
 
 				{/* Quick Stats */}

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import ManageAllowedEmails from "@/components/survey/ManageAllowedEmails";
 import SurveyAllowedEmailsManager from "@/components/survey/SurveyInvitationManager";
+import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
 
 export default function DashboardPage() {
 	const { data: surveys } = useGetSurveysQuery();
@@ -83,7 +84,7 @@ export default function DashboardPage() {
 				</CardContent>
 			</Card>
 
-			
+			<QrCodeGenerator text="Hello, World!" />
 		</div>
 	);
 }
