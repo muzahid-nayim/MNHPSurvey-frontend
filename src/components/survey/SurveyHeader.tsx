@@ -14,6 +14,17 @@ interface SurveyHeaderProps {
 	isLoading?: boolean;
 }
 
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import QrCodeGenerator from "./QRCodeGenerator";
+import { useMemo } from "react";
+
 export function SurveyHeader({
 	survey,
 	onEditClick,
@@ -34,12 +45,12 @@ export function SurveyHeader({
 		}
 	};
 	const [updateStatus] = useUpdateSurveyStatusMutation();
+	const surveyUrl = useMemo(() => {
+		return `${window.location.origin}/survey/${survey.id}`;
+	}, [survey.id]);
+
 	const handleCopySurveyLink = () => {
-		const url = `${window.location.origin}/survey/${survey.id}`;
-		copyToClipboard(url, "Survey link copied to clipboard!");
-		// console.log(url);// link is getting here and working well
-		// navigator.clipboard.writeText(url);
-		// alert("Survey link copied to clipboard!");
+		copyToClipboard(surveyUrl, "Survey link copied to clipboard!");
 	};
 
 	const handleStatusChange = async (newStatus: string) => {
@@ -94,7 +105,7 @@ export function SurveyHeader({
 				</div>
 				<span
 					className={`px-3 py-1 rounded text-sm font-medium ${getStatusColor(
-						survey?.status
+						survey?.status,
 					)}`}
 				>
 					{survey?.status?.toUpperCase()}
@@ -125,6 +136,21 @@ export function SurveyHeader({
 						>
 							Copy Survey Link
 						</Button>
+						<Dialog>
+							<DialogTrigger asChild>
+								<Button className="bg-blue-600 hover:bg-blue-700">
+									Share QR code
+								</Button>
+							</DialogTrigger>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>
+										Here is your qr code for the survey.
+									</DialogTitle>
+									<QrCodeGenerator text={surveyUrl} />
+								</DialogHeader>
+							</DialogContent>
+						</Dialog>
 						<Button
 							variant="outline"
 							onClick={() => handleChangeStatus("draft")}

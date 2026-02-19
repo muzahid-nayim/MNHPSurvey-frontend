@@ -73,10 +73,10 @@ export function UserAvatar() {
                focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
 				>
 					<div className="hidden md:flex flex-col items-end">
-						<p className="text-sm font-medium leading-none text-foreground">
+						<p className="text-sm font-medium leading-none text-foreground truncate max-w-[130px]">
 							Hello, {user.username}!
 						</p>
-						<p className="text-xs leading-none text-muted-foreground truncate max-w-[180px]">
+						<p className="text-xs leading-none text-muted-foreground truncate max-w-[130p x]">
 							{user.email}
 						</p>
 					</div>

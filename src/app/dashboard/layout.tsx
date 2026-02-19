@@ -160,7 +160,7 @@ export default function DashboardLayout({
 					</div>
 
 					{/* User Info */}
-					<div className="p-4 border-b border-border">
+					<div className="p-4 border-b border-border ">
 						<UserAvatar />
 					</div>
 

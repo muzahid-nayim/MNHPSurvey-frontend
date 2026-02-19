@@ -84,7 +84,7 @@ export default function DashboardPage() {
 				</CardContent>
 			</Card>
 
-			<QrCodeGenerator text="Hello, World!" />
+			
 		</div>
 	);
 }

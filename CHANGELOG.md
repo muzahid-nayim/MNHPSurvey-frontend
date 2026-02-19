@@ -9,6 +9,13 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.3.0] - 2026-2-19
+### Added 
+- Added basic experimental QR code option to share survey link.
+
+### Fixed
+- Fix some minor issue.
+
 ## [0.2.1] - 2026-2-18
 ### Fixed
 - Fix user registration with same uername in frontend.
