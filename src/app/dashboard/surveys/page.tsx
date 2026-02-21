@@ -27,10 +27,27 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { toast } from "react-toastify";
-
-import { LinkIcon, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+	HelpCircle,
+	Users,
+	Calendar,
+	Share2,
+	Copy,
+	QrCode,
+	Trash2,
+	MessageSquare,
+} from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
+import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
 
 export default function SurveysPage() {
 	const { data: surveys, isLoading, error } = useGetSurveysQuery();
@@ -96,112 +113,164 @@ export default function SurveysPage() {
 					</CardContent>
 				</Card>
 			) : (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{surveys?.map((survey) => {
 						const publicUrl = `${window.location.origin}/survey/${survey.id}`;
 
 						return (
 							<Card
 								key={survey.id}
-								className="overflow-hidden group
-								 hover:shadow-md transition-shadow cursor-pointer relative"
+								className="group relative flex cursor-pointer flex-col overflow-hidden transition-all hover:shadow-lg"
 								onClick={() =>
 									(window.location.href = `/dashboard/surveys/${survey.id}`)
 								}
 							>
-								{/* Status badge */}
-								<div className="absolute top-3 right-3 z-10">
+								{/* Status Badge */}
+								<div className="absolute right-3 top-3 z-10">
 									<span
 										className={`
-													  px-2 py-1 rounded-full text-xs font-medium
-													  ${
-															survey.status === "active"
-																? "bg-green-100 text-green-800"
-																: survey.status === "draft"
-																? "bg-gray-100 text-gray-800"
-																: "bg-red-100 text-red-800"
-														}
-													`}
+              inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+              ${
+					survey.status === "active"
+						? "bg-green-100 text-green-800"
+						: survey.status === "draft"
+							? "bg-gray-100 text-gray-800"
+							: "bg-red-100 text-red-800"
+				}
+            `}
 									>
 										{survey.status}
 									</span>
 								</div>
 
-								<CardHeader className="pb-3">
-									<div>
-										<CardTitle className="truncate group-hover:text-primary">
-											{survey.title}
-										</CardTitle>
-										<CardDescription className="truncate">
-											{survey.description ||
-												"No description"}
-										</CardDescription>
-									</div>
+								<CardHeader className="pb-2">
+									<CardTitle className="truncate pr-16 text-lg group-hover:text-primary">
+										{survey.title}
+									</CardTitle>
+									<CardDescription className="line-clamp-2">
+										{survey.description || "No description"}
+									</CardDescription>
 								</CardHeader>
 
-								<CardContent className="pt-0">
+								<CardContent className="flex flex-1 flex-col pb-4">
 									{/* Stats */}
-									<div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-										<div className="space-y-1">
-											<p className="font-medium">
-												Questions
-											</p>
-											<p className="text-2xl font-bold">
-												{survey.question_count}
-											</p>
+									<div className="mb-3 grid grid-cols-2 gap-2">
+										<div className="flex items-center gap-2 rounded-md bg-muted/50 p-2">
+											<HelpCircle className="h-4 w-4 text-muted-foreground" />
+											<div>
+												<p className="text-xs text-muted-foreground">
+													Questions
+												</p>
+												<p className="text-lg font-semibold">
+													{survey.question_count}
+												</p>
+											</div>
 										</div>
-										<div className="space-y-1">
-											<p className="font-medium">
-												Responses
-											</p>
-											<p className="text-2xl font-bold">
-												{survey.response_count}
-											</p>
+										<div className="flex items-center gap-2 rounded-md bg-muted/50 p-2">
+											<Users className="h-4 w-4 text-muted-foreground" />
+											<div>
+												<p className="text-xs text-muted-foreground">
+													Responses
+												</p>
+												<p className="text-lg font-semibold">
+													{survey.response_count}
+												</p>
+											</div>
 										</div>
 									</div>
 
-									<p className="text-sm text-muted-foreground mb-4">
-										Created:{" "}
-										{new Date(
-											survey.created_at
-										).toLocaleDateString()}
-									</p>
+									{/* Created Date */}
+									<div className="mb-4 flex items-center gap-1 text-xs text-muted-foreground">
+										<Calendar className="h-3.5 w-3.5" />
+										<span>
+											Created{" "}
+											{new Date(
+												survey.created_at,
+											).toLocaleDateString()}
+										</span>
+									</div>
 
-									{/* 3 Action Buttons */}
+									{/* Action Buttons - Responsive Button Group */}
 									<div
-										className="flex gap-2"
+										className="mt-auto flex flex-nowrap items-center"
 										onClick={(e) => e.stopPropagation()}
 									>
 										{/* Responses Button */}
 										<Link
 											href={`/dashboard/surveys/${survey.id}/responses`}
-											className="flex-1"
+											className="flex-1 min-w-0" // 🔑 Critical for truncation
 										>
 											<Button
 												variant="outline"
 												size="sm"
-												className="w-full h-8 text-xs"
+												className="w-full gap-1 px-2 py-0 h-8 sm:h-9 rounded-r-none"
 												onClick={(e) =>
 													e.stopPropagation()
 												}
 											>
-												Responses
+												<MessageSquare className="h-3.5 w-3.5 shrink-0" />
+												<span className="truncate min-w-0 text-[11px] sm:text-xs">
+													Responses
+												</span>
 											</Button>
 										</Link>
 
-										{/* Copy Link Button (only for active surveys) */}
+										{/* Share Button (only for active surveys) */}
 										{survey.status === "active" && (
-											<Button
-												variant="outline"
-												size="sm"
-												className="h-8 px-3 text-xs flex-1"
-												onClick={(e) => {
-													e.stopPropagation();
-													copyToClipboard(publicUrl, "Survey link copied to clipboard!");
-												}}
-											>
-												Copy Link
-											</Button>
+											<Dialog>
+												<DialogTrigger asChild>
+													<Button
+														variant="outline"
+														size="sm"
+														className="flex-1 min-w-0 gap-1 px-2 py-0 h-8 sm:h-9 rounded-none"
+														onClick={(e) =>
+															e.stopPropagation()
+														}
+													>
+														<Share2 className="h-3.5 w-3.5 shrink-0" />
+														<span className="truncate min-w-0 text-[11px] sm:text-xs">
+															Share
+														</span>
+													</Button>
+												</DialogTrigger>
+												<DialogContent
+													className="sm:max-w-md"
+													onClick={(e) =>
+														e.stopPropagation()
+													}
+												>
+													<DialogHeader>
+														<DialogTitle>
+															Share Survey
+														</DialogTitle>
+														<DialogDescription>
+															Share this survey
+															with respondents
+														</DialogDescription>
+													</DialogHeader>
+													<div className="flex flex-col items-center gap-4 py-2">
+														<Button
+															onClick={() => {
+																copyToClipboard(
+																	publicUrl,
+																	"Survey link copied!",
+																);
+															}}
+															variant="outline"
+															className="w-full justify-start gap-2"
+														>
+															<Copy className="h-4 w-4" />
+															Copy Survey Link
+														</Button>
+														<div className="rounded-lg border bg-muted/20 p-4">
+															<QrCodeGenerator
+																text={publicUrl}
+																showDownload
+															/>
+														</div>
+													</div>
+												</DialogContent>
+											</Dialog>
 										)}
 
 										{/* Delete Button */}
@@ -210,12 +279,15 @@ export default function SurveysPage() {
 												<Button
 													variant="destructive"
 													size="sm"
-													className="h-8 px-3 text-xs flex-1"
+													className="flex-1 min-w-0 gap-1 px-2 py-0 h-8 sm:h-9 rounded-l-none"
 													onClick={(e) =>
 														e.stopPropagation()
 													}
 												>
-													Delete
+													<Trash2 className="h-3.5 w-3.5 shrink-0" />
+													<span className="truncate min-w-0 text-[11px] sm:text-xs">
+														Delete
+													</span>
 												</Button>
 											</AlertDialogTrigger>
 											<AlertDialogContent
@@ -239,10 +311,11 @@ export default function SurveysPage() {
 														Cancel
 													</AlertDialogCancel>
 													<AlertDialogAction
+														className="bg-destructive"
 														onClick={(e) => {
 															e.stopPropagation();
 															handleDelete(
-																survey.id
+																survey.id,
 															);
 														}}
 													>

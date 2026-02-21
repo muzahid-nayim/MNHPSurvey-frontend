@@ -20,16 +20,23 @@ import {
 	Menu,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/core/utils";
 import { logout } from "@/core/store/slices/authSlice";
+import { UserAvatar } from "@/components/common/UserAvater";
+import { toast } from "react-toastify";
 
 export default function DashboardLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	
 	const [logoutMutation] = useLogoutMutation();
 	const router = useRouter();
 	const pathname = usePathname();
@@ -47,24 +54,26 @@ export default function DashboardLayout({
 	}, [isAuthenticated, router, pathname, loading]);
 
 	const handleLogout = async () => {
-		try {
-			if (typeof window !== "undefined") {
+			try {
 				const storedAuth = localStorage.getItem("auth");
 				if (storedAuth) {
 					const { refreshToken } = JSON.parse(storedAuth);
 					await logoutMutation({ refresh_token: refreshToken });
 				}
-			}
-			dispatch(logout());
-			localStorage.removeItem("auth");
-			router.push("/login");
-		} catch (error) {
-			console.error("Logout failed:", error);
-			dispatch(logout());
-			localStorage.removeItem("auth");
-			router.push("/login");
-		}
-	};
+				dispatch(logout());
+				localStorage.removeItem("auth");
+					router.push("/login");
+				toast.success("Logged out successfully!");
+			} catch (error) {
+				console.error("Logout failed:", error);
+				dispatch(logout());
+				localStorage.removeItem("auth");
+				setTimeout(() => {
+					router.push("/login");
+				}, 1000);
+				toast.error("Session expired. Please login again.");
+			} 
+		};
 
 	// Navigation items
 	const navigation = [
@@ -86,12 +95,12 @@ export default function DashboardLayout({
 			icon: BarChart3,
 			current: pathname.startsWith("/dashboard/analytics"),
 		},
-		{
-			name: "Profile",
-			href: "/dashboard/profile",
-			icon: User,
-			current: pathname === "/dashboard/profile",
-		},
+		// {
+		// 	name: "Profile",
+		// 	href: "/dashboard/profile",
+		// 	icon: User,
+		// 	current: pathname === "/dashboard/profile",
+		// },
 		{
 			name: "Settings",
 			href: "/dashboard/settings",
@@ -142,25 +151,19 @@ export default function DashboardLayout({
 						<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 							<SquarePen className="h-4 w-4 text-white" />
 						</div>
-						<Link href={"/"} className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<Link
+							href={"/"}
+							className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent"
+						>
 							MNHPSurvey
 						</Link>
 					</div>
 
 					{/* User Info */}
-					<div className="flex items-center gap-3 p-6 border-b border-border">
-						<div className="h-10 w-10 rounded-full bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium">
-							{user?.username?.charAt(0).toUpperCase() || "U"}
-						</div>
-						<div className="flex-1 min-w-0">
-							<p className="font-medium text-foreground truncate">
-								{user?.username}
-							</p>
-							<p className="text-sm text-muted-foreground truncate">
-								{user?.email}
-							</p>
-						</div>
+					<div className="p-4 border-b border-border ">
+						<UserAvatar />
 					</div>
+
 
 					{/* Navigation */}
 					<nav className="flex-1 p-4 space-y-2">
@@ -228,26 +231,17 @@ export default function DashboardLayout({
 										<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 											<SquarePen className="h-4 w-4 text-white" />
 										</div>
-										<span className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+										<Link
+											href={"/"}
+											className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent"
+										>
 											MNHPSurvey
-										</span>
+										</Link>
 									</div>
 
 									{/* Mobile User Info */}
-									<div className="flex items-center gap-3 p-6 border-b border-border">
-										<div className="h-10 w-10 rounded-full bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium">
-											{user?.username
-												?.charAt(0)
-												.toUpperCase() || "U"}
-										</div>
-										<div className="flex-1 min-w-0">
-											<p className="font-medium text-foreground truncate">
-												{user?.username}
-											</p>
-											<p className="text-sm text-muted-foreground truncate">
-												{user?.email}
-											</p>
-										</div>
+									<div className="p-4 border-b border-border">
+										<UserAvatar />
 									</div>
 
 									{/* Mobile Navigation */}

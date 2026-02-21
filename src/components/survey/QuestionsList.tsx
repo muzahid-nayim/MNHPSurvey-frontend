@@ -89,7 +89,7 @@ export function QuestionsList({
 			is_required: question.is_required,
 			options: question.options.map((opt: any) => ({
 				id: opt.id, // Keep the ID for existing options
-				text: opt.option_text // Store text separately
+				text: opt.option_text, // Store text separately
 			})),
 		});
 		setShowAddQuestion(true); // Show the form when editing
@@ -154,7 +154,7 @@ export function QuestionsList({
 		const validOptions = questionForm.options.filter(
 			(opt) => opt.text.trim() !== ""
 		);
-		
+
 		if (validOptions.length < 2) {
 			toast.info("Add at least 2 options");
 			return;
@@ -166,7 +166,7 @@ export function QuestionsList({
 				return {
 					...(option.id && { id: option.id }), // Include ID only if it exists
 					option_text: option.text,
-					order: index
+					order: index,
 				};
 			});
 
@@ -254,7 +254,68 @@ export function QuestionsList({
 							{survey?.questions?.length !== 1 ? "s" : ""}
 						</p>
 					</div>
+					<div>
+						{/* Add Question Button - Only show in draft status */}
+						{survey?.status === "draft" &&
+							!showAddQuestion &&
+							!editingQuestionId && (
+								<Button
+									onClick={() => {
+										setShowAddQuestion(true);
+										setTimeout(() => {
+											document
+												.getElementById("question-form")
+												?.scrollIntoView({
+													behavior: "smooth",
+												});
+										}, 0);
+									}}
+									className="w-full mb-6 bg-blue-600 hover:bg-blue-700 my-4"
+								>
+									+ Add Question
+								</Button>
+							)}
+					</div>
 				</div>
+
+				{/* Question Form - Add or Edit */}
+				{(showAddQuestion || editingQuestionId) && (
+					<div id="question-form">
+						<QuestionForm
+							isEditing={!!editingQuestionId}
+							questionText={questionForm.question_text}
+							questionType={questionForm.question_type}
+							isRequired={questionForm.is_required}
+							options={questionForm.options.map(
+								(opt) => opt.text
+							)} // Convert to string[] for the form
+							isLoading={isCreatingQuestion || isUpdatingQuestion}
+							onQuestionTextChange={(text) =>
+								updateQuestionForm({
+									...questionForm,
+									question_text: text,
+								})
+							}
+							onQuestionTypeChange={(type) =>
+								updateQuestionForm({
+									...questionForm,
+									question_type: type,
+								})
+							}
+							onRequiredChange={(required) =>
+								updateQuestionForm({
+									...questionForm,
+									is_required: required,
+								})
+							}
+							onAddOption={addOptionToForm}
+							onRemoveOption={removeOptionFromForm}
+							onUpdateOption={updateOptionInForm}
+							onSubmit={handleSubmitQuestion}
+							onCancel={cancelQuestionEdit}
+						/>
+					</div>
+				)}
 
 				{/* Empty State */}
 				{(!survey?.questions || survey.questions.length === 0) && (
@@ -412,55 +473,6 @@ export function QuestionsList({
 						)
 					)}
 				</div>
-
-				{/* Add Question Button - Only show in draft status */}
-				{survey?.status === "draft" &&
-					!showAddQuestion &&
-					!editingQuestionId && (
-						<Button
-							onClick={() => setShowAddQuestion(true)}
-							className="w-full mb-6 bg-blue-600 hover:bg-blue-700 my-4"
-						>
-							+ Add Question
-						</Button>
-					)}
-
-				{/* Question Form - Add or Edit */}
-				{(showAddQuestion || editingQuestionId) && (
-					<div id="question-form">
-						<QuestionForm
-							isEditing={!!editingQuestionId}
-							questionText={questionForm.question_text}
-							questionType={questionForm.question_type}
-							isRequired={questionForm.is_required}
-							options={questionForm.options.map(opt => opt.text)} // Convert to string[] for the form
-							isLoading={isCreatingQuestion || isUpdatingQuestion}
-							onQuestionTextChange={(text) =>
-								updateQuestionForm({
-									...questionForm,
-									question_text: text,
-								})
-							}
-							onQuestionTypeChange={(type) =>
-								updateQuestionForm({
-									...questionForm,
-									question_type: type,
-								})
-							}
-							onRequiredChange={(required) =>
-								updateQuestionForm({
-									...questionForm,
-									is_required: required,
-								})
-							}
-							onAddOption={addOptionToForm}
-							onRemoveOption={removeOptionFromForm}
-							onUpdateOption={updateOptionInForm}
-							onSubmit={handleSubmitQuestion}
-							onCancel={cancelQuestionEdit}
-						/>
-					</div>
-				)}
 			</div>
 
 			{/* Delete Confirmation Dialog */}

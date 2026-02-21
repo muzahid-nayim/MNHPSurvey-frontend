@@ -1,6 +1,6 @@
 // src/components/survey/SurveyHeader.tsx
 "use client";
-
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useUpdateSurveyStatusMutation } from "@/core/api/surveyApi";
 import { useClipboard } from "@/hooks/useClipboard";
@@ -13,6 +13,37 @@ interface SurveyHeaderProps {
 	onEditClick: () => void;
 	isLoading?: boolean;
 }
+
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+	Share2,
+	Copy,
+	QrCode,
+	Undo,
+	XCircle,
+	Rocket,
+	Pencil,
+	RefreshCw,
+	ArrowLeft,
+	Circle,
+	Info,
+} from "lucide-react";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
+import QrCodeGenerator from "./QRCodeGenerator";
+import { useMemo } from "react";
+import { ButtonGroup } from "../ui/button-group";
 
 export function SurveyHeader({
 	survey,
@@ -34,12 +65,13 @@ export function SurveyHeader({
 		}
 	};
 	const [updateStatus] = useUpdateSurveyStatusMutation();
+
+	const surveyUrl = useMemo(() => {
+		return `${window.location.origin}/survey/${survey.id}`;
+	}, [survey.id]);
+
 	const handleCopySurveyLink = () => {
-		const url = `${window.location.origin}/survey/${survey.id}`;
-		copyToClipboard(url, "Survey link copied to clipboard!");
-		// console.log(url);// link is getting here and working well
-		// navigator.clipboard.writeText(url);
-		// alert("Survey link copied to clipboard!");
+		copyToClipboard(surveyUrl, "Survey link copied to clipboard!");
 	};
 
 	const handleStatusChange = async (newStatus: string) => {
@@ -83,60 +115,126 @@ export function SurveyHeader({
 	};
 
 	return (
-		<div className="mb-8">
-			{/* Survey Title and Description */}
-			<div className="flex justify-between items-start mb-4">
-				<div>
-					<h1 className="text-3xl font-bold">{survey?.title}</h1>
-					<p className="text-muted-foreground">
-						{survey?.description}
-					</p>
+		<div className="mb-8 rounded-lg border bg-card p-6 shadow-sm">
+			{/* Header with title, description and status */}
+			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+				<div className="space-y-1">
+					<h1 className="text-3xl font-bold tracking-tight">
+						{survey?.title}
+					</h1>
+					{survey?.description && (
+						<p className="text-muted-foreground">
+							{survey?.description}
+						</p>
+					)}
 				</div>
-				<span
-					className={`px-3 py-1 rounded text-sm font-medium ${getStatusColor(
-						survey?.status
-					)}`}
-				>
-					{survey?.status?.toUpperCase()}
-				</span>
+				<div className="flex items-center gap-2">
+					<span
+						className={cn(
+							"inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
+							getStatusColor(survey?.status),
+						)}
+					>
+						<Circle className="h-2 w-2 fill-current" />
+						{survey?.status?.toUpperCase()}
+					</span>
+				</div>
 			</div>
 
-			{/* Action Buttons Based on Status */}
-			<div className="flex gap-2 flex-wrap">
+			{/* Action Buttons */}
+			<div className="mt-6 flex flex-wrap items-center gap-2">
 				{survey?.status === "draft" && (
-					<>
+					<ButtonGroup className="flex items-center">
 						<Button
 							onClick={handlePublish}
-							className="bg-green-600 hover:bg-green-700"
+							className="gap-2 bg-primary hover:bg-primary/90"
 						>
+							<Rocket className="h-4 w-4" />
 							Publish Survey
-						</Button>
-						<Button variant="outline" onClick={onEditClick}>
-							Edit Survey Details
-						</Button>
-					</>
-				)}
-
-				{survey?.status === "active" && (
-					<>
-						<Button
-							onClick={handleCopySurveyLink}
-							className="bg-blue-600 hover:bg-blue-700"
-						>
-							Copy Survey Link
 						</Button>
 						<Button
 							variant="outline"
-							onClick={() => handleChangeStatus("draft")}
+							onClick={onEditClick}
+							className="gap-2"
 						>
-							Revert to Draft
+							<Pencil className="h-4 w-4" />
+							Edit Survey Details
 						</Button>
 						<Button
 							variant="destructive"
 							onClick={handleCloseStatus}
+							className="gap-2"
 						>
+							<XCircle className="h-4 w-4" />
 							Close Survey
 						</Button>
+					</ButtonGroup>
+				)}
+
+				{survey?.status === "active" && (
+					<>
+						<ButtonGroup className="flex items-center">
+							<Dialog>
+								<DialogTrigger asChild>
+									<Button
+										className="justify-start gap-2 bg-green-600 hover:bg-green-700"
+									>
+										<QrCode className="h-4 w-4" />
+										Share
+									</Button>
+								</DialogTrigger>
+								<DialogContent
+									className="sm:max-w-md"
+									onClick={(e) => e.stopPropagation()}
+								>
+									<DialogHeader>
+										<DialogTitle>Share Survey</DialogTitle>
+										<DialogDescription>
+											Share this survey with respondents
+										</DialogDescription>
+									</DialogHeader>
+									<div className="flex flex-col items-center gap-4 py-2">
+										{/* Copy Link Button */}
+										<Button
+											onClick={() => {
+												copyToClipboard(
+													surveyUrl,
+													"Survey link copied!",
+												);
+											}}
+											variant="outline"
+											className="w-full justify-start gap-2"
+										>
+											<Copy className="h-4 w-4" />
+											Copy Survey Link
+										</Button>
+
+										{/* QR Code */}
+										<div className="rounded-lg border bg-muted/20 p-4">
+											<QrCodeGenerator
+												text={surveyUrl}
+												showDownload
+											/>
+										</div>
+									</div>
+								</DialogContent>
+							</Dialog>
+
+							<Button
+								variant="outline"
+								onClick={() => handleChangeStatus("draft")}
+							>
+								<Undo className="h-4 w-4" />
+								Revert to Draft
+							</Button>
+							<Button
+								variant="destructive"
+								onClick={handleCloseStatus}
+							>
+								<XCircle className="h-4 w-4" />
+								Close Survey
+							</Button>
+						</ButtonGroup>
 					</>
 				)}
 
@@ -145,7 +243,9 @@ export function SurveyHeader({
 						<Button
 							variant="outline"
 							onClick={() => handleChangeStatus("draft")}
+							className="gap-2"
 						>
+							<RefreshCw className="h-4 w-4" />
 							Reopen as Draft
 						</Button>
 					</>
@@ -154,26 +254,34 @@ export function SurveyHeader({
 				<Button
 					variant="outline"
 					onClick={() => router.push("/dashboard/surveys")}
+					className="gap-2"
 				>
+					<ArrowLeft className="h-4 w-4" />
 					Back to Surveys
 				</Button>
 			</div>
 
-			{survey?.status === "draft" ? (
-				<p className="mt-4 text-base text-orange-500">
-					Note: The survey is currently in draft mode and not visible
-					to respondents.
-				</p>
-			) : survey?.status === "closed" ? (
-				<p className="mt-4 text-base text-red-600">
-					Note: The survey is closed and no longer accepting
-					responses.
-				</p>
-			) : (
-				<p className="mt-4 text-base text-green-600">
-					Note: The survey is active and accepting responses.
-				</p>
-			)}
+			{/* Status Note with Icon */}
+			<div className="mt-4">
+				{survey?.status === "draft" ? (
+					<p className="flex items-center gap-2 text-base text-orange-600">
+						<Info className="h-4 w-4" />
+						Note: The survey is currently in draft mode and not
+						visible to respondents.
+					</p>
+				) : survey?.status === "closed" ? (
+					<p className="flex items-center gap-2 text-base text-red-600">
+						<Info className="h-4 w-4" />
+						Note: The survey is closed and no longer accepting
+						responses.
+					</p>
+				) : (
+					<p className="flex items-center gap-2 text-base text-green-600">
+						<Info className="h-4 w-4" />
+						Note: The survey is active and accepting responses.
+					</p>
+				)}
+			</div>
 		</div>
 	);
 }

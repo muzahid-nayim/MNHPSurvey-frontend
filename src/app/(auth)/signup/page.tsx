@@ -31,6 +31,7 @@ import {
 	Check,
 	X,
 } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
 	const [formState, setFormState] = useState({
@@ -41,6 +42,11 @@ export default function RegisterPage() {
 		firstName: "",
 		lastName: "",
 	});
+
+	// useEffect(() => {
+	// 	console.log("formState", formState);
+	// },[formState])
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [passwordError, setPasswordError] = useState("");
@@ -92,6 +98,10 @@ export default function RegisterPage() {
 		if (!validatePassword()) {
 			return;
 		}
+		if (passwordStrength < 3) {
+			toast.warn ("Must contain 8 characters, 1 number, 1 symbol")
+			return;
+		}
 
 		try {
 			await register({
@@ -102,9 +112,13 @@ export default function RegisterPage() {
 				first_name: formState.firstName || undefined,
 				last_name: formState.lastName || undefined,
 			}).unwrap();
-			router.push("/verify-email");
+			// router.push("/verify-email");
+			router.push(
+				`/verify-email-sent?email=${encodeURIComponent(formState.email)}`,
+			);
 		} catch (err: any) {
-			console.error("Registration failed:", err);
+			// console.error("Registration failed:", err);
+			toast.error(getErrorMessage());
 		}
 	};
 
@@ -125,7 +139,6 @@ export default function RegisterPage() {
 		"bg-orange-500",
 		"bg-yellow-500",
 		"bg-green-500",
-		"bg-green-600",
 	];
 
 	// Extract error message from RTK Query error
@@ -147,7 +160,7 @@ export default function RegisterPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
@@ -155,10 +168,10 @@ export default function RegisterPage() {
 						href="/"
 						className="inline-flex items-center space-x-2 mb-4"
 					>
-						<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 							<SquarePen className="h-5 w-5 text-white" />
 						</div>
-						<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							MNHPSurvey
 						</span>
 					</Link>
@@ -322,7 +335,7 @@ export default function RegisterPage() {
 								{formState.password && (
 									<div className="space-y-2">
 										<div className="flex gap-1">
-											{[0, 1, 2, 3, 4].map((index) => (
+											{[0, 1, 2, 3].map((index) => (
 												<div
 													key={index}
 													className={`h-1 flex-1 rounded-full transition-all ${
@@ -330,7 +343,7 @@ export default function RegisterPage() {
 															? strengthColors[
 																	passwordStrength -
 																		1
-															  ]
+																]
 															: "bg-muted"
 													}`}
 												/>
@@ -348,7 +361,7 @@ export default function RegisterPage() {
 											</div>
 											<div className="flex items-center gap-1">
 												{/[A-Z]/.test(
-													formState.password
+													formState.password,
 												) ? (
 													<Check className="h-3 w-3 text-green-500" />
 												) : (
@@ -358,13 +371,23 @@ export default function RegisterPage() {
 											</div>
 											<div className="flex items-center gap-1">
 												{/[0-9]/.test(
-													formState.password
+													formState.password,
 												) ? (
 													<Check className="h-3 w-3 text-green-500" />
 												) : (
 													<X className="h-3 w-3 text-red-500" />
 												)}
 												<span>Number</span>
+											</div>
+											<div className="flex items-center gap-1">
+												{/[^A-Za-z0-9]/.test(
+													formState.password,
+												) ? (
+													<Check className="h-3 w-3 text-green-500" />
+												) : (
+													<X className="h-3 w-3 text-red-500" />
+												)}
+												<span>Special Character</span>
 											</div>
 										</div>
 									</div>
@@ -403,7 +426,7 @@ export default function RegisterPage() {
 										className="absolute right-0 top-0 h-10 w-10 text-muted-foreground hover:text-foreground"
 										onClick={() =>
 											setShowConfirmPassword(
-												!showConfirmPassword
+												!showConfirmPassword,
 											)
 										}
 										disabled={isLoading}
@@ -420,7 +443,7 @@ export default function RegisterPage() {
 							{/* Submit Button */}
 							<Button
 								type="submit"
-								className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+								className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
 								disabled={isLoading}
 								size="lg"
 							>

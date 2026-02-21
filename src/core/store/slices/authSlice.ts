@@ -11,8 +11,8 @@ interface AuthState {
 	error: string | null;
 }
 
-// 1. load once at boot
-const initialState: AuthState = loadAuth() ?? {
+// Empty/clean initial state
+const cleanInitialState: AuthState = {
 	user: null,
 	accessToken: null,
 	refreshToken: null,
@@ -20,6 +20,9 @@ const initialState: AuthState = loadAuth() ?? {
 	loading: false,
 	error: null,
 };
+
+// Load persisted auth state on boot, or use clean state
+const initialState: AuthState = loadAuth() ?? cleanInitialState;
 
 const authSlice = createSlice({
 	name: "auth",
@@ -56,7 +59,7 @@ const authSlice = createSlice({
 		},
 
 		logout: (state) => {
-			Object.assign(state, initialState);
+			Object.assign(state, cleanInitialState);
 			clearAuth(); // <- CLEAR
 		},
 

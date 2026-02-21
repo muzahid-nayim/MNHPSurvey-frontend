@@ -46,7 +46,7 @@ function ResetPasswordContent() {
 	const validateForm = () => {
 		if (!token) {
 			setPasswordError(
-				"Reset token is missing. Please use the link from your email."
+				"Reset token is missing. Please use the link from your email.",
 			);
 			return false;
 		}
@@ -92,17 +92,17 @@ function ResetPasswordContent() {
 
 	if (!token) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
 						<Link
 							href="/"
 							className="inline-flex items-center space-x-2 mb-4"
 						>
-							<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 								<SquarePen className="h-5 w-5 text-white" />
 							</div>
-							<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</Link>
@@ -136,17 +136,17 @@ function ResetPasswordContent() {
 
 	if (isSuccess) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
 						<Link
 							href="/"
 							className="inline-flex items-center space-x-2 mb-4"
 						>
-							<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 								<SquarePen className="h-5 w-5 text-white" />
 							</div>
-							<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 								MNHPSurvey
 							</span>
 						</Link>
@@ -169,7 +169,7 @@ function ResetPasswordContent() {
 								</p>
 							</div>
 							<Link href="/login">
-								<Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+								<Button className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
 									Continue to Login
 								</Button>
 							</Link>
@@ -181,17 +181,17 @@ function ResetPasswordContent() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
+		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
 				<div className="text-center mb-8">
 					<Link
 						href="/"
 						className="inline-flex items-center space-x-2 mb-4"
 					>
-						<div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
 							<SquarePen className="h-5 w-5 text-white" />
 						</div>
-						<span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 							MNHPSurvey
 						</span>
 					</Link>
@@ -292,7 +292,7 @@ function ResetPasswordContent() {
 										className="absolute right-0 top-0 h-10 w-10 text-muted-foreground hover:text-foreground"
 										onClick={() =>
 											setShowConfirmPassword(
-												!showConfirmPassword
+												!showConfirmPassword,
 											)
 										}
 										disabled={isLoading}
@@ -308,7 +308,7 @@ function ResetPasswordContent() {
 
 							<Button
 								type="submit"
-								className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+								className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
 								disabled={isLoading}
 								size="lg"
 							>
@@ -328,7 +328,7 @@ export default function ResetPasswordPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="min-h-screen bg-gradient-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center">
+				<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center">
 					<div className="text-center">
 						<p className="text-muted-foreground">Loading...</p>
 					</div>

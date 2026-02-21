@@ -71,9 +71,9 @@ export function SurveyStatusCard({
 
 	// Card styling based on type
 	const cardStyles = {
-		error: "border-destructive/20 bg-gradient-to-br from-background to-destructive/5",
-		not_found: "border-border/50 bg-gradient-to-br from-card to-muted/5",
-		submitted: "border-primary/20 bg-gradient-to-br from-card to-primary/5",
+		error: "border-destructive/20 bg-linear-to-br from-background to-destructive/5",
+		not_found: "border-border/50 bg-linear-to-br from-card to-muted/5",
+		submitted: "border-primary/20 bg-linear-to-br from-card to-primary/5",
 	};
 
 	// Configuration for each type
@@ -148,16 +148,16 @@ export function SurveyStatusCard({
 								type === "error"
 									? "text-destructive"
 									: type === "submitted"
-									? "text-primary/80"
-									: "text-muted-foreground"
+										? "text-primary/80"
+										: "text-muted-foreground"
 							}`}
 						>
 							{displayMessage ||
 								(type === "not_found"
 									? "The survey you're looking for doesn't exist or has been removed"
 									: type === "submitted"
-									? "Your response has been recorded successfully"
-									: "An unexpected error occurred")}
+										? "Your response has been recorded successfully"
+										: "An unexpected error occurred")}
 						</p>
 
 						{/* Action Buttons */}
@@ -180,7 +180,8 @@ export function SurveyStatusCard({
 														onLogin();
 													} else {
 														window.location.href = `/login?returnTo=${encodeURIComponent(
-															window.location.href
+															window.location
+																.href,
 														)}`;
 													}
 												}}
@@ -304,10 +305,10 @@ export function SurveyStatusCard({
 														const url =
 															window.location.href.replace(
 																"/submit",
-																""
+																"",
 															);
 														navigator.clipboard.writeText(
-															url
+															url,
 														);
 														// You can add a toast notification here
 													})
@@ -334,9 +335,9 @@ export const SurveyErrorCard = (props: Omit<SurveyStatusCardProps, "type">) => (
 );
 
 export const SurveyNotFoundCard = (
-	props: Omit<SurveyStatusCardProps, "type">
+	props: Omit<SurveyStatusCardProps, "type">,
 ) => <SurveyStatusCard type="not_found" {...props} />;
 
 export const SurveySubmittedCard = (
-	props: Omit<SurveyStatusCardProps, "type">
+	props: Omit<SurveyStatusCardProps, "type">,
 ) => <SurveyStatusCard type="submitted" {...props} />;

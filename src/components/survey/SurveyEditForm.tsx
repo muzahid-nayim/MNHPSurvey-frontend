@@ -369,7 +369,7 @@ export function SurveyEditForm({
 						<Button
 							type="submit"
 							disabled={isUpdatingSurvey}
-							className="sm:flex-1 h-11 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
+							className="sm:flex-1 h-11 bg-linear-to-r bg-green-600 hover:bg-green-700"
 						>
 							{isUpdatingSurvey ? (
 								<>
