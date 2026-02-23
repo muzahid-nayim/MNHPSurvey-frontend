@@ -59,7 +59,7 @@ export function QuestionsList({
 	// State
 	const [showAddQuestion, setShowAddQuestion] = useState(false);
 	const [editingQuestionId, setEditingQuestionId] = useState<string | null>(
-		null
+		null,
 	);
 	const [questionForm, setQuestionForm] = useState<QuestionFormState>({
 		question_text: "",
@@ -152,7 +152,7 @@ export function QuestionsList({
 		e.preventDefault();
 
 		const validOptions = questionForm.options.filter(
-			(opt) => opt.text.trim() !== ""
+			(opt) => opt.text.trim() !== "",
 		);
 
 		if (validOptions.length < 2) {
@@ -204,7 +204,7 @@ export function QuestionsList({
 			toast.error(
 				editingQuestionId
 					? "Failed to update question"
-					: "Failed to create question"
+					: "Failed to create question",
 			);
 		}
 	};
@@ -270,7 +270,7 @@ export function QuestionsList({
 												});
 										}, 0);
 									}}
-									className="w-full mb-6 bg-blue-600 hover:bg-blue-700 my-4"
+									className="w-full mb-6 bg-blue-600 hover:bg-gradient-r/50 my-4"
 								>
 									+ Add Question
 								</Button>
@@ -287,7 +287,7 @@ export function QuestionsList({
 							questionType={questionForm.question_type}
 							isRequired={questionForm.is_required}
 							options={questionForm.options.map(
-								(opt) => opt.text
+								(opt) => opt.text,
 							)} // Convert to string[] for the form
 							isLoading={isCreatingQuestion || isUpdatingQuestion}
 							onQuestionTextChange={(text) =>
@@ -385,7 +385,7 @@ export function QuestionsList({
 													size="sm"
 													onClick={() =>
 														handleEditQuestion(
-															question.id
+															question.id,
 														)
 													}
 													className="h-8 px-3"
@@ -455,7 +455,7 @@ export function QuestionsList({
 																					id: option.id,
 																					questionId:
 																						question.id,
-																				}
+																				},
 																			)
 																		}
 																	>
@@ -463,14 +463,14 @@ export function QuestionsList({
 																	</Button>
 																)}
 															</div>
-														)
+														),
 													)}
 												</div>
 											</div>
 										)}
 								</CardContent>
 							</Card>
-						)
+						),
 					)}
 				</div>
 			</div>

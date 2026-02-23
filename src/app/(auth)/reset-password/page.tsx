@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, SquarePen, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/common/logo";
 
 function ResetPasswordContent() {
 	const router = useRouter();
@@ -95,17 +96,7 @@ function ResetPasswordContent() {
 			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
-						<Link
-							href="/"
-							className="inline-flex items-center space-x-2 mb-4"
-						>
-							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-								<SquarePen className="h-5 w-5 text-white" />
-							</div>
-							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-								MNHPSurvey
-							</span>
-						</Link>
+						<Logo/>
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -139,17 +130,7 @@ function ResetPasswordContent() {
 			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
-						<Link
-							href="/"
-							className="inline-flex items-center space-x-2 mb-4"
-						>
-							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-								<SquarePen className="h-5 w-5 text-white" />
-							</div>
-							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-								MNHPSurvey
-							</span>
-						</Link>
+						<Logo/>
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -169,7 +150,7 @@ function ResetPasswordContent() {
 								</p>
 							</div>
 							<Link href="/login">
-								<Button className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+								<Button className="w-full bg-linear-to-r from-gradient-l to-gradient-r  hover:from-gradient-l/50 hover:to-gradient-r/50 text-white">
 									Continue to Login
 								</Button>
 							</Link>
@@ -184,17 +165,7 @@ function ResetPasswordContent() {
 		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
 				<div className="text-center mb-8">
-					<Link
-						href="/"
-						className="inline-flex items-center space-x-2 mb-4"
-					>
-						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-							<SquarePen className="h-5 w-5 text-white" />
-						</div>
-						<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-							MNHPSurvey
-						</span>
-					</Link>
+					<Logo/>
 					<p className="text-muted-foreground">Create new password</p>
 				</div>
 
@@ -308,7 +279,7 @@ function ResetPasswordContent() {
 
 							<Button
 								type="submit"
-								className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+								className="w-full bg-linear-to-r from-gradient-l to-gradient-r  hover:from-gradient-l/50 hover:to-gradient-r/50 text-white transition-all shadow-sm hover:shadow-md"
 								disabled={isLoading}
 								size="lg"
 							>

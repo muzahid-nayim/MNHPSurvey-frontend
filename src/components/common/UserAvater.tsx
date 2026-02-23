@@ -23,7 +23,7 @@ import { RootState } from "@/core/store";
 
 export function UserAvatar() {
 	const { isAuthenticated, user, loading } = useSelector(
-		(state: RootState) => state.auth
+		(state: RootState) => state.auth,
 	);
 	const dispatch = useDispatch();
 	const router = useRouter();
@@ -88,7 +88,7 @@ export function UserAvatar() {
 								}
 								alt={user.username}
 							/>
-							<AvatarFallback className="bg-linear-to-br from-blue-500 to-purple-600 text-white font-semibold">
+							<AvatarFallback className="bg-linear-to-br from-blue-500  text-white font-semibold">
 								{user.username.substring(0, 2).toUpperCase()}
 							</AvatarFallback>
 						</Avatar>

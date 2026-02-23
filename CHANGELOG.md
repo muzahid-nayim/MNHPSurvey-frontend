@@ -8,6 +8,18 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+
+## [0.3.2] - 2026-2-22
+### Added
+- Added footer,hero,CTA component .
+- Make logo for site.
+
+### Changed
+- Changed theme color to green
+- Changed floating section component and add mouse following animation there .
+- remove old logo and use new logo all over the place.
+
+
 ## [0.3.1] - 2026-2-20
 ### Changed
 - Changed theme color to green. and fix some UI issue in survey list(action button overflowing)

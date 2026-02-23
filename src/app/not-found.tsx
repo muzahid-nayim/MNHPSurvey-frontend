@@ -5,21 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Home, Search, Mail } from "lucide-react";
 import Link from "next/link";
+import Footer from "./(landingpage)/_components/Footer";
 
 export default function NotFound() {
 	return (
 		<>
-		<Navbar />
+			<Navbar />
 			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="container max-w-4xl mx-auto">
 					<FloatingShapes />
 					<div className="text-center">
 						{/* Animated 404 Number */}
 						<div className="relative mb-8">
-							<div className="text-9xl md:text-[12rem] font-bold bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent opacity-90">
+							<div className="text-9xl md:text-[12rem] font-bold bg-linear-to-br from-gradient-l to-gradient-r  bg-clip-text text-transparent opacity-90">
 								404
 							</div>
-							<div className="absolute inset-0 text-9xl md:text-[12rem] font-bold bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent opacity-20 blur-xl">
+							<div className="absolute inset-0 text-9xl md:text-[12rem] font-bold bg-linear-to-br from-gradient-l to-gradient-r  bg-clip-text text-transparent opacity-20 blur-xl">
 								404
 							</div>
 						</div>
@@ -110,6 +111,7 @@ export default function NotFound() {
 					</div>
 				</div>
 			</div>
+			<Footer />
 		</>
 	);
 }
