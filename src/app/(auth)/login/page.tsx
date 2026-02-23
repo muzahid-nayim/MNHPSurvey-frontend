@@ -24,6 +24,7 @@ import { Eye, EyeOff, Mail, Lock, ArrowRight, SquarePen } from "lucide-react";
 import { setCredentials } from "@/core/store/slices/authSlice";
 import { useAppDispatch } from "@/core/store/hooks";
 import { toast } from "react-toastify";
+import Logo from "@/components/common/logo";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -87,18 +88,8 @@ export default function LoginPage() {
 			<div className="w-full max-w-md">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
-					<Link
-						href="/"
-						className="inline-flex items-center space-x-2 mb-4"
-					>
-						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-							<SquarePen className="h-5 w-5 text-white" />
-						</div>
-						<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-							MNHPSurvey
-						</span>
-					</Link>
-					<p className="text-muted-foreground">
+					<Logo />
+					<p className="text-muted-foreground mt-2">
 						Sign in to your account
 					</p>
 				</div>
@@ -207,7 +198,7 @@ export default function LoginPage() {
 							{/* Submit Button */}
 							<Button
 								type="submit"
-								className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+								className="w-full bg-linear-to-r from-gradient-l to-gradient-r  hover:from-gradient-l/50 hover:to-gradient-r/50 text-white transition-all shadow-sm hover:shadow-md"
 								disabled={isLoading}
 								size="lg"
 							>

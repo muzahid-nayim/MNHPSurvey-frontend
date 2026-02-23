@@ -31,6 +31,7 @@ import { cn } from "@/core/utils";
 import { logout } from "@/core/store/slices/authSlice";
 import { UserAvatar } from "@/components/common/UserAvater";
 import { toast } from "react-toastify";
+import Logo from "@/components/common/logo";
 
 export default function DashboardLayout({
 	children,
@@ -43,7 +44,7 @@ export default function DashboardLayout({
 	const dispatch = useDispatch();
 
 	const { isAuthenticated, user, loading } = useSelector(
-		(state: RootState) => state.auth
+		(state: RootState) => state.auth,
 	);
 	// Redirect if not authenticated
 	useEffect(() => {
@@ -54,26 +55,26 @@ export default function DashboardLayout({
 	}, [isAuthenticated, router, pathname, loading]);
 
 	const handleLogout = async () => {
-			try {
-				const storedAuth = localStorage.getItem("auth");
-				if (storedAuth) {
-					const { refreshToken } = JSON.parse(storedAuth);
-					await logoutMutation({ refresh_token: refreshToken });
-				}
-				dispatch(logout());
-				localStorage.removeItem("auth");
-					router.push("/login");
-				toast.success("Logged out successfully!");
-			} catch (error) {
-				console.error("Logout failed:", error);
-				dispatch(logout());
-				localStorage.removeItem("auth");
-				setTimeout(() => {
-					router.push("/login");
-				}, 1000);
-				toast.error("Session expired. Please login again.");
-			} 
-		};
+		try {
+			const storedAuth = localStorage.getItem("auth");
+			if (storedAuth) {
+				const { refreshToken } = JSON.parse(storedAuth);
+				await logoutMutation({ refresh_token: refreshToken });
+			}
+			dispatch(logout());
+			localStorage.removeItem("auth");
+			router.push("/login");
+			toast.success("Logged out successfully!");
+		} catch (error) {
+			console.error("Logout failed:", error);
+			dispatch(logout());
+			localStorage.removeItem("auth");
+			setTimeout(() => {
+				router.push("/login");
+			}, 1000);
+			toast.error("Session expired. Please login again.");
+		}
+	};
 
 	// Navigation items
 	const navigation = [
@@ -148,22 +149,13 @@ export default function DashboardLayout({
 				<div className="flex flex-col flex-1 border-r border-border bg-card/50 backdrop-blur-sm">
 					{/* Sidebar Header */}
 					<div className="flex items-center gap-3 p-6 border-b border-border">
-						<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-							<SquarePen className="h-4 w-4 text-white" />
-						</div>
-						<Link
-							href={"/"}
-							className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent"
-						>
-							MNHPSurvey
-						</Link>
+						<Logo/>
 					</div>
 
 					{/* User Info */}
 					<div className="p-4 border-b border-border ">
 						<UserAvatar />
 					</div>
-
 
 					{/* Navigation */}
 					<nav className="flex-1 p-4 space-y-2">
@@ -177,7 +169,7 @@ export default function DashboardLayout({
 										"group flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors",
 										item.current
 											? "bg-primary text-primary-foreground shadow-sm"
-											: "text-muted-foreground hover:text-foreground hover:bg-accent"
+											: "text-muted-foreground hover:text-foreground hover:bg-accent",
 									)}
 								>
 									<Icon className="h-4 w-4" />
@@ -222,21 +214,12 @@ export default function DashboardLayout({
 								className="w-64 p-0 bg-card/95 backdrop-blur-md"
 							>
 								<SheetHeader>
-									<SheetTitle>Navigation Menu</SheetTitle>{" "}
-									{/* ← ADD THIS */}
+									<SheetTitle>{" "}</SheetTitle>
 								</SheetHeader>
 								<div className="flex flex-col h-full">
 									{/* Mobile Sidebar Header */}
 									<div className="flex items-center gap-3 p-6 border-b border-border">
-										<div className="flex items-center justify-center w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-											<SquarePen className="h-4 w-4 text-white" />
-										</div>
-										<Link
-											href={"/"}
-											className="font-bold text-lg bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent"
-										>
-											MNHPSurvey
-										</Link>
+										<Logo/>
 									</div>
 
 									{/* Mobile User Info */}
@@ -256,7 +239,7 @@ export default function DashboardLayout({
 														"group flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors",
 														item.current
 															? "bg-primary text-primary-foreground shadow-sm"
-															: "text-muted-foreground hover:text-foreground hover:bg-accent"
+															: "text-muted-foreground hover:text-foreground hover:bg-accent",
 													)}
 												>
 													<Icon className="h-4 w-4" />
@@ -287,12 +270,7 @@ export default function DashboardLayout({
 							</SheetContent>
 						</Sheet>
 						<div className="flex items-center gap-2">
-							<div className="flex items-center justify-center w-6 h-6 bg-linear-to-br from-blue-600 to-purple-600 rounded">
-								<SquarePen className="h-3 w-3 text-white" />
-							</div>
-							<span className="font-bold bg-linear-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
-								MNHPSurvey
-							</span>
+							<Logo/>
 						</div>
 					</div>
 					<ThemeToggle />
@@ -303,7 +281,7 @@ export default function DashboardLayout({
 			<main
 				className={cn(
 					"flex-1 flex flex-col min-h-screen transition-all duration-300",
-					"lg:ml-64" // Account for sidebar on desktop
+					"lg:ml-64", // Account for sidebar on desktop
 				)}
 			>
 				{/* Mobile spacing */}

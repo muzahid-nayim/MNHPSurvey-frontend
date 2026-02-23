@@ -43,7 +43,7 @@ export function ProfileInfoCard({ user, loading }: ProfileInfoCardProps) {
 				{/* Profile Header */}
 				<div className="flex items-start gap-4 pb-6 border-b">
 					<Avatar className="h-20 w-20">
-						<AvatarFallback className="bg-linear-to-br from-blue-500 to-purple-600 text-white text-lg font-semibold">
+						<AvatarFallback className="bg-linear-to-br from-blue-500  text-white text-lg font-semibold">
 							{initials}
 						</AvatarFallback>
 					</Avatar>

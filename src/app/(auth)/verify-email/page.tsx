@@ -28,6 +28,7 @@ import {
 	ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/common/logo";
 
 function VerifyEmailContent() {
 	const router = useRouter();
@@ -95,17 +96,7 @@ function VerifyEmailContent() {
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
-						<Link
-							href="/"
-							className="inline-flex items-center space-x-2 mb-4"
-						>
-							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-								<SquarePen className="h-5 w-5 text-white" />
-							</div>
-							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-								MNHPSurvey
-							</span>
-						</Link>
+						<Logo />
 						<p className="text-muted-foreground">
 							Verifying your email
 						</p>
@@ -135,17 +126,7 @@ function VerifyEmailContent() {
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
-						<Link
-							href="/"
-							className="inline-flex items-center space-x-2 mb-4"
-						>
-							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-								<SquarePen className="h-5 w-5 text-white" />
-							</div>
-							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-								MNHPSurvey
-							</span>
-						</Link>
+						<Logo/>
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -169,7 +150,7 @@ function VerifyEmailContent() {
 							<div className="space-y-3">
 								<Button
 									onClick={() => router.push("/login")}
-									className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+									className="w-full bg-linear-to-r from-gradient-l to-gradient-r  hover:from-gradient-l/50 hover:to-gradient-r/50 text-white transition-all shadow-sm hover:shadow-md"
 									size="lg"
 								>
 									Continue to Login
@@ -197,17 +178,7 @@ function VerifyEmailContent() {
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
-						<Link
-							href="/"
-							className="inline-flex items-center space-x-2 mb-4"
-						>
-							<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-								<SquarePen className="h-5 w-5 text-white" />
-							</div>
-							<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-								MNHPSurvey
-							</span>
-						</Link>
+						<Logo/>
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -237,7 +208,7 @@ function VerifyEmailContent() {
 							<div className="space-y-3">
 								<Button
 									onClick={() => setStatus("resend")}
-									className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+									className="w-full bg-linear-to-r from-gradient-l to-gradient-r  hover:from-gradient-l/50 hover:to-gradient-r/50 text-white transition-all shadow-sm hover:shadow-md"
 									size="lg"
 								>
 									Request New Verification Link
@@ -264,17 +235,7 @@ function VerifyEmailContent() {
 			<div className="w-full max-w-md">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
-					<Link
-						href="/"
-						className="inline-flex items-center space-x-2 mb-4"
-					>
-						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg">
-							<SquarePen className="h-5 w-5 text-white" />
-						</div>
-						<span className="font-bold text-2xl bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-							MNHPSurvey
-						</span>
-					</Link>
+					<Logo/>
 					<p className="text-muted-foreground">
 						Verify your email address
 					</p>
@@ -337,7 +298,7 @@ function VerifyEmailContent() {
 
 							<Button
 								type="submit"
-								className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transition-all shadow-sm hover:shadow-md"
+								className="w-full bg-linear-to-r from-gradient-l to-gradient-r  hover:from-gradient-l/50 hover:to-gradient-r/50 text-white transition-all shadow-sm hover:shadow-md"
 								disabled={isResending}
 								size="lg"
 							>
