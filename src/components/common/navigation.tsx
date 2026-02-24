@@ -131,7 +131,7 @@ export function Navbar() {
 								</Link>
 								<Link
 									href="/signup"
-									className="bg-gradient-to-r from-gradient-l to-gradient-r text-white hover:from-gradient-l/90 hover:to-gradient-r/90 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm hover:shadow-md"
+									className="bg-linear-to-r from-gradient-l to-gradient-r text-white hover:from-gradient-l/90 hover:to-gradient-r/90 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm hover:shadow-md"
 								>
 									Get Started
 								</Link>
