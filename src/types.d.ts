@@ -1,6 +1,5 @@
 // frontend/src/types.d.ts
 
-
 // ============================================
 // SURVEY TYPES
 // ============================================
@@ -125,4 +124,30 @@ export interface SubmitSurveyRequest {
 		question_id: string;
 		selected_options: string[];
 	}[];
+}
+
+// ============================================
+// AGGREGATED RESPONSE TYPES (For Charts)
+// ============================================
+
+export interface AggregatedOption {
+	id: string;
+	option_text: string;
+	count: number;
+	percentage: number;
+}
+
+export interface AggregatedQuestion {
+	id: string;
+	question_text: string;
+	question_type: QuestionType;
+	total_answers: number;
+	options: AggregatedOption[];
+}
+
+export interface AggregatedSurveyResponse {
+	survey_id: string;
+	survey_title: string;
+	total_responses: number;
+	questions: AggregatedQuestion[];
 }
