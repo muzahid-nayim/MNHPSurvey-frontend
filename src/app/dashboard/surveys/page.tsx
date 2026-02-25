@@ -45,6 +45,7 @@ import {
 	QrCode,
 	Trash2,
 	MessageSquare,
+	Plus,
 } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
@@ -96,7 +97,7 @@ export default function SurveysPage() {
 					</p>
 				</div>
 				<Link href="/dashboard/surveys/create">
-					<Button>Create Survey</Button>
+					<Button><Plus/>Create Survey</Button>
 				</Link>
 			</div>
 
@@ -120,7 +121,7 @@ export default function SurveysPage() {
 						return (
 							<Card
 								key={survey.id}
-								className="group relative flex cursor-pointer flex-col overflow-hidden transition-all hover:shadow-lg"
+								className="group relative flex cursor-pointer flex-col overflow-hidden transition-all hover:shadow-lg hover:ring ring-ring"
 								onClick={() =>
 									(window.location.href = `/dashboard/surveys/${survey.id}`)
 								}

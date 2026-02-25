@@ -188,7 +188,7 @@ export default function DashboardLayout({
 							</span>
 						</div>
 						<Button
-							variant="outline"
+							variant="destructive"
 							onClick={handleLogout}
 							className="w-full justify-start gap-3 border-border text-muted-foreground hover:text-foreground"
 						>
@@ -258,7 +258,7 @@ export default function DashboardLayout({
 											</span>
 										</div>
 										<Button
-											variant="outline"
+											variant="destructive"
 											onClick={handleLogout}
 											className="w-full justify-start gap-3 border-border text-muted-foreground hover:text-foreground"
 										>

@@ -11,6 +11,7 @@ import type {
 	AllowedEmail,
 	SurveyResponse,
 	SubmitSurveyRequest,
+	AggregatedSurveyResponse,
 } from "@/types";
 
 /**
@@ -287,9 +288,9 @@ export const surveyApi = createApi({
 		// ==========================================
 
 		/**
-		 * Get all responses for survey
+		 * Get all responses for survey (aggregated statistics)
 		 */
-		getResponses: builder.query<SurveyResponse[], string>({
+		getResponses: builder.query<AggregatedSurveyResponse, string>({
 			query: (surveyId) => `/${surveyId}/responses/`,
 			providesTags: ["Response"],
 		}),

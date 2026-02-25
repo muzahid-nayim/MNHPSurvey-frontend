@@ -14,6 +14,7 @@ import {
 import ManageAllowedEmails from "@/components/survey/ManageAllowedEmails";
 import SurveyAllowedEmailsManager from "@/components/survey/SurveyInvitationManager";
 import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
+import { ListIcon, Plus } from "lucide-react";
 
 export default function DashboardPage() {
 	const { data: surveys } = useGetSurveysQuery();
@@ -32,29 +33,33 @@ export default function DashboardPage() {
 
 			{/* Stats Cards */}
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-				<Card>
-					<CardHeader>
-						<CardTitle>Total Surveys</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-4xl font-bold">
-							{stats.totalSurveys}
-						</p>
-					</CardContent>
-				</Card>
+				<Link href="/dashboard/surveys">
+					<Card className="hover:ring ring-ring">
+						<CardHeader>
+							<CardTitle>Total Surveys</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<p className="text-4xl font-bold">
+								{stats.totalSurveys}
+							</p>
+						</CardContent>
+					</Card>
+				</Link>
 
-				<Card>
-					<CardHeader>
-						<CardTitle>Active Surveys</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-4xl font-bold">
-							{stats.activeSurveys}
-						</p>
-					</CardContent>
-				</Card>
+				<Link href="/dashboard/surveys">
+					<Card className="hover:ring ring-ring">
+						<CardHeader>
+							<CardTitle>Active Surveys</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<p className="text-4xl font-bold">
+								{stats.activeSurveys}
+							</p>
+						</CardContent>
+					</Card>
+				</Link>
 
-				<Card>
+				<Card className="hover:ring ring-ring">
 					<CardHeader>
 						<CardTitle>Total Responses</CardTitle>
 					</CardHeader>
@@ -67,7 +72,7 @@ export default function DashboardPage() {
 			</div>
 
 			{/* Quick Actions */}
-			<Card>
+			<Card className="hover:ring ring-ring">
 				<CardHeader>
 					<CardTitle>Quick Actions</CardTitle>
 					<CardDescription>
@@ -76,15 +81,13 @@ export default function DashboardPage() {
 				</CardHeader>
 				<CardContent className="flex gap-4">
 					<Link href="/dashboard/surveys/create">
-						<Button>Create New Survey</Button>
+						<Button> <Plus/>Create New Survey</Button>
 					</Link>
 					<Link href="/dashboard/surveys">
-						<Button variant="outline">View All Surveys</Button>
+						<Button variant="outline"><ListIcon/>View All Surveys</Button>
 					</Link>
 				</CardContent>
 			</Card>
-
-			
 		</div>
 	);
 }
