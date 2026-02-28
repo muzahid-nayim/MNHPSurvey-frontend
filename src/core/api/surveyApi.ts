@@ -12,6 +12,7 @@ import type {
 	SurveyResponse,
 	SubmitSurveyRequest,
 	AggregatedSurveyResponse,
+	QuestionResponsesData,
 } from "@/types";
 
 /**
@@ -306,6 +307,18 @@ export const surveyApi = createApi({
 				`/${surveyId}/responses/${responseId}/`,
 		}),
 
+		/**
+		 * Get responses for specific question (for data table)
+		 */
+		getResponsesByQuestion: builder.query<
+			QuestionResponsesData,
+			{ surveyId: string; questionId: string }
+		>({
+			query: ({ surveyId, questionId }) =>
+				`/${surveyId}/responses/detail/?question_id=${questionId}`,
+			providesTags: ["Response"],
+		}),
+
 		// ==========================================
 		// PUBLIC ENDPOINTS (No auth required)
 		// ==========================================
@@ -364,6 +377,7 @@ export const {
 	useRemoveSurveyAllowedEmailMutation,
 	useGetResponsesQuery,
 	useGetResponseQuery,
+	useGetResponsesByQuestionQuery,
 	useGetTakeSurveyQuery,
 	useSubmitSurveyMutation,
 } = surveyApi;

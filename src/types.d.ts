@@ -151,3 +151,23 @@ export interface AggregatedSurveyResponse {
 	total_responses: number;
 	questions: AggregatedQuestion[];
 }
+// ============================================
+// DATA TABLE RESPONSE TYPES
+// ============================================
+
+export interface ResponseTableRow {
+	id: string;
+	sn: number;
+	email: string;
+	respondent_name?: string;
+	selected_options: string;
+	submitted_at: string;
+}
+
+export interface QuestionResponsesData {
+	question_id: string;
+	question_text: string;
+	question_type: QuestionType;
+	total_responses: number;
+	responses: ResponseTableRow[];
+}

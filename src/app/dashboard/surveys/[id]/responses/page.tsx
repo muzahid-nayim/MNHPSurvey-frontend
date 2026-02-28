@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useGetResponsesQuery, useGetSurveyQuery } from "@/core/api/surveyApi";
 import { ResponseBarChart } from "@/components/survey/ResponseBarChart";
 import { ResponsePieChart } from "@/components/survey/ResponsePieChart";
+import { ResponseDetailsTable } from "@/components/survey/ResponseDetailsTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -132,6 +133,15 @@ export default function SurveyResponsesPage() {
 						</div>
 					))}
 				</div>
+			)}
+
+			{/* Data Table Section */}
+			{aggregatedResponses.questions.length > 0 && (
+				<ResponseDetailsTable
+					surveyId={surveyId}
+					questions={aggregatedResponses.questions}
+					initialQuestionId={aggregatedResponses.questions[0].id}
+				/>
 			)}
 		</div>
 	);
