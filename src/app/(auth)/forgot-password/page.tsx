@@ -1,7 +1,7 @@
 // app/forgot-password/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { usePasswordResetRequestMutation } from "@/core/api/authApi";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
 	const getErrorMessage = () => {
 		if (error) {
 			if ("data" in error) {
-				const errorData = error.data as any;
+				const errorData = error.data as Record<string, string>;
 				return (
 					errorData.message ||
 					errorData.detail ||
@@ -46,6 +46,44 @@ export default function ForgotPasswordPage() {
 		return "Failed to send reset email. Please try again.";
 	};
 
+	return (
+		<Suspense
+			fallback={
+				<div className="min-h-screen flex items-center justify-center">
+					Loading...
+				</div>
+			}
+		>
+			<ForgotPasswordContent
+				email={email}
+				setEmail={setEmail}
+				isLoading={isLoading}
+				isError={isError}
+				isSuccess={isSuccess}
+				getErrorMessage={getErrorMessage}
+				handleSubmit={handleSubmit}
+			/>
+		</Suspense>
+	);
+}
+
+function ForgotPasswordContent({
+	email,
+	setEmail,
+	isLoading,
+	isError,
+	isSuccess,
+	getErrorMessage,
+	handleSubmit,
+}: {
+	email: string;
+	setEmail: (val: string) => void;
+	isLoading: boolean;
+	isError: boolean;
+	isSuccess: boolean;
+	getErrorMessage: () => string;
+	handleSubmit: (e: React.FormEvent) => void;
+}) {
 	return (
 		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
@@ -58,7 +96,7 @@ export default function ForgotPasswordPage() {
 						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-gradient-l to-gradient-r  rounded-lg">
 							<SquarePen className="h-5 w-5 text-white" />
 						</div>
-						<Logo/>
+						<Logo />
 					</Link>
 					<p className="text-muted-foreground">Reset your password</p>
 				</div>

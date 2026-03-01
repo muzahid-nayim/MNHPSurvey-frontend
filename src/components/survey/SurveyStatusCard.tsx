@@ -13,7 +13,6 @@ import {
 	Home,
 	RefreshCw,
 	Share2,
-	ClipboardList,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,7 +23,7 @@ export interface SurveyStatusCardProps {
 	type: SurveyStatusType;
 	title?: string;
 	message?: string;
-	error?: any;
+	error?: unknown;
 	onLogin?: () => void;
 
 	onCopyLink?: () => void;
@@ -46,10 +45,14 @@ export function SurveyStatusCard({
 		if (typeof error === "string") return error;
 
 		// Handle RTK Query error structure
-		if (error.data?.error) return error.data.error;
+		const errorData = (error as Record<string, unknown>)?.data as
+			| Record<string, unknown>
+			| undefined;
+		if (errorData?.error) return String(errorData.error);
 
 		// Handle serialized error
-		if (error.message) return error.message;
+		if ((error as Record<string, unknown>)?.message)
+			return String((error as Record<string, unknown>).message);
 
 		return message || "An error occurred";
 	};

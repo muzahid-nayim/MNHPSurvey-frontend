@@ -12,11 +12,9 @@ import Link from "next/link";
 import {
 	LayoutDashboard,
 	FileText,
-	User,
 	LogOut,
 	Settings,
 	BarChart3,
-	SquarePen,
 	Menu,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
@@ -149,7 +147,7 @@ export default function DashboardLayout({
 				<div className="flex flex-col flex-1 border-r border-border bg-card/50 backdrop-blur-sm">
 					{/* Sidebar Header */}
 					<div className="flex items-center gap-3 p-6 border-b border-border">
-						<Logo/>
+						<Logo />
 					</div>
 
 					{/* User Info */}
@@ -214,12 +212,12 @@ export default function DashboardLayout({
 								className="w-64 p-0 bg-card/95 backdrop-blur-md"
 							>
 								<SheetHeader>
-									<SheetTitle>{" "}</SheetTitle>
+									<SheetTitle> </SheetTitle>
 								</SheetHeader>
 								<div className="flex flex-col h-full">
 									{/* Mobile Sidebar Header */}
 									<div className="flex items-center gap-3 p-6 border-b border-border">
-										<Logo/>
+										<Logo />
 									</div>
 
 									{/* Mobile User Info */}
@@ -270,7 +268,7 @@ export default function DashboardLayout({
 							</SheetContent>
 						</Sheet>
 						<div className="flex items-center gap-2">
-							<Logo/>
+							<Logo />
 						</div>
 					</div>
 					<ThemeToggle />
@@ -294,8 +292,8 @@ export default function DashboardLayout({
 							Dashboard
 						</h1>
 						<p className="text-muted-foreground mt-2">
-							Welcome back, {user?.username}! Here's what's
-							happening today.
+							Welcome back, {user?.username}! Here&apos;s
+							what&apos;s happening today.
 						</p>
 					</header>
 

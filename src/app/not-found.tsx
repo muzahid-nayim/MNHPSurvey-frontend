@@ -3,14 +3,16 @@ import { Navbar } from "@/components/common/navigation";
 import { FloatingShapes } from "@/components/custom/floating-shapes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Home, Search, Mail } from "lucide-react";
+import { Home, Search, Mail } from "lucide-react";
 import Link from "next/link";
 import Footer from "../components/common/Footer";
+
+
 
 export default function NotFound() {
 	return (
 		<>
-			<Navbar />
+				<Navbar />
 			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="container max-w-4xl mx-auto">
 					<FloatingShapes />

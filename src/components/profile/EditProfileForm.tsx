@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
 	Card,
@@ -50,10 +49,13 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 			const updatedUser = await updateProfile(data).unwrap();
 			toast.success("Profile updated successfully!");
 			dispatch(updateUser(updatedUser));
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
 			const errorMessage =
-				error?.data?.error ||
-				error?.data?.message ||
+				String(errorData?.error) ||
+				String(errorData?.message) ||
 				"Failed to update profile";
 			toast.error(errorMessage);
 		}

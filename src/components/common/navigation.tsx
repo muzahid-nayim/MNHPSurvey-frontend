@@ -1,3 +1,4 @@
+// frontend/src/components/common/navigation.tsx
 "use client";
 
 import * as React from "react";

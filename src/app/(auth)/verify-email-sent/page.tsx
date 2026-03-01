@@ -19,7 +19,7 @@ export default function VerifyEmailSentPage() {
 	const email = searchParams.get("email") || "your email";
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted p-4">
+		<div className="min-h-screen flex items-center justify-center bg-linear-to-b from-background to-muted p-4">
 			<Card className="w-full max-w-md shadow-lg border">
 				<CardHeader className="text-center space-y-2">
 					<div className="flex justify-center mb-2">
@@ -29,7 +29,7 @@ export default function VerifyEmailSentPage() {
 					</div>
 					<CardTitle className="text-2xl">Check Your Email</CardTitle>
 					<CardDescription>
-						We've sent a verification link to{" "}
+						We&apos;ve sent a verification link to{" "}
 						<span className="font-medium text-foreground">
 							{email}
 						</span>

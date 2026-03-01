@@ -22,10 +22,7 @@ import {
 	Loader2,
 	Users,
 	Check,
-	X,
-	Plus,
 	Mail,
-	Shield,
 	UserPlus,
 	Send,
 	Trash2,
@@ -58,8 +55,26 @@ export default function SurveyAllowedEmailsManager({
 	accessType,
 	className,
 }: Props) {
-	if (accessType !== "private_invited") return null;
+	// Return early before any hooks if not needed
+	if (accessType !== "private_invited") {
+		return null;
+	}
 
+	return (
+		<SurveyAllowedEmailsManagerContent
+			surveyId={surveyId}
+			className={className}
+		/>
+	);
+}
+
+function SurveyAllowedEmailsManagerContent({
+	surveyId,
+	className,
+}: {
+	surveyId: string;
+	className?: string;
+}) {
 	const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
 	const [isSaving, setIsSaving] = useState(false);
 	const [newEmail, setNewEmail] = useState("");
@@ -86,7 +101,7 @@ export default function SurveyAllowedEmailsManager({
 		setSelectedEmails((prev) =>
 			prev.includes(emailId)
 				? prev.filter((id) => id !== emailId)
-				: [...prev, emailId]
+				: [...prev, emailId],
 		);
 	};
 
@@ -98,8 +113,13 @@ export default function SurveyAllowedEmailsManager({
 				allowed_email_ids: selectedEmails,
 			}).unwrap();
 			toast.success("Survey access has been updated successfully.");
-		} catch (error: any) {
-			toast.error(error.data?.error || "Failed to update survey access");
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			toast.error(
+				String(errorData?.error) || "Failed to update survey access",
+			);
 			const emailIds = surveyAllowedEmails.map((email) => email.id);
 			setSelectedEmails(emailIds);
 		} finally {
@@ -115,8 +135,11 @@ export default function SurveyAllowedEmailsManager({
 			}).unwrap();
 			setSelectedEmails((prev) => prev.filter((id) => id !== emailId));
 			toast.info("Email has been removed from survey access.");
-		} catch (error: any) {
-			toast.error(error.data?.error || "Failed to remove email");
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			toast.error(String(errorData?.error) || "Failed to remove email");
 		}
 	};
 
@@ -140,11 +163,17 @@ export default function SurveyAllowedEmailsManager({
 			setSelectedEmails((prev) => [...prev, response.id]);
 			setNewEmail("");
 			toast.info("Email has been added to your allowed list.");
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			const emailErrors = (
+				errorData?.email as unknown[] | undefined
+			)?.[0];
 			toast.error(
-				error.data?.error ||
-					error.data?.email?.[0] ||
-					"Failed to add email"
+				String(errorData?.error) ||
+					String(emailErrors) ||
+					"Failed to add email",
 			);
 		} finally {
 			setIsAddingEmail(false);
@@ -157,7 +186,7 @@ export default function SurveyAllowedEmailsManager({
 		JSON.stringify(surveyAllowedEmails.map((e) => e.id).sort());
 
 	const selectedEmailObjects = userAllowedEmails.filter((email) =>
-		selectedEmails.includes(email.id)
+		selectedEmails.includes(email.id),
 	);
 
 	if (isLoading) {
@@ -264,8 +293,8 @@ export default function SurveyAllowedEmailsManager({
 								{isSaving
 									? "Saving..."
 									: hasChanges
-									? "Save Changes"
-									: "Saved"}
+										? "Save Changes"
+										: "Saved"}
 							</Button>
 						</div>
 					</div>
@@ -301,7 +330,7 @@ export default function SurveyAllowedEmailsManager({
 														checked={isSelected}
 														onCheckedChange={() =>
 															handleToggleEmail(
-																email.id
+																email.id,
 															)
 														}
 														className="data-[state=checked]:bg-primary data-[state=checked]:border-primary shrink-0"
@@ -333,7 +362,7 @@ export default function SurveyAllowedEmailsManager({
 												)}
 											</div>
 										);
-									}
+									},
 								)}
 							</div>
 						</div>
@@ -348,9 +377,7 @@ export default function SurveyAllowedEmailsManager({
 							<div className="p-1.5 rounded-md bg-green-100">
 								<Check className="h-4 w-4 text-green-600" />
 							</div>
-							<span>
-								Active Access
-							</span>
+							<span>Active Access</span>
 							<Badge
 								variant="outline"
 								className="ml-2 bg-green-100 text-green-800 border-green-200"
@@ -385,7 +412,7 @@ export default function SurveyAllowedEmailsManager({
 													size="icon"
 													onClick={() =>
 														handleRemoveEmail(
-															email.id
+															email.id,
 														)
 													}
 													className="h-7 w-7 text-muted-foreground hover:text-red-600 hover:bg-red-50 shrink-0"
