@@ -76,7 +76,7 @@ export function UserAvatar() {
 						<p className="text-sm font-medium leading-none text-foreground truncate max-w-[130px]">
 							Hello, {user.username}!
 						</p>
-						<p className="text-xs leading-none text-muted-foreground truncate max-w-[130p x]">
+						<p className="text-xs leading-none text-muted-foreground truncate max-w-[130px]">
 							{user.email}
 						</p>
 					</div>

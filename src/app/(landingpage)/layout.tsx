@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/common/navigation";
-import Footer from "./_components/Footer";
+import Footer from "../../components/common/Footer";
 
 // frontend/src/app/(landingpage)/layout.tsx
 export default function LandingPageLayout({
@@ -9,10 +9,8 @@ export default function LandingPageLayout({
 }) {
 	return (
 		<>
-		<Navbar/>
-			<main className="mx-auto w-full max-w-7xl">
-				{children}
-			</main>
+			<Navbar />
+			<main className="mx-auto w-full ">{children}</main>
 			<Footer />
 		</>
 	);

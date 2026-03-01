@@ -7,30 +7,62 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+## [0.4.1] - 2026-02-28
+### Change
+- change floating shape component.
+- Inhance navigation section 
+- inhanched hero section 
+- inhanched theme toggle 
+- inhance overall UI
+
+
+## [0.4.1] - 2026-02-28
+
+### Added
+
+- **Reusable Response Details Component**
+	- Created `ResponseDetailsTable.tsx` component for flexible data table usage
+	- Auto-selects first question on page load
+	- Can be easily moved or reused in other pages
+
+### Fixed
+
+- **Data Table Fixes**
+	- Created missing `ResponseTableColumns.tsx` file
+	- Fixed duplicate respondents in filtered results
+	- Data table now correctly displays only responses for selected question
+
+### Changed
+
+- **Refactoring**
+	- Extracted data table logic from responses page to `ResponseDetailsTable` component
+	- Improved component organization for better maintainability
+
+---
 
 ## [0.4.0] - 2026-02-25
 
 ### Added
 
 - **Survey Response Charts & Analytics**
-    - Added `ResponseBarChart.tsx` component for visualizing response counts and percentages
-    - Added `ResponsePieChart.tsx` component for pie chart visualization
-    - Implemented chart type toggle (Bar/Pie) in responses page
-    - Added chart color coding for better visual distinction
-    - Custom tooltip displays both count and percentage for options
+	- Added `ResponseBarChart.tsx` component for visualizing response counts and percentages
+	- Added `ResponsePieChart.tsx` component for pie chart visualization
+	- Implemented chart type toggle (Bar/Pie) in responses page
+	- Added chart color coding for better visual distinction
+	- Custom tooltip displays both count and percentage for options
 
 ### Changed
 
 - **API Integration**
-    - Updated `useGetResponsesQuery` to return aggregated statistics instead of raw response list
-    - Response data now includes counts and percentages pre-calculated by backend
-    - Simplified response data structure for easier visualization
+	- Updated `useGetResponsesQuery` to return aggregated statistics instead of raw response list
+	- Response data now includes counts and percentages pre-calculated by backend
+	- Simplified response data structure for easier visualization
 
 - **UI/UX Improvements**
-    - Enhanced responses page layout with better structure
-    - Improved responsive design for all screen sizes
-    - Added lucide-react icons for chart type buttons
-    - Better visual hierarchy with cards and sections
+	- Enhanced responses page layout with better structure
+	- Improved responsive design for all screen sizes
+	- Added lucide-react icons for chart type buttons
+	- Better visual hierarchy with cards and sections
 
 ### Technical
 
@@ -130,7 +162,7 @@ We follow [Semantic Versioning](https://semver.org/):
 
 ### Fixed
 
-    Fixed question option not adding issue while editing question.
+	Fixed question option not adding issue while editing question.
 
 - Changed option format from string[] to {id?: string, text: string}[]
 - Fixed initQuestionEdit to preserve option IDs during edit
@@ -293,65 +325,65 @@ We follow [Semantic Versioning](https://semver.org/):
 ### Added
 
 - **Redux Toolkit Integration**
-    - Complete Redux store configuration with persistence
-    - Auth slice for managing authentication state
-    - RTK Query API for backend communication
-    - Automatic token refresh and reauthentication logic
+	- Complete Redux store configuration with persistence
+	- Auth slice for managing authentication state
+	- RTK Query API for backend communication
+	- Automatic token refresh and reauthentication logic
 
 - **Authentication System**
-    - Complete login page with professional UI and form validation
-    - User registration page with password strength indicator
-    - Email verification flow with resend functionality
-    - Password reset (forgot password) workflow
-    - Change password functionality for authenticated users
-    - Protected routes and authentication guards
+	- Complete login page with professional UI and form validation
+	- User registration page with password strength indicator
+	- Email verification flow with resend functionality
+	- Password reset (forgot password) workflow
+	- Change password functionality for authenticated users
+	- Protected routes and authentication guards
 
 - **Professional UI Components**
-    - Theme system with light/dark mode support
-    - Theme toggle component with system preference detection
-    - Glass morphism design across all pages
-    - Responsive navigation with mobile sidebar
-    - Professional 404 error page
+	- Theme system with light/dark mode support
+	- Theme toggle component with system preference detection
+	- Glass morphism design across all pages
+	- Responsive navigation with mobile sidebar
+	- Professional 404 error page
 
 - **Dashboard & Layout**
-    - Protected dashboard layout with sidebar navigation
-    - User profile display in sidebar
-    - Mobile-responsive design with sheet navigation
-    - Professional branding (MNHPSurvey) throughout
+	- Protected dashboard layout with sidebar navigation
+	- User profile display in sidebar
+	- Mobile-responsive design with sheet navigation
+	- Professional branding (MNHPSurvey) throughout
 
 - **Form Handling & UX**
-    - Form validation with real-time feedback
-    - Loading states and error handling
-    - Password visibility toggles
-    - Professional alert and notification system
+	- Form validation with real-time feedback
+	- Loading states and error handling
+	- Password visibility toggles
+	- Professional alert and notification system
 
 ### Enhanced
 
 - **Home Page**
-    - Complete theme support (dark/light modes)
-    - Enhanced feature showcase with icons
-    - Professional statistics section
-    - Improved call-to-action sections
+	- Complete theme support (dark/light modes)
+	- Enhanced feature showcase with icons
+	- Professional statistics section
+	- Improved call-to-action sections
 
 - **Navigation**
-    - Responsive navigation bar with mobile menu
-    - Theme-aware styling throughout
-    - Professional logo and branding
-    - User authentication state display
+	- Responsive navigation bar with mobile menu
+	- Theme-aware styling throughout
+	- Professional logo and branding
+	- User authentication state display
 
 ### Technical Improvements
 
 - **State Management**
-    - Redux middleware for API calls
-    - Automatic token refresh interceptor
-    - Persistent authentication state
-    - Optimized re-renders with proper selectors
+	- Redux middleware for API calls
+	- Automatic token refresh interceptor
+	- Persistent authentication state
+	- Optimized re-renders with proper selectors
 
 - **Performance**
-    - Code splitting with React Suspense
-    - Optimized bundle size
-    - Efficient reauthentication flows
-    - Responsive image loading
+	- Code splitting with React Suspense
+	- Optimized bundle size
+	- Efficient reauthentication flows
+	- Responsive image loading
 
 ## [0.0.1] - 2025-11-1
 
