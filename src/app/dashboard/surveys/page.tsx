@@ -35,14 +35,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "react-toastify";
 import {
 	HelpCircle,
 	Users,
 	Calendar,
 	Share2,
 	Copy,
-	QrCode,
 	Trash2,
 	MessageSquare,
 	Plus,
@@ -53,14 +51,12 @@ import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
 export default function SurveysPage() {
 	const { data: surveys, isLoading, error } = useGetSurveysQuery();
 	const [deleteSurvey] = useDeleteSurveyMutation();
-	const [deleteId, setDeleteId] = useState<string | null>(null);
 	const { copyToClipboard } = useClipboard();
 	// const url = window.location.origin;
 	// console.log(url);
 	const handleDelete = async (id: string) => {
 		try {
 			await deleteSurvey(id).unwrap();
-			setDeleteId(null);
 		} catch (error) {
 			console.error("Failed to delete survey:", error);
 		}
@@ -97,7 +93,10 @@ export default function SurveysPage() {
 					</p>
 				</div>
 				<Link href="/dashboard/surveys/create">
-					<Button><Plus/>Create Survey</Button>
+					<Button>
+						<Plus />
+						Create Survey
+					</Button>
 				</Link>
 			</div>
 
@@ -302,9 +301,10 @@ export default function SurveysPage() {
 													</AlertDialogTitle>
 													<AlertDialogDescription>
 														Are you sure? This will
-														permanently delete "
-														{survey.title}" and all
-														responses.
+														permanently delete
+														&quot;
+														{survey.title}&quot; and
+														all responses.
 													</AlertDialogDescription>
 												</AlertDialogHeader>
 												<AlertDialogFooter>

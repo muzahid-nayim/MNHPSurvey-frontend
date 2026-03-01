@@ -15,10 +15,9 @@ import Link from "next/link";
 
 interface ProfileInfoCardProps {
 	user: User | null;
-	loading?: boolean;
 }
 
-export function ProfileInfoCard({ user, loading }: ProfileInfoCardProps) {
+export function ProfileInfoCard({ user }: ProfileInfoCardProps) {
 	if (!user) return null;
 
 	const initials = `${user.first_name?.[0] || user.username[0]}${

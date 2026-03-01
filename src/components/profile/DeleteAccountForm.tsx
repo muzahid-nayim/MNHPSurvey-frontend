@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
 	AlertDialog,
-	AlertDialogAction,
 	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
@@ -63,10 +62,13 @@ export function DeleteAccountForm() {
 			setTimeout(() => {
 				router.push("/");
 			}, 500);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
 			const errorMessage =
-				error?.data?.error ||
-				error?.data?.message ||
+				String(errorData?.error) ||
+				String(errorData?.message) ||
 				"Failed to delete account";
 			toast.error(errorMessage);
 			reset();

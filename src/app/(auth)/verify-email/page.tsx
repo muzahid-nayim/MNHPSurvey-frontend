@@ -24,10 +24,8 @@ import {
 	Loader2,
 	Mail,
 	ArrowRight,
-	SquarePen,
 	ShieldCheck,
 } from "lucide-react";
-import Link from "next/link";
 import Logo from "@/components/common/logo";
 
 function VerifyEmailContent() {
@@ -35,7 +33,7 @@ function VerifyEmailContent() {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
 
-	const [verifyEmail, { isLoading: isVerifying }] = useVerifyEmailMutation();
+	const [verifyEmail] = useVerifyEmailMutation();
 	const [resendVerification, { isLoading: isResending }] =
 		useResendVerificationMutation();
 
@@ -46,31 +44,35 @@ function VerifyEmailContent() {
 	const [email, setEmail] = useState("");
 
 	useEffect(() => {
-		if (token) {
-			handleVerify(token);
-		} else {
-			setStatus("resend");
-		}
-	}, [token]);
+		const verify = async () => {
+			if (!token) {
+				setStatus("resend");
+				return;
+			}
 
-	const handleVerify = async (verificationToken: string) => {
-		try {
-			const result = await verifyEmail({
-				token: verificationToken,
-			}).unwrap();
-			setStatus("success");
-			setMessage(
-				result.message ||
-					"Your email has been successfully verified. You can now access all features of MNHPSurvey.",
-			);
-		} catch (err: any) {
-			setStatus("error");
-			setMessage(
-				err?.data?.error ||
-					"Verification failed. The token may be invalid or expired.",
-			);
-		}
-	};
+			try {
+				const result = await verifyEmail({
+					token,
+				}).unwrap();
+				setStatus("success");
+				setMessage(
+					result.message ||
+						"Your email has been successfully verified. You can now access all features of MNHPSurvey.",
+				);
+			} catch (err: unknown) {
+				setStatus("error");
+				const errorMsg = (err as Record<string, unknown>)?.data as
+					| Record<string, unknown>
+					| undefined;
+				setMessage(
+					String(errorMsg?.error) ||
+						"Verification failed. The token may be invalid or expired.",
+				);
+			}
+		};
+
+		verify();
+	}, [token, verifyEmail]);
 
 	const handleResend = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -81,9 +83,12 @@ function VerifyEmailContent() {
 					"Verification email sent successfully. Please check your inbox.",
 			);
 			setStatus("success");
-		} catch (err: any) {
+		} catch (err: unknown) {
+			const errorMsg = (err as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
 			setMessage(
-				err?.data?.error ||
+				String(errorMsg?.error) ||
 					"Failed to resend verification email. Please try again.",
 			);
 		}
@@ -126,7 +131,7 @@ function VerifyEmailContent() {
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
-						<Logo/>
+						<Logo />
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -178,7 +183,7 @@ function VerifyEmailContent() {
 				<div className="w-full max-w-md">
 					{/* Logo/Brand */}
 					<div className="text-center mb-8">
-						<Logo/>
+						<Logo />
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -192,7 +197,7 @@ function VerifyEmailContent() {
 								Verification Failed
 							</CardTitle>
 							<CardDescription className="text-lg">
-								We couldn't verify your email
+								We couldn&apos;t verify your email
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-6">
@@ -235,7 +240,7 @@ function VerifyEmailContent() {
 			<div className="w-full max-w-md">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
-					<Logo/>
+					<Logo />
 					<p className="text-muted-foreground">
 						Verify your email address
 					</p>
@@ -341,7 +346,7 @@ function VerifyEmailContent() {
 				{/* Help Text */}
 				<div className="text-center mt-6">
 					<p className="text-sm text-muted-foreground">
-						Didn't receive the email? Check your spam folder or
+						Didn&apos;t receive the email? Check your spam folder or
 						contact support.
 					</p>
 				</div>

@@ -1,5 +1,4 @@
 import { FloatingShapes } from "@/components/custom/floating-shapes";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -8,7 +7,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import {
-	ArrowRight,
 	BarChart3,
 	QrCode,
 	Download,
@@ -16,7 +14,6 @@ import {
 	Users,
 	Shield,
 } from "lucide-react";
-import Link from "next/link";
 
 export default function Features (){
 	const features = [

@@ -27,7 +27,6 @@ import {
 	Lock,
 	User,
 	ArrowRight,
-	SquarePen,
 	Check,
 	X,
 } from "lucide-react";
@@ -53,9 +52,7 @@ export default function RegisterPage() {
 	const [passwordError, setPasswordError] = useState("");
 	const [register, { isLoading, isError, error }] = useRegisterMutation();
 	const router = useRouter();
-	const { isAuthenticated, user, loading } = useSelector(
-		(state: RootState) => state.auth,
-	);
+	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -117,7 +114,7 @@ export default function RegisterPage() {
 			router.push(
 				`/verify-email-sent?email=${encodeURIComponent(formState.email)}`,
 			);
-		} catch (err: any) {
+		} catch (_: unknown) {
 			// console.error("Registration failed:", err);
 			toast.error(getErrorMessage());
 		}
@@ -143,16 +140,16 @@ export default function RegisterPage() {
 	];
 
 	// Extract error message from RTK Query error
-	const getErrorMessage = () => {
+	const getErrorMessage = (): string => {
 		if (error) {
 			if ("data" in error) {
-				const errorData = error.data as any;
-				if (errorData.message) return errorData.message;
-				if (errorData.detail) return errorData.detail;
+				const errorData = error.data as Record<string, unknown>;
+				if (errorData.message) return String(errorData.message);
+				if (errorData.detail) return String(errorData.detail);
 				if (typeof errorData === "object") {
 					// Handle field-specific errors
 					const fieldErrors = Object.values(errorData).flat();
-					return fieldErrors.join(", ");
+					return String(fieldErrors.join(", "));
 				}
 			}
 			return "Registration failed. Please check your information and try again.";
@@ -165,7 +162,7 @@ export default function RegisterPage() {
 			<div className="w-full max-w-md">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
-					<Logo/>
+					<Logo />
 					<p className="text-muted-foreground">Create your account</p>
 				</div>
 

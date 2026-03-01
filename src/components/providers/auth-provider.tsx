@@ -1,6 +1,6 @@
 // src/components/providers/auth-provider.tsx
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/core/store";
@@ -8,24 +8,24 @@ import { useRefreshTokenMutation } from "@/core/api/authApi";
 import { LoadingSpinner } from "../ui/loading-spinner";
 import { logout, setLoading } from "@/core/store/slices/authSlice";
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+// ── Inner component — uses useSearchParams so must be inside Suspense ──
+function AuthProviderInner({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
+	const searchParams = useSearchParams(); // ← only here, wrapped by Suspense
 	const dispatch = useDispatch();
 
-	const { accessToken, refreshToken, isAuthenticated, loading } = useSelector(
-		(state: RootState) => state.auth
+	const { isAuthenticated, loading } = useSelector(
+		(state: RootState) => state.auth,
 	);
 
 	const [isRehydrating, setIsRehydrating] = useState(true);
 	const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
-	const redirectedRef = useRef(false); // ← Prevent redirect loops
+	const redirectedRef = useRef(false);
 
 	const [refreshTokenMutation, { isLoading: refreshTokenLoading }] =
 		useRefreshTokenMutation();
 
-	// Handle initial authentication rehydration
 	useEffect(() => {
 		const rehydrateAuth = async () => {
 			dispatch(setLoading(true));
@@ -39,20 +39,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 						try {
 							const parsed = JSON.parse(storedAuth);
 
-							// If we have tokens but no user profile, try to refresh
 							if (
 								parsed.accessToken &&
 								parsed.refreshToken &&
 								!parsed.user
 							) {
 								try {
-									const result =
-										await refreshTokenMutation().unwrap();
-									// The baseQueryWithReauth should handle updating the access token
+									await refreshTokenMutation().unwrap();
 								} catch (refreshError) {
 									console.error(
 										"Token refresh failed during rehydration:",
-										refreshError
+										refreshError,
 									);
 									dispatch(logout());
 									localStorage.removeItem("auth");
@@ -61,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 						} catch (parseError) {
 							console.error(
 								"Failed to parse stored auth during rehydration:",
-								parseError
+								parseError,
 							);
 							dispatch(logout());
 							localStorage.removeItem("auth");
@@ -80,54 +77,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 	}, [dispatch, hasCheckedAuth, refreshTokenMutation]);
 
-	// Handle authentication redirects - with loop prevention
 	useEffect(() => {
-		if (
-			isRehydrating ||
-			loading ||
-			refreshTokenLoading ||
-			!hasCheckedAuth
-		) {
+		if (isRehydrating || loading || refreshTokenLoading || !hasCheckedAuth) {
 			return;
 		}
 
-		const protectedRoutes = [
-			"/dashboard",
-			"/surveys",
-			"/profile",
-			"/create-survey",
-		];
-		const isProtectedRoute = protectedRoutes.some((route) =>
-			pathname.startsWith(route)
+		const protectedRoutes = ["/dashboard", "/surveys", "/profile", "/create-survey"];
+		const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
+		const isAuthRoute = ["/login", "/register", "/verify-email", "/forgot-password", "/reset-password"].includes(pathname);
+		const isPublicRoute = ["/public", "/verify-email", "/reset-password"].some((route) =>
+			pathname.startsWith(route),
 		);
-		const isAuthRoute = [
-			"/login",
-			"/register",
-			"/verify-email",
-			"/forgot-password",
-			"/reset-password",
-		].includes(pathname);
-		const isPublicRoute = [
-			"/public",
-			"/verify-email",
-			"/reset-password",
-		].some((route) => pathname.startsWith(route));
 
-		// Redirect unauthenticated users from protected routes
 		if (!isAuthenticated && !isPublicRoute && isProtectedRoute) {
-			// Only redirect once - prevent infinite loops
 			if (!redirectedRef.current) {
 				redirectedRef.current = true;
-				const redirect =
-					pathname !== "/login" ? pathname : "/dashboard";
+				const redirect = pathname !== "/login" ? pathname : "/dashboard";
 				router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
 			}
 			return;
 		}
 
-		// Redirect authenticated users from auth routes to dashboard
 		if (isAuthenticated && isAuthRoute) {
-			// Only redirect once
 			if (!redirectedRef.current) {
 				redirectedRef.current = true;
 				const redirect = searchParams.get("redirect") || "/dashboard";
@@ -136,8 +107,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			return;
 		}
 
-		// Reset redirect flag when user is on appropriate page
-		// (authenticated on protected/public routes, or unauthenticated on auth routes)
 		if (
 			(isAuthenticated && (isProtectedRoute || isPublicRoute)) ||
 			(!isAuthenticated && (isAuthRoute || isPublicRoute))
@@ -156,7 +125,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		searchParams,
 	]);
 
-	// Show loading spinner while rehydrating or checking auth
 	if (isRehydrating || loading || refreshTokenLoading || !hasCheckedAuth) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
@@ -166,4 +134,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	}
 
 	return children;
+}
+
+// ── Outer component — wraps inner in Suspense ──
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+	return (
+		<Suspense
+			fallback={
+				<div className="min-h-screen flex items-center justify-center">
+					<LoadingSpinner size="lg" />
+				</div>
+			}
+		>
+			<AuthProviderInner>{children}</AuthProviderInner>
+		</Suspense>
+	);
 }

@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, Mail, Plus, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import {
@@ -13,7 +12,6 @@ import {
 	useCreateAllowedEmailMutation,
 	useDeleteAllowedEmailMutation,
 } from "@/core/api/surveyApi";
-
 
 export default function ManageAllowedEmails() {
 	const [newEmail, setNewEmail] = useState("");
@@ -50,10 +48,16 @@ export default function ManageAllowedEmails() {
 			setNewEmail("");
 			setIsFormVisible(false);
 			refetch();
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			const emailErrors = (
+				errorData?.email as unknown[] | undefined
+			)?.[0];
 			const errorMessage =
-				error.data?.email?.[0] ||
-				error.data?.error ||
+				String(emailErrors) ||
+				String(errorData?.error) ||
 				"Failed to add email";
 			toast.error(errorMessage);
 		}
@@ -68,8 +72,11 @@ export default function ManageAllowedEmails() {
 			await deleteEmail(id).unwrap();
 			toast.success("Email deleted successfully!");
 			refetch();
-		} catch (error: any) {
-			toast.error(error.data?.error || "Failed to delete email");
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			toast.error(String(errorData?.error) || "Failed to delete email");
 		}
 	};
 
@@ -160,7 +167,7 @@ export default function ManageAllowedEmails() {
 										<p className="text-sm text-muted-foreground">
 											Added:{" "}
 											{new Date(
-												email.created_at
+												email.created_at,
 											).toLocaleDateString()}
 										</p>
 									</div>

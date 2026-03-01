@@ -20,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, SquarePen } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { setCredentials } from "@/core/store/slices/authSlice";
 import { useAppDispatch } from "@/core/store/hooks";
 import { toast } from "react-toastify";
@@ -35,9 +35,7 @@ export default function LoginPage() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const { isAuthenticated, user, loading } = useSelector(
-		(state: RootState) => state.auth,
-	);
+	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
 	// Redirect if already authenticated
 	useEffect(() => {
@@ -71,7 +69,7 @@ export default function LoginPage() {
 	const getErrorMessage = () => {
 		if (error) {
 			if ("data" in error) {
-				const errorData = error.data as any;
+				const errorData = error.data as Record<string, string>;
 				return (
 					errorData.message ||
 					errorData.detail ||

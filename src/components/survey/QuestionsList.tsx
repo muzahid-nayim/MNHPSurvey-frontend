@@ -1,10 +1,9 @@
 // src/components/survey/QuestionsList.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
 	AlertDialog,
@@ -16,7 +15,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Edit2, Trash2, Check, X, Radio, CheckSquare } from "lucide-react";
+import { Edit2, Trash2, Radio, CheckSquare } from "lucide-react";
 import type { QuestionType, Question, Survey } from "@/types";
 import { QuestionForm } from "@/components/survey/QuestionForm";
 import { toast } from "react-toastify";
@@ -53,7 +52,6 @@ export function QuestionsList({
 	const [updateQuestion, { isLoading: isUpdatingQuestion }] =
 		useUpdateQuestionMutation();
 	const [deleteQuestion] = useDeleteQuestionMutation();
-	const [updateOption] = useUpdateOptionMutation();
 	const [deleteOption] = useDeleteOptionMutation();
 
 	// State
@@ -79,7 +77,7 @@ export function QuestionsList({
 		survey?.status === "draft" || survey?.status === "active";
 
 	// Helper Functions - FIXED
-	const initQuestionEdit = (question: any) => {
+	const initQuestionEdit = (question: Question) => {
 		if (!question) return;
 		setEditingQuestionId(question.id);
 		// FIXED: Include option IDs for existing options
@@ -87,7 +85,7 @@ export function QuestionsList({
 			question_text: question.question_text,
 			question_type: question.question_type,
 			is_required: question.is_required,
-			options: question.options.map((opt: any) => ({
+			options: question.options.map((opt) => ({
 				id: opt.id, // Keep the ID for existing options
 				text: opt.option_text, // Store text separately
 			})),
@@ -139,6 +137,7 @@ export function QuestionsList({
 	// Event Handlers
 	const handleEditQuestion = (questionId: string) => {
 		const question = survey?.questions?.find((q) => q.id === questionId);
+		if (!question) return;
 		initQuestionEdit(question);
 		setTimeout(() => {
 			document
@@ -200,7 +199,7 @@ export function QuestionsList({
 			}
 			onSurveyUpdate(); // Refresh survey data
 			cancelQuestionEdit();
-		} catch (error) {
+		} catch (_error) {
 			toast.error(
 				editingQuestionId
 					? "Failed to update question"
@@ -214,7 +213,7 @@ export function QuestionsList({
 			await deleteQuestion({ surveyId, questionId }).unwrap();
 			onSurveyUpdate(); // Refresh survey data
 			toast.success("Question deleted successfully!");
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to delete question");
 		}
 	};
@@ -224,7 +223,7 @@ export function QuestionsList({
 			await deleteOption({ surveyId, questionId, optionId }).unwrap();
 			onSurveyUpdate(); // Refresh survey data
 			toast.success("Option deleted successfully!");
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to delete option");
 		}
 	};

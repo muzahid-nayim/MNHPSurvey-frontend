@@ -15,12 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Eye, EyeOff, Lock, SquarePen, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, Lock, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/common/logo";
 
 function ResetPasswordContent() {
-	const router = useRouter();
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
 
@@ -77,14 +76,14 @@ function ResetPasswordContent() {
 		}
 	};
 
-	const getErrorMessage = () => {
+	const getErrorMessage = (): string => {
 		if (error) {
 			if ("data" in error) {
-				const errorData = error.data as any;
-				return (
+				const errorData = error.data as Record<string, unknown>;
+				return String(
 					errorData.message ||
-					errorData.detail ||
-					"Password reset failed. The link may be invalid or expired."
+						errorData.detail ||
+						"Password reset failed. The link may be invalid or expired.",
 				);
 			}
 		}
@@ -96,7 +95,7 @@ function ResetPasswordContent() {
 			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
-						<Logo/>
+						<Logo />
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -130,7 +129,7 @@ function ResetPasswordContent() {
 			<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 				<div className="w-full max-w-md">
 					<div className="text-center mb-8">
-						<Logo/>
+						<Logo />
 					</div>
 
 					<Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -165,7 +164,7 @@ function ResetPasswordContent() {
 		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
 				<div className="text-center mb-8">
-					<Logo/>
+					<Logo />
 					<p className="text-muted-foreground">Create new password</p>
 				</div>
 

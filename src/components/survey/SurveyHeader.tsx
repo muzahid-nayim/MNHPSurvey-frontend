@@ -23,7 +23,6 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-	Share2,
 	Copy,
 	QrCode,
 	Undo,
@@ -31,17 +30,11 @@ import {
 	Rocket,
 	Pencil,
 	RefreshCw,
-	ArrowLeft,
 	Circle,
 	Info,
 	MessageSquareTextIcon,
 	ArrowUpRightIcon,
 } from "lucide-react";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
 
 import QrCodeGenerator from "./QRCodeGenerator";
 import { useMemo } from "react";

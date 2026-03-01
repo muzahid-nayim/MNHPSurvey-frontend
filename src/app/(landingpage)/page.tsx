@@ -3,7 +3,6 @@
 import CTA from "./_components/Cta";
 import Hero from "./_components/Hero";
 import Status from "./_components/Status";
-import Footer from "../../components/common/Footer";
 import Features from "./_components/Features";
 
 export default function HomePage() {

@@ -1,6 +1,6 @@
 // src/components/common/UserAvatar.tsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -22,9 +22,7 @@ import Link from "next/link";
 import { RootState } from "@/core/store";
 
 export function UserAvatar() {
-	const { isAuthenticated, user, loading } = useSelector(
-		(state: RootState) => state.auth,
-	);
+	const { user } = useSelector((state: RootState) => state.auth);
 	const dispatch = useDispatch();
 	const router = useRouter();
 	const [logoutMutation] = useLogoutMutation();
@@ -53,12 +51,6 @@ export function UserAvatar() {
 		}
 	};
 
-	const getTimeBasedGreeting = () => {
-		const hour = new Date().getHours();
-		if (hour < 12) return "Good morning";
-		if (hour < 17) return "Good afternoon";
-		return "Good evening";
-	};
 	if (!user) return null;
 
 	return (

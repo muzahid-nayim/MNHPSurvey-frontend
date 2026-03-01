@@ -47,7 +47,6 @@ import {
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
@@ -102,7 +101,7 @@ export default function CreateSurveyPage() {
 			if (formState.access_type === "private_invited") {
 				if (selectedEmails.length === 0) {
 					toast.error(
-						"Please select at least one email for private survey"
+						"Please select at least one email for private survey",
 					);
 					return;
 				}
@@ -118,9 +117,12 @@ export default function CreateSurveyPage() {
 			}
 
 			router.push(`/dashboard/surveys/`);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("Failed to create survey:", error);
-			toast.error(error?.data?.error || "Failed to create survey");
+			const errorMsg = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			toast.error(String(errorMsg?.error) || "Failed to create survey");
 		}
 	};
 
@@ -132,7 +134,7 @@ export default function CreateSurveyPage() {
 		setSelectedEmails((prev) =>
 			prev.includes(emailId)
 				? prev.filter((id) => id !== emailId)
-				: [...prev, emailId]
+				: [...prev, emailId],
 		);
 	};
 
@@ -261,8 +263,16 @@ export default function CreateSurveyPage() {
 											No allowed emails configured yet.
 										</p>
 										<p className="text-sm mt-1">
-											Go to <span><Link href="/dashboard/settings" className="underline  text-blue-600">Dashboard Settings</Link></span> to add
-											emails first.
+											Go to{" "}
+											<span>
+												<Link
+													href="/dashboard/settings"
+													className="underline  text-blue-600"
+												>
+													Dashboard Settings
+												</Link>
+											</span>{" "}
+											to add emails first.
 										</p>
 									</div>
 								) : (
@@ -275,7 +285,7 @@ export default function CreateSurveyPage() {
 													className="flex items-center gap-3 p-3 border rounded hover:bg-secondary transition cursor-pointer"
 													onClick={() =>
 														toggleEmailSelection(
-															email.id
+															email.id,
 														)
 													}
 												>
@@ -283,11 +293,11 @@ export default function CreateSurveyPage() {
 														type="checkbox"
 														id={`email-${email.id}`}
 														checked={selectedEmails.includes(
-															email.id
+															email.id,
 														)}
 														onChange={() =>
 															toggleEmailSelection(
-																email.id
+																email.id,
 															)
 														}
 														className="w-4 h-4 rounded cursor-pointer"
@@ -300,14 +310,14 @@ export default function CreateSurveyPage() {
 													</label>
 													{/* Visual indicator for selected emails */}
 													{selectedEmails.includes(
-														email.id
+														email.id,
 													) && (
 														<Badge className="bg-green-100 text-green-800">
 															<Check className="h-3 w-3" />
 														</Badge>
 													)}
 												</div>
-											)
+											),
 										)}
 									</div>
 								)}

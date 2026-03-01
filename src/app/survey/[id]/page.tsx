@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+	useParams,
+	usePathname,
+	useRouter,
+	useSearchParams,
+} from "next/navigation";
 import {
 	useGetTakeSurveyQuery,
 	useSubmitSurveyMutation,
@@ -29,17 +34,15 @@ export default function TakeSurveyPage() {
 	const surveyId = params.id as string;
 	const token = searchParams.get("token") || undefined;
 
-	const router = useRouter();
 	const pathname = usePathname();
 	const fullUrl =
-	  typeof window !== 'undefined'
-	    ? `${window.location.origin}${pathname}`
-	    : '';
+		typeof window !== "undefined"
+			? `${window.location.origin}${pathname}`
+			: "";
 	const {
 		data: survey,
 		isLoading,
 		error,
-		refetch,
 	} = useGetTakeSurveyQuery({ surveyId, token });
 
 	const [submitSurvey, { isLoading: isSubmitting }] =
@@ -51,25 +54,27 @@ export default function TakeSurveyPage() {
 
 	// Initialize answers state when survey loads
 	useEffect(() => {
-		if (survey?.questions) {
-			const initialAnswers: Record<string, string[]> = {};
-			survey.questions.forEach((q) => {
-				initialAnswers[q.id] = [];
-			});
-			setAnswers(initialAnswers);
-		}
+		if (!survey?.questions) return;
+
+		const initialAnswers: Record<string, string[]> = {};
+		survey.questions.forEach((q) => {
+			initialAnswers[q.id] = [];
+		});
+
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setAnswers(initialAnswers);
 	}, [survey]);
 
 	const handleOptionChange = (
 		questionId: string,
 		optionId: string,
-		isMultiple: boolean
+		isMultiple: boolean,
 	) => {
 		console.log(answers);
 		if (isMultiple) {
 			// Multiple choice - toggle option
 			setAnswers((prev) => {
-				const current = prev[questionId] || [];//keeping current selected options
+				const current = prev[questionId] || []; //keeping current selected options
 				if (current.includes(optionId)) {
 					return {
 						...prev,
@@ -92,7 +97,7 @@ export default function TakeSurveyPage() {
 		const requiredQuestions =
 			survey?.questions?.filter((q) => q.is_required) || [];
 		const missingAnswers = requiredQuestions.filter(
-			(q) => !answers[q.id] || answers[q.id].length === 0
+			(q) => !answers[q.id] || answers[q.id].length === 0,
 		);
 
 		if (missingAnswers.length > 0) {
@@ -103,7 +108,9 @@ export default function TakeSurveyPage() {
 
 		// Format answers for API
 		const formattedAnswers = Object.entries(answers)
-			.filter(([_, selectedOptions]) => selectedOptions.length > 0)
+			.filter(
+				([_questionId, selectedOptions]) => selectedOptions.length > 0,
+			)
 			.map(([questionId, selectedOptions]) => ({
 				question_id: questionId,
 				selected_options: selectedOptions,
@@ -116,9 +123,12 @@ export default function TakeSurveyPage() {
 				token,
 			}).unwrap();
 			setSubmitted(true);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// alert(error?.data?.error || "Failed to submit survey");
-			toast.error(error?.data?.error || "Failed to submit survey");
+			const errorMsg = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
+			toast.error(String(errorMsg?.error) || "Failed to submit survey");
 		}
 	};
 
@@ -131,20 +141,12 @@ export default function TakeSurveyPage() {
 	}
 
 	if (error) {
-		return (
-			<SurveyErrorCard
-				error={error}
-				title="Oops! Failed to Load"
-				
-			/>
-		);
+		return <SurveyErrorCard error={error} title="Oops! Failed to Load" />;
 	}
 
 	if (!survey) {
 		return (
-			<SurveyNotFoundCard
-				message="This survey has been deleted by the creator"
-			/>
+			<SurveyNotFoundCard message="This survey has been deleted by the creator" />
 		);
 	}
 
@@ -180,10 +182,11 @@ export default function TakeSurveyPage() {
 		survey.display_mode === "show_all"
 			? 1
 			: survey.display_mode === "one_by_one"
-			? survey.questions?.length || 1
-			: Math.ceil(
-					(survey.questions?.length || 0) / survey.questions_per_page
-			  );
+				? survey.questions?.length || 1
+				: Math.ceil(
+						(survey.questions?.length || 0) /
+							survey.questions_per_page,
+					);
 	const isLastPage = currentPage === totalPages - 1;
 
 	return (
@@ -215,10 +218,10 @@ export default function TakeSurveyPage() {
 										{survey.display_mode === "one_by_one"
 											? `Question ${
 													currentPage + 1
-											  } of ${totalPages}`
+												} of ${totalPages}`
 											: `Page ${
 													currentPage + 1
-											  } of ${totalPages}`}
+												} of ${totalPages}`}
 									</p>
 								</div>
 							)}
@@ -271,7 +274,7 @@ export default function TakeSurveyPage() {
 														question.id,
 														option.id,
 														question.question_type ===
-															"multiple_choice"
+															"multiple_choice",
 													)
 												}
 												className="w-4 h-4"
@@ -295,12 +298,10 @@ export default function TakeSurveyPage() {
 									<Button
 										type="button"
 										variant="outline"
-										onClick={(e) =>
-										{
-											e.preventDefault() ;
-											setCurrentPage((prev) => prev - 1)
-										}
-										}
+										onClick={(e) => {
+											e.preventDefault();
+											setCurrentPage((prev) => prev - 1);
+										}}
 									>
 										Previous
 									</Button>
@@ -312,7 +313,7 @@ export default function TakeSurveyPage() {
 									type="button"
 									onClick={(e) => {
 										e.preventDefault();
-										setCurrentPage((prev) => prev + 1)
+										setCurrentPage((prev) => prev + 1);
 									}}
 									className="ml-auto"
 								>

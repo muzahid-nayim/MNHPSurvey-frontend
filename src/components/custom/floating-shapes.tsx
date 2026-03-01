@@ -1,3 +1,4 @@
+// frontend/src/components/custom/floating-shapes.tsx
 "use client";
 
 export function FloatingShapes() {

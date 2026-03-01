@@ -46,7 +46,6 @@ export function ChangePasswordForm() {
 	});
 
 	const newPassword = watch("new_password");
-	const confirmPassword = watch("new_password2");
 
 	// Calculate password strength
 	const calculatePasswordStrength = (password: string) => {
@@ -74,10 +73,13 @@ export function ChangePasswordForm() {
 
 			toast.success("Password changed successfully!");
 			reset();
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const errorData = (error as Record<string, unknown>)?.data as
+				| Record<string, unknown>
+				| undefined;
 			const errorMessage =
-				error?.data?.error ||
-				error?.data?.message ||
+				String(errorData?.error) ||
+				String(errorData?.message) ||
 				"Failed to change password";
 			toast.error(errorMessage);
 		}
@@ -197,23 +199,23 @@ export function ChangePasswordForm() {
 											passwordStrength === 0
 												? "text-red-500"
 												: passwordStrength === 1
-												? "text-orange-500"
-												: passwordStrength === 2
-												? "text-yellow-500"
-												: passwordStrength === 3
-												? "text-lime-500"
-												: "text-green-500"
+													? "text-orange-500"
+													: passwordStrength === 2
+														? "text-yellow-500"
+														: passwordStrength === 3
+															? "text-lime-500"
+															: "text-green-500"
 										}`}
 									>
 										{passwordStrength === 0
 											? "Too Weak"
 											: passwordStrength === 1
-											? "Weak"
-											: passwordStrength === 2
-											? "Fair"
-											: passwordStrength === 3
-											? "Good"
-											: "Strong"}
+												? "Weak"
+												: passwordStrength === 2
+													? "Fair"
+													: passwordStrength === 3
+														? "Good"
+														: "Strong"}
 									</span>
 								</div>
 								<div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -222,12 +224,12 @@ export function ChangePasswordForm() {
 											passwordStrength === 0
 												? "bg-red-500 w-1/4"
 												: passwordStrength === 1
-												? "bg-orange-500 w-1/2"
-												: passwordStrength === 2
-												? "bg-yellow-500 w-3/4"
-												: passwordStrength === 3
-												? "bg-lime-500 w-full"
-												: "bg-green-500 w-full"
+													? "bg-orange-500 w-1/2"
+													: passwordStrength === 2
+														? "bg-yellow-500 w-3/4"
+														: passwordStrength === 3
+															? "bg-lime-500 w-full"
+															: "bg-green-500 w-full"
 										}`}
 									/>
 								</div>

@@ -11,9 +11,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import ManageAllowedEmails from "@/components/survey/ManageAllowedEmails";
-import SurveyAllowedEmailsManager from "@/components/survey/SurveyInvitationManager";
-import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
+
 import { ListIcon, Plus } from "lucide-react";
 
 export default function DashboardPage() {

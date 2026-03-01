@@ -1,17 +1,9 @@
 "use client";
-import { RootState } from "@/core/store";
-import { useSelector } from "react-redux";
+import Link from "next/link";
 import { ProfileInfoCard } from "@/components/profile/ProfileInfoCard";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, FileText, MessageSquare } from "lucide-react";
 import { useGetProfileQuery } from "@/core/api/authApi";
 
 export default function ProfilePage() {
@@ -19,10 +11,9 @@ export default function ProfilePage() {
 	// 	(state: RootState) => state.auth
 	// );
 
-	const { data: user, isLoading: loading, isLoading, error } = useGetProfileQuery();
+	const { data: user, isLoading: loading } = useGetProfileQuery();
 
 	console.log("user data in profile page:", user);
-
 
 	if (loading) {
 		return (
@@ -44,7 +35,7 @@ export default function ProfilePage() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* Main Profile Card */}
 				<div className="lg:col-span-2">
-					{ user && <ProfileInfoCard user={user} loading={loading} /> }
+					{user && <ProfileInfoCard user={user} />}
 				</div>
 
 				{/* Quick Stats */}
@@ -84,24 +75,24 @@ export default function ProfilePage() {
 							<CardTitle className="text-sm">Resources</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-2">
-							<a
+							<Link
 								href="/dashboard"
 								className="block text-sm text-blue-600 hover:underline"
 							>
 								← Back to Dashboard
-							</a>
-							<a
+							</Link>
+							<Link
 								href="/dashboard/surveys"
 								className="block text-sm text-blue-600 hover:underline"
 							>
 								View Surveys
-							</a>
-							<a
+							</Link>
+							<Link
 								href="/dashboard/profile/settings"
 								className="block text-sm text-blue-600 hover:underline"
 							>
 								Settings →
-							</a>
+							</Link>
 						</CardContent>
 					</Card>
 				</div>

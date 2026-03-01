@@ -8,7 +8,6 @@ import {
 	useGetSurveyQuery,
 	useUpdateSurveyStatusMutation,
 } from "@/core/api/surveyApi";
-import type { Survey } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SurveyHeader } from "@/components/survey/SurveyHeader";
 import { SurveyEditForm } from "@/components/survey/SurveyEditForm";
@@ -22,7 +21,6 @@ export default function EditSurveyPage() {
 
 	// API Queries and Mutations
 	const { data: survey, isLoading, refetch } = useGetSurveyQuery(surveyId);
-	const [updateStatus] = useUpdateSurveyStatusMutation();
 
 	const [isEditingSurvey, setIsEditingSurvey] = useState(false);
 	// ============END HOOKS & STATE============

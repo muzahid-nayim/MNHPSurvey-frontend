@@ -24,7 +24,6 @@ import {
 	Shield,
 	Mail,
 	Users,
-	Lock,
 } from "lucide-react";
 import type { Survey, AccessType, DisplayMode } from "@/types";
 import {
@@ -82,6 +81,7 @@ export function SurveyEditForm({
 
 	// ✅ Sync state when survey prop changes (like if parent refetches)
 	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
 		setFormState({
 			title: survey.title,
 			description: survey.description,
@@ -93,7 +93,7 @@ export function SurveyEditForm({
 	}, [survey]);
 
 	// ✅ INTERNAL STATE UPDATER - no more prop dependencies
-	const updateField = (field: keyof Survey, value: any) => {
+	const updateField = (field: keyof Survey, value: unknown) => {
 		setFormState((prev) => ({ ...prev, [field]: value }));
 	};
 
@@ -277,38 +277,35 @@ export function SurveyEditForm({
 									Questions Per Page
 								</Label>
 								<Select
-								value={formState.questions_per_page?.toString() || "5"}
-								onValueChange={(value) =>
-									setFormState({
-										...formState,
-										questions_per_page: parseInt(value),
-									})
-								}
-							>
-								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Question per page" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectItem value="3">
-											3
-										</SelectItem>
-										<SelectItem value="5">
-											5
-										</SelectItem>
-										<SelectItem value="7">
-											7
-										</SelectItem>
-										<SelectItem value="10">
-											10
-										</SelectItem>
+									value={
+										formState.questions_per_page?.toString() ||
+										"5"
+									}
+									onValueChange={(value) =>
+										setFormState({
+											...formState,
+											questions_per_page: parseInt(value),
+										})
+									}
+								>
+									<SelectTrigger className="w-full">
+										<SelectValue placeholder="Question per page" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectGroup>
+											<SelectItem value="3">3</SelectItem>
+											<SelectItem value="5">5</SelectItem>
+											<SelectItem value="7">7</SelectItem>
+											<SelectItem value="10">
+												10
+											</SelectItem>
 
-										<SelectItem value="15">
-											15
-										</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
+											<SelectItem value="15">
+												15
+											</SelectItem>
+										</SelectGroup>
+									</SelectContent>
+								</Select>
 							</div>
 						)}
 
@@ -321,7 +318,7 @@ export function SurveyEditForm({
 								onCheckedChange={(checked) =>
 									updateField(
 										"allow_multiple_responses",
-										checked
+										checked,
 									)
 								}
 								className="mt-1 h-5 w-5"

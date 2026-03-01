@@ -10,7 +10,7 @@ import { ResponseDetailsTable } from "@/components/survey/ResponseDetailsTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BarChart3, PieChart as PieChartIcon, ArrowLeft, MessageSquareText, ArrowUpRightIcon } from "lucide-react";
+import { BarChart3, PieChart as PieChartIcon, MessageSquareText, ArrowUpRightIcon } from "lucide-react";
 
 export default function SurveyResponsesPage() {
 	const params = useParams();

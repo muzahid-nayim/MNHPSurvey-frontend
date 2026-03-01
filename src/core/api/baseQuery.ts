@@ -29,9 +29,12 @@ const AUTH_API_URL = `${BASE_API_URL}/users`;
 const SURVEY_API_URL = `${BASE_API_URL}/surveys`;
 
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: Array<{
+	resolve: (token: string | null) => void;
+	reject: (error: unknown) => void;
+}> = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: unknown, token: string | null = null) => {
 	failedQueue.forEach((prom) => {
 		if (error) {
 			prom.reject(error);
@@ -47,7 +50,7 @@ const processQueue = (error: any, token: string | null = null) => {
  * @param baseUrl - The base URL for the API (auth or survey)
  */
 const createBaseQueryWithReauth = (
-	baseUrl: string
+	baseUrl: string,
 ): BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> => {
 	/**
 	 * Raw base query – attaches Authorization header if access token exists
@@ -108,7 +111,7 @@ const createBaseQueryWithReauth = (
 						body: { refresh: refreshToken },
 					},
 					api,
-					extraOptions
+					extraOptions,
 				);
 
 				if (refreshResult.data) {
