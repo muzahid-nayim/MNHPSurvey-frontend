@@ -34,6 +34,8 @@ import {
 	ArrowLeft,
 	Circle,
 	Info,
+	MessageSquareTextIcon,
+	ArrowUpRightIcon,
 } from "lucide-react";
 import {
 	HoverCard,
@@ -176,9 +178,7 @@ export function SurveyHeader({
 						<ButtonGroup className="flex items-center">
 							<Dialog>
 								<DialogTrigger asChild>
-									<Button
-										className="justify-start gap-2 bg-green-600 hover:bg-green-700"
-									>
+									<Button className="justify-start gap-2 bg-green-600 hover:bg-green-700">
 										<QrCode className="h-4 w-4" />
 										Share
 									</Button>
@@ -251,14 +251,27 @@ export function SurveyHeader({
 					</>
 				)}
 
-				<Button
-					variant="outline"
-					onClick={() => router.push("/dashboard/surveys")}
-					className="gap-2"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					Back to Surveys
-				</Button>
+				<ButtonGroup>
+					<Button
+						onClick={() =>
+							router.push(
+								`/dashboard/surveys/${survey?.id}/responses`,
+							)
+						}
+					>
+						<MessageSquareTextIcon className="h-3.5 w-3.5 shrink-0" />
+						
+						View Responses
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => router.push("/dashboard/surveys")}
+						className="gap-2"
+					>
+						<ArrowUpRightIcon className="h-4 w-4" />
+						Back to Surveys
+					</Button>
+				</ButtonGroup>
 			</div>
 
 			{/* Status Note with Icon */}

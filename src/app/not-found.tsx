@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Home, Search, Mail } from "lucide-react";
 import Link from "next/link";
-import Footer from "./(landingpage)/_components/Footer";
+import Footer from "../components/common/Footer";
 
 export default function NotFound() {
 	return (

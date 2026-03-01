@@ -1,81 +1,94 @@
-// components/common/theme-toggle.tsx
 "use client";
 
 import * as React from "react";
 import { Moon, Sun, Monitor } from "lucide-react";
 import { useTheme } from "next-themes";
-
-import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function ThemeToggle() {
-	const { setTheme, theme, resolvedTheme } = useTheme();
+	const { setTheme, theme } = useTheme();
 	const [mounted, setMounted] = React.useState(false);
 
-	// Wait for component to mount to avoid hydration mismatch
-	React.useEffect(() => {
-		setMounted(true);
-	}, []);
+	React.useEffect(() => setMounted(true), []);
 
-	if (!mounted) {
+	if (!mounted)
 		return (
-			<Button variant="ghost" size="icon" className="h-9 w-9">
-				<Sun className="h-4 w-4" />
-				<span className="sr-only">Toggle theme</span>
-			</Button>
+			<div className="h-10 w-[120px] rounded-full border border-border bg-muted animate-pulse" />
 		);
-	}
-
-	// Determine which icon to show based on current theme
-	const getCurrentIcon = () => {
-		if (theme === "system") {
-			return <Monitor className="h-4 w-4" />;
-		}
-		if (resolvedTheme === "dark") {
-			return <Moon className="h-4 w-4" />;
-		}
-		return <Sun className="h-4 w-4" />;
-	};
 
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" size="icon" className="h-9 w-9">
-					{getCurrentIcon()}
-					<span className="sr-only">Toggle theme</span>
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end" className="z-[60]">
-				<DropdownMenuItem
-					onClick={() => setTheme("light")}
-					className={`flex items-center gap-2 cursor-pointer ${theme === "light" ? "bg-accent" : ""}`}
-				>
-					<Sun className="h-4 w-4" />
-					<span>Light</span>
-					{theme === "light" && <span className="ml-auto text-xs">✓</span>}
-				</DropdownMenuItem>
-				<DropdownMenuItem
-					onClick={() => setTheme("dark")}
-					className={`flex items-center gap-2 cursor-pointer ${theme === "dark" ? "bg-accent" : ""}`}
-				>
-					<Moon className="h-4 w-4" />
-					<span>Dark</span>
-					{theme === "dark" && <span className="ml-auto text-xs">✓</span>}
-				</DropdownMenuItem>
-				<DropdownMenuItem
-					onClick={() => setTheme("system")}
-					className={`flex items-center gap-2 cursor-pointer ${theme === "system" ? "bg-accent" : ""}`}
-				>
-					<Monitor className="h-4 w-4" />
-					<span>System</span>
-					{theme === "system" && <span className="ml-auto text-xs">✓</span>}
-				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
+		<ToggleGroup
+			type="single"
+			value={theme}
+			onValueChange={(val) => val && setTheme(val)}
+			// Removed p-1, kept rounded-full, added overflow-hidden to contain circles (optional)
+			className="flex items-center h-8 rounded-full border border-border bg-muted gap-0 overflow-hidden"
+		>
+			<ToggleGroupItem
+				value="light"
+				className="
+		  w-7 h-7 p-0 flex items-center justify-center
+		  data-[state=on]:bg-background data-[state=on]:shadow-md
+		  data-[state=on]:text-amber-400
+		  text-muted-foreground hover:text-amber-400
+		  transition-all duration-200 data-[state=on]:rounded-full
+		"
+			>
+				<Sun
+					className="w-3.5 h-3.5 transition-all duration-200"
+					style={{
+						filter:
+							theme === "light"
+								? "drop-shadow(0 0 6px rgba(251,191,36,0.9))"
+								: "none",
+					}}
+				/>
+				<span className="sr-only">Light</span>
+			</ToggleGroupItem>
+
+			<ToggleGroupItem
+				value="system"
+				className="
+		  w-7 h-7 p-0 flex items-center justify-center
+		  data-[state=on]:bg-background data-[state=on]:shadow-md
+		  data-[state=on]:text-blue-400
+		  text-muted-foreground hover:text-blue-400
+		  transition-all duration-200 data-[state=on]:rounded-full
+		"
+			>
+				<Monitor
+					className="w-3.5 h-3.5 transition-all duration-200"
+					style={{
+						filter:
+							theme === "system"
+								? "drop-shadow(0 0 6px rgba(96,165,250,0.9))"
+								: "none",
+					}}
+				/>
+				<span className="sr-only">System</span>
+			</ToggleGroupItem>
+
+			<ToggleGroupItem
+				value="dark"
+				className="
+		  w-7 h-7 p-0 flex items-center justify-center
+		  data-[state=on]:bg-background data-[state=on]:shadow-md
+		  data-[state=on]:text-violet-400
+		  text-muted-foreground hover:text-violet-400
+		  transition-all duration-200 data-[state=on]:rounded-full
+		"
+			>
+				<Moon
+					className="w-3.5 h-3.5 transition-all duration-200"
+					style={{
+						filter:
+							theme === "dark"
+								? "drop-shadow(0 0 6px rgba(167,139,250,0.9))"
+								: "none",
+					}}
+				/>
+				<span className="sr-only">Dark</span>
+			</ToggleGroupItem>
+		</ToggleGroup>
 	);
 }
