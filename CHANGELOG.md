@@ -7,6 +7,10 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+## [0.4.3] - 2026-03-2
+### Fixed
+- showing error message in toast when login failed.
+
 ## [0.4.2] - 2026-03-1
 ### Fixed	
 - Fixed lot of type and others issue during build.
