@@ -193,7 +193,7 @@ export default function AboutPage() {
 						card, no setup, no noise.
 					</p>
 					<a
-						href="/register"
+						href="/signup"
 						className="inline-block px-8 py-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
 					>
 						Get Started Free

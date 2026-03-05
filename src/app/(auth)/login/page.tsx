@@ -58,7 +58,7 @@ export default function LoginPage() {
 					refreshToken: response.refresh,
 				}),
 			);
-			const redirectTo = searchParams.get("redirect") || "/dashboard";
+			const redirectTo = searchParams.get("redirect") || searchParams.get("returnTo") || "/dashboard";
 			router.push(redirectTo);
 		} catch (err) {
 			if ((err as FetchBaseQueryError)?.data) {
@@ -161,7 +161,7 @@ export default function LoginPage() {
 										onChange={(e) =>
 											setEmail(e.target.value)
 										}
-										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -196,7 +196,7 @@ export default function LoginPage() {
 										onChange={(e) =>
 											setPassword(e.target.value)
 										}
-										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -279,7 +279,7 @@ export default function LoginPage() {
 						</Link>{" "}
 						and{" "}
 						<Link
-							href="/privacy"
+							href="/terms"
 							className="text-primary hover:text-primary/80 transition-colors"
 						>
 							Privacy Policy

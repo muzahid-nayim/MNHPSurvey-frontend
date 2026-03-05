@@ -208,7 +208,7 @@ function ResetPasswordContent() {
 										placeholder="Enter new password"
 										value={formState.password}
 										onChange={handleChange}
-										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -251,7 +251,7 @@ function ResetPasswordContent() {
 										placeholder="Confirm new password"
 										value={formState.password2}
 										onChange={handleChange}
-										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>

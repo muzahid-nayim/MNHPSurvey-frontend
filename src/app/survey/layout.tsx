@@ -1,11 +1,11 @@
+import Footer from "@/components/common/Footer";
 import { Navbar } from "@/components/common/navigation";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Authentication",
+	title: "Survey",
 };
-// src/app/(auth)/layout.tsx
-export default function AuthLayout({
+export default function SurveyLayout({
 	children,
 }: {
 	children: React.ReactNode;
@@ -13,9 +13,8 @@ export default function AuthLayout({
 	return (
 		<>
 			<Navbar />
-			<main className="min-h-screen flex items-center justify-center">
-				{children}
-			</main>
+			<main className="mx-auto w-full max-w-6xl p-3 py-10">{children}</main>
+			<Footer/>
 		</>
 	);
 }

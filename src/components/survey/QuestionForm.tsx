@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trash2, Plus } from "lucide-react";
 import type { QuestionType } from "@/types";
-
+import { useEffect, useRef } from "react";
 interface QuestionFormProps {
 	isEditing: boolean;
 	questionText: string;
@@ -42,6 +42,17 @@ export function QuestionForm({
 	onSubmit,
 	onCancel,
 }: QuestionFormProps) {
+	const prevOptionsLength = useRef(options.length);
+	useEffect(() => {
+		if (options.length > prevOptionsLength.current) {
+			const inputs = document.querySelectorAll<HTMLInputElement>(
+				'input[placeholder^="Option"]',
+			);
+			inputs[inputs.length - 1]?.focus();
+		}
+		prevOptionsLength.current = options.length;
+	}, [options.length]);
+
 	return (
 		<Card className="border-2 border-blue-500/20">
 			<form onSubmit={onSubmit}>
@@ -59,8 +70,9 @@ export function QuestionForm({
 							onChange={(e) =>
 								onQuestionTextChange(e.target.value)
 							}
-							placeholder="Enter your question here"
+							placeholder="e.g. What is your preferred work schedule?"
 							required
+							className="text-sm md:text-base "
 						/>
 					</div>
 
@@ -142,11 +154,23 @@ export function QuestionForm({
 										onChange={(e) =>
 											onUpdateOption(
 												index,
-												e.target.value
+												e.target.value,
 											)
 										}
 										placeholder={`Option ${index + 1}`}
 										required
+										onKeyDown={(e) => {
+											if (e.key === "Enter") {
+												e.preventDefault();
+												if (
+													index ===
+														options.length - 1 &&
+													option.trim()
+												) {
+													onAddOption();
+												}
+											}
+										}}
 									/>
 									{options.length > 2 && (
 										<Button
@@ -171,12 +195,13 @@ export function QuestionForm({
 							type="submit"
 							disabled={isLoading}
 							className="flex-1"
+							
 						>
 							{isLoading
 								? "Saving..."
 								: isEditing
-								? "Update Question"
-								: "Add Question"}
+									? "Update Question"
+									: "Add Question"}
 						</Button>
 						<Button
 							type="button"

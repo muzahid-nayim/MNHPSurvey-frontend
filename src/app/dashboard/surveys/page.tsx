@@ -47,11 +47,14 @@ import {
 } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import QrCodeGenerator from "@/components/survey/QRCodeGenerator";
+import { set } from "react-hook-form";
 
 export default function SurveysPage() {
 	const { data: surveys, isLoading, error } = useGetSurveysQuery();
 	const [deleteSurvey] = useDeleteSurveyMutation();
 	const { copyToClipboard } = useClipboard();
+	const [shareDialogOpen, setShareDialogOpen] = useState(false);
+	
 	// const url = window.location.origin;
 	// console.log(url);
 	const handleDelete = async (id: string) => {
@@ -217,7 +220,7 @@ export default function SurveysPage() {
 
 										{/* Share Button (only for active surveys) */}
 										{survey.status === "active" && (
-											<Dialog>
+											<Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
 												<DialogTrigger asChild>
 													<Button
 														variant="outline"
@@ -255,6 +258,7 @@ export default function SurveysPage() {
 																	publicUrl,
 																	"Survey link copied!",
 																);
+																setShareDialogOpen(false)
 															}}
 															variant="outline"
 															className="w-full justify-start gap-2"
@@ -266,6 +270,7 @@ export default function SurveysPage() {
 															<QrCodeGenerator
 																text={publicUrl}
 																showDownload
+																onDownload={() => setShareDialogOpen(false)}
 															/>
 														</div>
 													</div>

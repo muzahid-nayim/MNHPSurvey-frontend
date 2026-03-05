@@ -74,7 +74,7 @@ export default function TakeSurveyPage() {
 		if (isMultiple) {
 			// Multiple choice - toggle option
 			setAnswers((prev) => {
-				const current = prev[questionId] || []; //keeping current selected options
+				const current = prev[questionId] || []; 
 				if (current.includes(optionId)) {
 					return {
 						...prev,
@@ -85,7 +85,6 @@ export default function TakeSurveyPage() {
 				}
 			});
 		} else {
-			// Single choice - replace
 			setAnswers((prev) => ({ ...prev, [questionId]: [optionId] }));
 		}
 	};
@@ -141,7 +140,43 @@ export default function TakeSurveyPage() {
 	}
 
 	if (error) {
-		return <SurveyErrorCard error={error} title="Oops! Failed to Load" />;
+		// Extract error code from backend
+		const errorCode = (error as Record<string, unknown>)?.data as
+			| Record<string, unknown>
+			| undefined;
+		const errorMessage = errorCode?.error as string | undefined;
+
+		// Not found or inactive
+		if ((error as Record<string, unknown>)?.status === 404) {
+			return (
+				<SurveyNotFoundCard message="This survey doesn't exist or is no longer active." />
+			);
+		}
+
+		// Login required
+		if (errorMessage === "login_required") {
+			return (
+				<SurveyErrorCard
+					title="Login Required"
+					message="You need to be logged in to access this survey."
+					error={error}
+				/>
+			);
+		}
+
+		// Not invited
+		if (errorMessage === "not_invited") {
+			return (
+				<SurveyErrorCard
+					title="Access Denied"
+					message="You are not invited to take this survey."
+					error={error}
+				/>
+			);
+		}
+
+		// Generic fallback
+		return <SurveyErrorCard error={error} title="Failed to Load Survey" />;
 	}
 
 	if (!survey) {
@@ -313,6 +348,25 @@ export default function TakeSurveyPage() {
 									type="button"
 									onClick={(e) => {
 										e.preventDefault();
+
+										const currentQuestions =
+											questionsToShow;
+										const unanswered =
+											currentQuestions.filter(
+												(q) =>
+													q.is_required &&
+													(!answers[q.id] ||
+														answers[q.id].length ===
+															0),
+											);
+
+										if (unanswered.length > 0) {
+											toast.error(
+												"Please answer all required questions before continuing.",
+											);
+											return;
+										}
+
 										setCurrentPage((prev) => prev + 1);
 									}}
 									className="ml-auto"

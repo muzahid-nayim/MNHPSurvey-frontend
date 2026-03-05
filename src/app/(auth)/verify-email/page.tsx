@@ -142,16 +142,14 @@ function VerifyEmailContent() {
 								</div>
 							</div>
 							<CardTitle className="text-2xl text-foreground">
-								Email Verified!
+								{message}
 							</CardTitle>
 							<CardDescription className="text-lg">
-								Your email has been successfully verified
+								{ message == "Verification email sent successfully" ? "Please check your email for the verification link." : "Your email has been successfully verified. You can now access all features of MNHPSurvey." }
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-6">
-							<p className="text-muted-foreground text-center leading-relaxed">
-								{message}
-							</p>
+							
 							<div className="space-y-3">
 								<Button
 									onClick={() => router.push("/login")}
@@ -294,7 +292,7 @@ function VerifyEmailContent() {
 										onChange={(e) =>
 											setEmail(e.target.value)
 										}
-										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isResending}
 									/>

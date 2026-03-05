@@ -6,16 +6,19 @@ import { Download } from "lucide-react";
 type QrCodeGeneratorProps = {
 	text: string;
 	showDownload?: boolean;
+	onDownload?: () => void;
 };
 
-function QrCodeGenerator({ text, showDownload = false }: QrCodeGeneratorProps) {
+function QrCodeGenerator({
+	text,
+	showDownload = false,
+	onDownload,
+}: QrCodeGeneratorProps) {
 	const { Canvas } = useQRCode();
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-	// Callback ref to capture the canvas element
 	const setCanvasRef = useCallback((node: HTMLDivElement | null) => {
 		if (node) {
-			// Look for the canvas element inside the div
 			const canvas = node.querySelector("canvas");
 			if (canvas) {
 				canvasRef.current = canvas;
@@ -30,7 +33,6 @@ function QrCodeGenerator({ text, showDownload = false }: QrCodeGeneratorProps) {
 			return;
 		}
 
-		// Convert canvas to data URL and trigger download
 		const dataUrl = canvas.toDataURL("image/png");
 		const link = document.createElement("a");
 		link.href = dataUrl;
@@ -38,6 +40,7 @@ function QrCodeGenerator({ text, showDownload = false }: QrCodeGeneratorProps) {
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+		onDownload?.();
 	};
 
 	return (

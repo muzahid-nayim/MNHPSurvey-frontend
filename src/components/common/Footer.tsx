@@ -29,24 +29,24 @@ const Footer = () => {
 						>
 							Features
 						</Link>
-						<Link
+						{/* <Link
 							href="/pricing"
 							className="text-muted-foreground hover:text-primary transition-colors"
 						>
 							Pricing
-						</Link>
+						</Link> */}
 						<Link
 							href="/about"
 							className="text-muted-foreground hover:text-primary transition-colors"
 						>
 							About
 						</Link>
-						<Link
+						{/* <Link
 							href="/blog"
 							className="text-muted-foreground hover:text-primary transition-colors"
 						>
 							Blog
-						</Link>
+						</Link> */}
 						<Link
 							href="/contact"
 							className="text-muted-foreground hover:text-primary transition-colors"
@@ -58,13 +58,13 @@ const Footer = () => {
 					{/* Social icons */}
 					<div className="flex space-x-4">
 						<a
-							href="#"
+							href="https://www.facebook.com/Muzahid.Nayim"
 							className="text-muted-foreground hover:text-primary transition-colors"
 						>
 							<Facebook className="h-5 w-5" />
 							<span className="sr-only">Facebook</span>
 						</a>
-						<a
+						{/* <a
 							href="#"
 							className="text-muted-foreground hover:text-primary transition-colors"
 						>
@@ -77,9 +77,9 @@ const Footer = () => {
 						>
 							<Linkedin className="h-5 w-5" />
 							<span className="sr-only">LinkedIn</span>
-						</a>
+						</a> */}
 						<a
-							href="#"
+							href="https://github.com/muzahid-nayim"
 							className="text-muted-foreground hover:text-primary transition-colors"
 						>
 							<Github className="h-5 w-5" />
@@ -91,8 +91,7 @@ const Footer = () => {
 				{/* Bottom bar with copyright and legal links */}
 				<div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center text-xs text-muted-foreground">
 					<p>
-						© {new Date().getFullYear()} MNHP Survey. All rights
-						reserved.
+						© {new Date().getFullYear()} <Link className="underline text-primary" href={"https://github.com/muzahid-nayim"} >Muzahidul Islam</Link>. Built as a portfolio project.
 					</p>
 					<div className="flex gap-4 mt-2 sm:mt-0">
 						<Link
@@ -102,7 +101,7 @@ const Footer = () => {
 							Terms
 						</Link>
 						<Link
-							href="/privacy"
+							href="/terms"
 							className="hover:text-primary transition-colors"
 						>
 							Privacy

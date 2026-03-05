@@ -50,6 +50,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
 export default function CreateSurveyPage() {
@@ -173,26 +175,31 @@ export default function CreateSurveyPage() {
 										title: e.target.value,
 									})
 								}
-								placeholder="Customer Satisfaction Survey"
+								placeholder="What would you like to ask today?"
 								required
+								className="text-sm md:text-base"
 							/>
 						</div>
 
 						{/* Survey Description - Optional textarea */}
 						<div className="space-y-2">
-							<Label htmlFor="description">Description</Label>
-							<textarea
-								id="description"
-								value={formState.description}
+							<Field>
+								<FieldLabel htmlFor="description">
+									Description
+								</FieldLabel>
+								<Textarea
+									id="description"
+									placeholder="Type your message here."
+									value={formState.description}
 								onChange={(e) =>
 									setFormState({
 										...formState,
 										description: e.target.value,
 									})
 								}
-								placeholder="Tell us about your experience..."
-								className="w-full min-h-[100px] px-3 py-2 border rounded-md"
-							/>
+								/>
+							</Field>
+							
 						</div>
 
 						{/* ======================== */}

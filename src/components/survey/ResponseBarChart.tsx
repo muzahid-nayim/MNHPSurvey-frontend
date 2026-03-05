@@ -33,7 +33,7 @@ export function ResponseBarChart({ question }: ResponseBarChartProps) {
 	return (
 		<Card className="w-full hover:ring ring-ring">
 			<CardHeader>
-				<CardTitle className="text-lg">
+				<CardTitle className="text-base sm:text-lg">
 					{question.question_text}
 				</CardTitle>
 				<CardDescription>
@@ -42,28 +42,27 @@ export function ResponseBarChart({ question }: ResponseBarChartProps) {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<ResponsiveContainer width="100%" height={300}>
-					<BarChart data={chartData}>
-						<CartesianGrid strokeDasharray="3 3" />
-						<XAxis
-							dataKey="name"
-							angle={-45}
-							textAnchor="end"
-							height={100}
-						/>
-						<YAxis />
-						<Tooltip
-							formatter={(value) => {
-								if (typeof value === "number")
-									return value.toFixed(2);
-								return value;
-							}}
-						/>
-						<Legend />
-						<Bar dataKey="Count" fill="#3b82f6" />
-						<Bar dataKey="Percentage" fill="#10b981" />
-					</BarChart>
-				</ResponsiveContainer>
+				<div className="overflow-x-auto">
+					<div className="min-w-[320px]">
+						<ResponsiveContainer width="100%" height={300}>
+							<BarChart data={chartData}>
+								<CartesianGrid strokeDasharray="3 3" />
+								<XAxis
+									dataKey="name"
+									angle={-45}
+									textAnchor="end"
+									height={80}
+									tick={{ fontSize: 11 }}
+								/>
+								<YAxis tick={{ fontSize: 11 }} />
+								<Tooltip />
+								<Legend />
+								<Bar dataKey="Count" fill="#3b82f6" />
+								<Bar dataKey="Percentage" fill="#10b981" />
+							</BarChart>
+						</ResponsiveContainer>
+					</div>
+				</div>
 			</CardContent>
 		</Card>
 	);

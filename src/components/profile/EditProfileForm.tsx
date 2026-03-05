@@ -94,6 +94,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 							id="username"
 							placeholder="Enter your username"
 							disabled={isLoading}
+							className="text-sm md:text-base "
 						/>
 						{errors.username && (
 							<p className="text-sm text-red-500 flex items-center gap-1">
@@ -118,6 +119,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 							id="first_name"
 							placeholder="Enter your first name (optional)"
 							disabled={isLoading}
+							className="text-sm md:text-base "
 						/>
 						{errors.first_name && (
 							<p className="text-sm text-red-500 flex items-center gap-1">
@@ -142,6 +144,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 							id="last_name"
 							placeholder="Enter your last name (optional)"
 							disabled={isLoading}
+							className="text-sm md:text-base "
 						/>
 						{errors.last_name && (
 							<p className="text-sm text-red-500 flex items-center gap-1">

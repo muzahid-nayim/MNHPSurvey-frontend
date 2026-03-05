@@ -1,4 +1,4 @@
-// app/register/page.tsx
+// app/signup/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -206,7 +206,7 @@ export default function RegisterPage() {
 										placeholder="First name"
 										value={formState.firstName}
 										onChange={handleChange}
-										className="bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base bg-background/50 border-border/50 focus:border-primary"
 										disabled={isLoading}
 									/>
 								</div>
@@ -224,7 +224,7 @@ export default function RegisterPage() {
 										placeholder="Last name"
 										value={formState.lastName}
 										onChange={handleChange}
-										className="bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base bg-background/50 border-border/50 focus:border-primary"
 										disabled={isLoading}
 									/>
 								</div>
@@ -247,7 +247,7 @@ export default function RegisterPage() {
 										placeholder="Choose a username"
 										value={formState.username}
 										onChange={handleChange}
-										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -271,7 +271,7 @@ export default function RegisterPage() {
 										placeholder="Enter your email"
 										value={formState.email}
 										onChange={handleChange}
-										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -297,7 +297,7 @@ export default function RegisterPage() {
 										placeholder="Create a password"
 										value={formState.password}
 										onChange={handleChange}
-										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -403,7 +403,7 @@ export default function RegisterPage() {
 										placeholder="Confirm your password"
 										value={formState.password2}
 										onChange={handleChange}
-										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -488,7 +488,7 @@ export default function RegisterPage() {
 						</Link>{" "}
 						and{" "}
 						<Link
-							href="/privacy"
+							href="/terms"
 							className="text-primary hover:text-primary/80 transition-colors"
 						>
 							Privacy Policy

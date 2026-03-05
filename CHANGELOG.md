@@ -7,6 +7,30 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR** version `X.0.0`: Increment for incompatible API changes or breaking changes.
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
+
+## [0.5.0] - 2026-03-05
+### Added
+- Terms & Conditions page with all survey types and legal information.
+- Delete confirmation AlertDialog in ManageAllowedEmails component.
+- Spin animation on "Try Again" button in SurveyStatusCard.
+- QR code share dialog now closes automatically after copy or download.
+- Mobile responsive improvements to SurveyHeader component.
+- Using shadcn texarea in survey creation .
+- Change readme file and add image link there.
+
+### Fixed
+- Login redirect issue — `returnTo` and `redirect` param mismatch resolved.
+- `handleLogin` function was defined but never called in SurveyStatusCard buttons.
+- `useSearchParams()` missing Suspense boundary causing build failure on `/404` and `/login` pages — fixed by splitting `AuthProvider` into server/client components.
+- Next.js security vulnerability — upgraded to latest stable version.
+- Fixe responsive issue in dashboard landing page.
+- Fixed UI issue in multiple places . 
+
+
+## [0.4.4] - 2026-03-4
+### Fixed
+- fix email verification message issue.
+
 ## [0.4.3] - 2026-03-2
 ### Fixed
 - showing error message in toast when login failed.

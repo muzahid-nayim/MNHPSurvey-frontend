@@ -229,7 +229,7 @@ function SurveyAllowedEmailsManagerContent({
 									e.key === "Enter" && handleAddNewEmail()
 								}
 								disabled={isAddingEmail}
-								className="pl-9"
+								className="text-sm md:text-base pl-9"
 							/>
 						</div>
 						<TooltipProvider>

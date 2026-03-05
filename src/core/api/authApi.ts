@@ -3,7 +3,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 import { authBaseQuery } from "./baseQuery";
 
-
 export interface User {
 	id: string;
 	username: string;
@@ -87,17 +86,17 @@ export const authApi = createApi({
 			query: () => ({
 				url: "/token/refresh/",
 				method: "POST",
-				body: {}, 
+				body: {},
 			}),
 		}),
 		register: builder.mutation<RegisterResponse, RegisterRequest>({
 			query: (userData) => ({
-				url: "/register/",
+				url: "/signup/",
 				method: "POST",
 				body: userData,
 			}),
 		}),
-		
+
 		logout: builder.mutation<
 			{ message: string },
 			{ refresh_token: string }

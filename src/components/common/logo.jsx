@@ -56,13 +56,13 @@ const Logo = ({ showText = true, className = "" }) => {
 
 			{/* Text */}
 			{showText && (
-				<span className="font-bold text-xl tracking-tight hidden sm:inline-block text-foreground">
+				<span className="font-bold text-xl tracking-tight sm:inline-block text-foreground">
 					MNHP <span style={{ color: "var(--primary)" }}>Survey</span>
 				</span>
 			)}
-			<span className="font-bold text-xl tracking-tight sm:hidden text-foreground">
+			{/* <span className="font-bold text-xl tracking-tight sm:hidden text-foreground">
 				MNHP
-			</span>
+			</span> */}
 		</Link>
 	);
 };

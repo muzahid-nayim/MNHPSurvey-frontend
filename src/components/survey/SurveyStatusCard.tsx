@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export type SurveyStatusType = "error" | "not_found" | "submitted";
 
@@ -37,20 +38,18 @@ export function SurveyStatusCard({
 	onLogin,
 	onCopyLink,
 }: SurveyStatusCardProps) {
-	// Get error message if error prop is provided
 
 	const getErrorMessage = () => {
+		console.log("Error object:", error); 
 		if (!error) return message;
 
 		if (typeof error === "string") return error;
 
-		// Handle RTK Query error structure
 		const errorData = (error as Record<string, unknown>)?.data as
 			| Record<string, unknown>
 			| undefined;
 		if (errorData?.error) return String(errorData.error);
 
-		// Handle serialized error
 		if ((error as Record<string, unknown>)?.message)
 			return String((error as Record<string, unknown>).message);
 
@@ -60,16 +59,23 @@ export function SurveyStatusCard({
 	const router = useRouter();
 
 	const displayMessage = type === "error" ? getErrorMessage() : message;
-	// Safe defaults using Next.js router
 	const handleGoBack = () => router.back();
 	const handleGoHome = () => router.push("/");
-	const handleTryAgain = () => router.refresh();
+	const [isRetrying, setIsRetrying] = useState(false);
+
+	const handleTryAgain = () => {
+	    setIsRetrying(true);
+	    setTimeout(() => {
+	        setIsRetrying(false);
+	        router.refresh();
+	    }, 1500);
+	}
 
 	const handleLogin =
 		onLogin ||
 		(() => {
 			const redirectUrl = window.location.href;
-			router.push(`/login?returnTo=${encodeURIComponent(redirectUrl)}`);
+			router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
 		});
 
 	// Card styling based on type
@@ -167,9 +173,12 @@ export function SurveyStatusCard({
 						<div className="space-y-4">
 							{/* ERROR STATE - Check if it's an auth error */}
 							{type === "error" &&
-							displayMessage
+							(displayMessage
 								?.toLowerCase()
-								.includes("logged in") ? (
+								.includes("logged in") ||
+								title
+									?.toLowerCase()
+									.includes("login required")) ? (
 								<>
 									<div className="bg-muted/30 p-4 rounded-lg mb-4">
 										<p className="text-sm text-muted-foreground mb-3">
@@ -179,14 +188,7 @@ export function SurveyStatusCard({
 											<Button
 												className="flex-1 gap-2"
 												onClick={() => {
-													if (onLogin) {
-														onLogin();
-													} else {
-														window.location.href = `/login?returnTo=${encodeURIComponent(
-															window.location
-																.href,
-														)}`;
-													}
+													handleLogin();
 												}}
 											>
 												<LogIn className="h-4 w-4" />
@@ -197,7 +199,7 @@ export function SurveyStatusCard({
 												className="flex-1 gap-2"
 												onClick={() =>
 													(window.location.href =
-														"/register")
+														"/signup")
 												}
 											>
 												<UserPlus className="h-4 w-4" />
@@ -213,9 +215,14 @@ export function SurveyStatusCard({
 										onClick={handleTryAgain}
 										variant="default"
 										className="gap-2"
+										disabled={isRetrying}
 									>
-										<RefreshCw className="h-4 w-4" />
-										Try Again
+										<RefreshCw
+											className={`h-4 w-4 ${isRetrying ? "animate-spin" : ""}`}
+										/>
+										{isRetrying
+											? "Retrying..."
+											: "Try Again"}
 									</Button>
 									<Button
 										variant="outline"
@@ -313,7 +320,6 @@ export function SurveyStatusCard({
 														navigator.clipboard.writeText(
 															url,
 														);
-														// You can add a toast notification here
 													})
 												}
 											>
@@ -332,7 +338,6 @@ export function SurveyStatusCard({
 	);
 }
 
-// Convenience components for each type
 export const SurveyErrorCard = (props: Omit<SurveyStatusCardProps, "type">) => (
 	<SurveyStatusCard type="error" {...props} />
 );

@@ -10,18 +10,27 @@ import { ResponseDetailsTable } from "@/components/survey/ResponseDetailsTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BarChart3, PieChart as PieChartIcon, MessageSquareText, ArrowUpRightIcon } from "lucide-react";
+import {
+	BarChart3,
+	PieChart as PieChartIcon,
+	MessageSquareText,
+	ArrowUpRightIcon,
+} from "lucide-react";
 
 export default function SurveyResponsesPage() {
 	const params = useParams();
 	const surveyId = params.id as string;
 	const [chartType, setChartType] = useState<"bar" | "pie">("bar");
 
-	const { data: aggregatedResponses, isLoading, error } = useGetResponsesQuery(surveyId);
+	const {
+		data: aggregatedResponses,
+		isLoading,
+		error,
+	} = useGetResponsesQuery(surveyId);
 
 	if (isLoading) {
 		return (
-			<div className="container mx-auto py-8 max-w-7xl">
+			<div className="container mx-auto py-6 sm:py-8 max-w-7xl px-4">
 				<Skeleton className="h-64 w-full rounded-lg" />
 			</div>
 		);
@@ -52,11 +61,9 @@ export default function SurveyResponsesPage() {
 	}
 
 	return (
-		<div className="container mx-auto py-8 max-w-7xl">
-
+		<div className="container mx-auto py-6 sm:py-8 max-w-7xl px-4">
 			{/* ── Header card — same style as survey detail ── */}
 			<div className="mb-8 rounded-lg border bg-card p-6 shadow-sm">
-
 				{/* Top row — title + back button */}
 				<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 					<div className="space-y-1">
@@ -64,7 +71,7 @@ export default function SurveyResponsesPage() {
 							<MessageSquareText className="h-4 w-4" />
 							Survey Responses
 						</div>
-						<h1 className="text-3xl font-bold tracking-tight">
+						<h1 className="text-xl sm:text-3xl font-bold tracking-tight">
 							{aggregatedResponses.survey_title}
 						</h1>
 					</div>
@@ -80,13 +87,17 @@ export default function SurveyResponsesPage() {
 				{/* Stat cards */}
 				<div className="mt-6 grid grid-cols-2 sm:grid-cols-2 gap-3 max-w-sm">
 					<div className="rounded-md border bg-muted/40 px-4 py-3">
-						<p className="text-xs text-muted-foreground">Total Responses</p>
+						<p className="text-xs text-muted-foreground">
+							Total Responses
+						</p>
 						<p className="text-2xl font-bold mt-0.5">
 							{aggregatedResponses.total_responses}
 						</p>
 					</div>
 					<div className="rounded-md border bg-muted/40 px-4 py-3">
-						<p className="text-xs text-muted-foreground">Total Questions</p>
+						<p className="text-xs text-muted-foreground">
+							Total Questions
+						</p>
 						<p className="text-2xl font-bold mt-0.5">
 							{aggregatedResponses.questions.length}
 						</p>
@@ -94,11 +105,11 @@ export default function SurveyResponsesPage() {
 				</div>
 
 				{/* Chart toggle */}
-				<div className="mt-6 flex items-center gap-2">
+				<div className="mt-6 flex items-center gap-2 flex-wrap">
 					<Button
 						variant={chartType === "bar" ? "default" : "outline"}
 						onClick={() => setChartType("bar")}
-						className="gap-2"
+						className="gap-2 h-8 text-xs px-2.5 sm:h-10 sm:text-sm sm:px-4"
 					>
 						<BarChart3 className="w-4 h-4" />
 						Bar Chart
@@ -106,7 +117,7 @@ export default function SurveyResponsesPage() {
 					<Button
 						variant={chartType === "pie" ? "default" : "outline"}
 						onClick={() => setChartType("pie")}
-						className="gap-2"
+						className="gap-2 h-8 text-xs px-2.5 sm:h-10 sm:text-sm sm:px-4"
 					>
 						<PieChartIcon className="w-4 h-4" />
 						Pie Chart
