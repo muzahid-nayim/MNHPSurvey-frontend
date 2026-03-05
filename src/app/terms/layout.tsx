@@ -3,8 +3,9 @@ import { Navbar } from "@/components/common/navigation";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "About",
+	title: "Terms & Conditions",
 };
+// frontend/src/app/terms/layout.tsx
 export default function AboutLayout({
 	children,
 }: {

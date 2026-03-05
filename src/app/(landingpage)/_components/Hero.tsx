@@ -47,7 +47,7 @@ const Hero = () => {
 				{/* Tag */}
 				<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/25 bg-primary/5 text-primary text-xs font-semibold tracking-widest uppercase mb-8 animate-fade-in-up">
 					<span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-					Survey Platform
+					MNHP survey
 				</div>
 
 				{/* Headline */}
@@ -67,9 +67,9 @@ const Hero = () => {
 					className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed animate-fade-in-up"
 					style={{ animationDelay: "0.2s" }}
 				>
-					A focused survey platform with flexible access control,
-					multiple display modes, and instant response analytics —
-					without the noise.
+					A focused MNHP survey with flexible access control, multiple
+					display modes, and instant response analytics — without the
+					noise.
 				</p>
 
 				{/* Feature badges */}
@@ -103,7 +103,6 @@ const Hero = () => {
 							<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
 						</Link>
 					</Button>
-					
 				</div>
 
 				{/* Trust line */}
@@ -141,7 +140,7 @@ const Hero = () => {
 						].map((stat) => (
 							<div
 								key={stat.label}
-								className="flex-1 max-w-[180px] mx-auto sm:mx-0 rounded-2xl border border-border bg-card/80 backdrop-blur-sm p-5 text-left hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
+								className="flex-1 min-w-[180px] max-w-[200px]  mx-auto sm:mx-0 rounded-2xl border border-border bg-card/80 backdrop-blur-sm p-5 text-left hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
 							>
 								<p className="text-3xl font-black text-primary mb-1">
 									{stat.value}

@@ -112,7 +112,7 @@ export function ChangePasswordForm() {
 								id="old_password"
 								placeholder="Enter your current password"
 								disabled={isLoading}
-								className="pr-10"
+								className="text-sm md:text-base pr-10"
 							/>
 							<button
 								type="button"
@@ -169,7 +169,7 @@ export function ChangePasswordForm() {
 								id="new_password"
 								placeholder="Enter your new password"
 								disabled={isLoading}
-								className="pr-10"
+								className="text-sm md:text-base pr-10"
 							/>
 							<button
 								type="button"
@@ -330,7 +330,7 @@ export function ChangePasswordForm() {
 								id="new_password2"
 								placeholder="Confirm your new password"
 								disabled={isLoading}
-								className="pr-10"
+								className="text-sm md:text-base pr-10"
 							/>
 							<button
 								type="button"

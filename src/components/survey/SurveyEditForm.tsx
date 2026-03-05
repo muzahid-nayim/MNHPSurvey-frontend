@@ -183,7 +183,6 @@ export function SurveyEditForm({
 					</div>
 				)}
 
-				{/* ✅ FIXED FORM - uses internal handler */}
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="space-y-3">
 						<div className="flex items-center gap-2">
@@ -202,12 +201,12 @@ export function SurveyEditForm({
 								updateField("title", e.target.value)
 							}
 							placeholder="What's your survey about?"
-							className="h-11 text-base border-2 focus:border-primary"
+							className="text-sm md:text-base h-11 text-base border-2 focus:border-primary"
 							required
 						/>
 						<p className="text-xs text-muted-foreground">
 							A clear title helps respondents understand your
-							survey
+							survey.
 						</p>
 					</div>
 

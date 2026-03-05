@@ -33,12 +33,11 @@ interface QuestionsListProps {
 	onSurveyUpdate: () => void;
 }
 
-// Question Form State Interface - FIXED
 interface QuestionFormState {
 	question_text: string;
 	question_type: QuestionType;
 	is_required: boolean;
-	options: { id?: string; text: string }[]; // Proper type for options
+	options: { id?: string; text: string }[];
 }
 
 export function QuestionsList({
@@ -46,7 +45,6 @@ export function QuestionsList({
 	surveyId,
 	onSurveyUpdate,
 }: QuestionsListProps) {
-	// API Mutations
 	const [createQuestion, { isLoading: isCreatingQuestion }] =
 		useCreateQuestionMutation();
 	const [updateQuestion, { isLoading: isUpdatingQuestion }] =
@@ -62,8 +60,8 @@ export function QuestionsList({
 	const [questionForm, setQuestionForm] = useState<QuestionFormState>({
 		question_text: "",
 		question_type: "single_choice",
-		is_required: false,
-		options: [{ text: "" }, { text: "" }], // FIXED: Initial state with proper format
+		is_required: true,
+		options: [{ text: "" }, { text: "" }], 
 	});
 
 	const [deleteDialog, setDeleteDialog] = useState<{
@@ -76,31 +74,28 @@ export function QuestionsList({
 	const isEditable =
 		survey?.status === "draft" || survey?.status === "active";
 
-	// Helper Functions - FIXED
 	const initQuestionEdit = (question: Question) => {
 		if (!question) return;
 		setEditingQuestionId(question.id);
-		// FIXED: Include option IDs for existing options
 		setQuestionForm({
 			question_text: question.question_text,
 			question_type: question.question_type,
 			is_required: question.is_required,
 			options: question.options.map((opt) => ({
-				id: opt.id, // Keep the ID for existing options
-				text: opt.option_text, // Store text separately
+				id: opt.id,
+				text: opt.option_text,
 			})),
 		});
-		setShowAddQuestion(true); // Show the form when editing
+		setShowAddQuestion(true); 
 	};
 
 	const cancelQuestionEdit = () => {
 		setEditingQuestionId(null);
-		// FIXED: Reset to proper format
 		setQuestionForm({
 			question_text: "",
 			question_type: "single_choice",
 			is_required: false,
-			options: [{ text: "" }, { text: "" }], // Proper initial format
+			options: [{ text: "" }, { text: "" }],
 		});
 		setShowAddQuestion(false);
 	};
@@ -109,7 +104,6 @@ export function QuestionsList({
 		setQuestionForm((prev) => ({ ...prev, ...updates }));
 	};
 
-	// FIXED: Add option with proper format
 	const addOptionToForm = () => {
 		setQuestionForm((prev) => ({
 			...prev,
@@ -117,7 +111,6 @@ export function QuestionsList({
 		}));
 	};
 
-	// FIXED: Remove option by index
 	const removeOptionFromForm = (index: number) => {
 		setQuestionForm((prev) => ({
 			...prev,
@@ -125,7 +118,6 @@ export function QuestionsList({
 		}));
 	};
 
-	// FIXED: Update option text with proper format
 	const updateOptionInForm = (index: number, value: string) => {
 		setQuestionForm((prev) => {
 			const newOptions = [...prev.options];
@@ -146,7 +138,6 @@ export function QuestionsList({
 		}, 0);
 	};
 
-	// FIXED: Handle submit with proper option formatting
 	const handleSubmitQuestion = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -160,17 +151,15 @@ export function QuestionsList({
 		}
 
 		try {
-			// FIXED: Format options properly for both create and update
 			const optionData = validOptions.map((option, index) => {
 				return {
-					...(option.id && { id: option.id }), // Include ID only if it exists
+					...(option.id && { id: option.id }),
 					option_text: option.text,
 					order: index,
 				};
 			});
 
 			if (editingQuestionId) {
-				// Update existing question - FIXED to use optionData
 				await updateQuestion({
 					surveyId,
 					questionId: editingQuestionId,
@@ -179,12 +168,11 @@ export function QuestionsList({
 						question_type: questionForm.question_type,
 						order: 0,
 						is_required: questionForm.is_required,
-						options: optionData, // Use properly formatted options
+						options: optionData, 
 					},
 				}).unwrap();
 				toast.success("Question updated successfully!");
 			} else {
-				// Create new question - FIXED to use optionData
 				await createQuestion({
 					surveyId,
 					data: {
@@ -192,12 +180,12 @@ export function QuestionsList({
 						question_type: questionForm.question_type,
 						order: survey?.questions?.length || 0,
 						is_required: questionForm.is_required,
-						options: optionData, // Use properly formatted options
+						options: optionData,
 					},
 				}).unwrap();
 				toast.success("Question created successfully!");
 			}
-			onSurveyUpdate(); // Refresh survey data
+			onSurveyUpdate();
 			cancelQuestionEdit();
 		} catch (_error) {
 			toast.error(
@@ -221,7 +209,7 @@ export function QuestionsList({
 	const handleDeleteOption = async (questionId: string, optionId: string) => {
 		try {
 			await deleteOption({ surveyId, questionId, optionId }).unwrap();
-			onSurveyUpdate(); // Refresh survey data
+			onSurveyUpdate(); 
 			toast.success("Option deleted successfully!");
 		} catch (_error) {
 			toast.error("Failed to delete option");
@@ -269,7 +257,7 @@ export function QuestionsList({
 												});
 										}, 0);
 									}}
-									className="w-full mb-6 bg-blue-600 hover:bg-gradient-r/50 my-4"
+									className="w-full mb-6 my-4"
 								>
 									+ Add Question
 								</Button>

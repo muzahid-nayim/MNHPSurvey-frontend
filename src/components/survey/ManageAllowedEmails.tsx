@@ -1,11 +1,20 @@
-// src/components/survey/ManageAllowedEmails.tsx
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Mail, Plus, Trash2 } from "lucide-react";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Loader2, Mail, Plus, Trash2, Info } from "lucide-react";
 import { toast } from "react-toastify";
 import {
 	useGetAllowedEmailsQuery,
@@ -16,6 +25,11 @@ import {
 export default function ManageAllowedEmails() {
 	const [newEmail, setNewEmail] = useState("");
 	const [isFormVisible, setIsFormVisible] = useState(false);
+	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+	const [emailToDelete, setEmailToDelete] = useState<{
+		id: string;
+		email: string;
+	} | null>(null);
 
 	const {
 		data: allowedEmails = [],
@@ -35,7 +49,6 @@ export default function ManageAllowedEmails() {
 			return;
 		}
 
-		// Basic email validation
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		if (!emailRegex.test(newEmail)) {
 			toast.error("Please enter a valid email address");
@@ -63,13 +76,16 @@ export default function ManageAllowedEmails() {
 		}
 	};
 
-	const handleDeleteEmail = async (id: string) => {
-		if (!confirm("Are you sure you want to delete this email?")) {
-			return;
-		}
+	const confirmDeleteEmail = (id: string, email: string) => {
+		setEmailToDelete({ id, email });
+		setDeleteDialogOpen(true);
+	};
+
+	const handleDeleteEmail = async () => {
+		if (!emailToDelete) return;
 
 		try {
-			await deleteEmail(id).unwrap();
+			await deleteEmail(emailToDelete.id).unwrap();
 			toast.success("Email deleted successfully!");
 			refetch();
 		} catch (error: unknown) {
@@ -77,6 +93,9 @@ export default function ManageAllowedEmails() {
 				| Record<string, unknown>
 				| undefined;
 			toast.error(String(errorData?.error) || "Failed to delete email");
+		} finally {
+			setDeleteDialogOpen(false);
+			setEmailToDelete(null);
 		}
 	};
 
@@ -90,7 +109,44 @@ export default function ManageAllowedEmails() {
 
 	return (
 		<div className="space-y-6">
-			{/* Add New Email */}
+			{/* Delete Confirmation Dialog */}
+			<AlertDialog
+				open={deleteDialogOpen}
+				onOpenChange={setDeleteDialogOpen}
+			>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>
+							Delete Allowed Email
+						</AlertDialogTitle>
+						<AlertDialogDescription>
+							Are you sure you want to remove{" "}
+							<span className="font-semibold text-foreground">
+								{emailToDelete?.email}
+							</span>{" "}
+							from your allowed emails? This will revoke their
+							access to your private surveys.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel disabled={isDeleting}>
+							Cancel
+						</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={handleDeleteEmail}
+							disabled={isDeleting}
+							className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+						>
+							{isDeleting && (
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+							)}
+							{isDeleting ? "Deleting..." : "Delete"}
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+
+			{/* Main Card */}
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex items-center justify-between">
@@ -123,6 +179,7 @@ export default function ManageAllowedEmails() {
 									}
 									disabled={isCreating}
 									autoFocus
+									className="text-sm md:text-base "
 								/>
 								<Button
 									type="submit"
@@ -175,9 +232,11 @@ export default function ManageAllowedEmails() {
 										variant="ghost"
 										size="sm"
 										onClick={() =>
-											handleDeleteEmail(email.id)
+											confirmDeleteEmail(
+												email.id,
+												email.email,
+											)
 										}
-										disabled={isDeleting}
 										className="text-destructive hover:text-destructive"
 									>
 										<Trash2 className="h-4 w-4" />
@@ -190,12 +249,12 @@ export default function ManageAllowedEmails() {
 			</Card>
 
 			{/* Info Card */}
-			<Card className="bg-blue-50 border-blue-200">
+			<Card className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
 				<CardContent className="pt-6">
-					<p className="text-sm text-blue-900">
-						<strong>💡 Tip:</strong> Add emails here and then select
-						which ones can access your private surveys when creating
-						or editing them.
+					<p className="text-sm text-blue-900 dark:text-blue-300 flex items-start gap-2">
+						<Info className="h-4 w-4 mt-0.5 shrink-0" />
+						Add emails here and then select which ones can access
+						your private surveys when creating or editing them.
 					</p>
 				</CardContent>
 			</Card>

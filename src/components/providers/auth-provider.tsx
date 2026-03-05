@@ -8,11 +8,10 @@ import { useRefreshTokenMutation } from "@/core/api/authApi";
 import { LoadingSpinner } from "../ui/loading-spinner";
 import { logout, setLoading } from "@/core/store/slices/authSlice";
 
-// ── Inner component — uses useSearchParams so must be inside Suspense ──
 function AuthProviderInner({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const searchParams = useSearchParams(); // ← only here, wrapped by Suspense
+	const searchParams = useSearchParams();
 	const dispatch = useDispatch();
 
 	const { isAuthenticated, loading } = useSelector(
@@ -78,21 +77,42 @@ function AuthProviderInner({ children }: { children: React.ReactNode }) {
 	}, [dispatch, hasCheckedAuth, refreshTokenMutation]);
 
 	useEffect(() => {
-		if (isRehydrating || loading || refreshTokenLoading || !hasCheckedAuth) {
+		if (
+			isRehydrating ||
+			loading ||
+			refreshTokenLoading ||
+			!hasCheckedAuth
+		) {
 			return;
 		}
 
-		const protectedRoutes = ["/dashboard", "/surveys", "/profile", "/create-survey"];
-		const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-		const isAuthRoute = ["/login", "/register", "/verify-email", "/forgot-password", "/reset-password"].includes(pathname);
-		const isPublicRoute = ["/public", "/verify-email", "/reset-password"].some((route) =>
+		const protectedRoutes = [
+			"/dashboard",
+			"/surveys",
+			"/profile",
+			"/create-survey",
+		];
+		const isProtectedRoute = protectedRoutes.some((route) =>
 			pathname.startsWith(route),
 		);
+		const isAuthRoute = [
+			"/login",
+			"/signup",
+			"/verify-email",
+			"/forgot-password",
+			"/reset-password",
+		].includes(pathname);
+		const isPublicRoute = [
+			"/public",
+			"/verify-email",
+			"/reset-password",
+		].some((route) => pathname.startsWith(route));
 
 		if (!isAuthenticated && !isPublicRoute && isProtectedRoute) {
 			if (!redirectedRef.current) {
 				redirectedRef.current = true;
-				const redirect = pathname !== "/login" ? pathname : "/dashboard";
+				const redirect =
+					pathname !== "/login" ? pathname : "/dashboard";
 				router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
 			}
 			return;
@@ -136,7 +156,6 @@ function AuthProviderInner({ children }: { children: React.ReactNode }) {
 	return children;
 }
 
-// ── Outer component — wraps inner in Suspense ──
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	return (
 		<Suspense

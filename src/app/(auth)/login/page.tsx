@@ -25,6 +25,7 @@ import { setCredentials } from "@/core/store/slices/authSlice";
 import { useAppDispatch } from "@/core/store/hooks";
 import { toast } from "react-toastify";
 import Logo from "@/components/common/logo";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -57,28 +58,35 @@ export default function LoginPage() {
 					refreshToken: response.refresh,
 				}),
 			);
-			const redirectTo = searchParams.get("redirect") || "/dashboard";
+			const redirectTo = searchParams.get("redirect") || searchParams.get("returnTo") || "/dashboard";
 			router.push(redirectTo);
 		} catch (err) {
-			// console.error("Login failed:", err);
-			toast.error(err as string);
+			if ((err as FetchBaseQueryError)?.data) {
+				const errorData = (err as FetchBaseQueryError).data as any;
+				const message = errorData?.error?.[0] || "Login failed";
+				toast.error(message);
+			}
 		}
 	};
 
 	// Extract error message from RTK Query error
-	const getErrorMessage = () => {
-		if (error) {
-			if ("data" in error) {
-				const errorData = error.data as Record<string, string>;
-				return (
-					errorData.message ||
-					errorData.detail ||
-					"Login failed. Please check your credentials."
-				);
-			}
-			return "Login failed. Please check your credentials.";
-		}
-		return "Login failed. Please check your credentials.";
+	const getErrorData = () => {
+		if (!error || !("data" in error)) return null;
+
+		const data = error.data as any;
+
+		const message =
+			data?.error?.[0] ||
+			data?.message ||
+			data?.detail ||
+			"Login failed. Please check your credentials.";
+
+		return {
+			message,
+			isEmailNotVerified:
+				message ===
+				"Email not verified. Please verify your email before logging in.",
+		};
 	};
 
 	return (
@@ -108,10 +116,28 @@ export default function LoginPage() {
 								variant="destructive"
 								className="border-red-200 dark:border-red-800"
 							>
-								<AlertDescription className="flex items-center">
-									<span className="flex-1">
-										{getErrorMessage()}
-									</span>
+								<AlertDescription className="flex items-center gap-2">
+									{(() => {
+										const errorData = getErrorData();
+										if (!errorData) return null;
+
+										return (
+											<>
+												<span className="flex-1">
+													{errorData.message}
+												</span>
+
+												{errorData.isEmailNotVerified && (
+													<Link
+														href="/verify-email"
+														className="underline font-medium"
+													>
+														Verify Email
+													</Link>
+												)}
+											</>
+										);
+									})()}
 								</AlertDescription>
 							</Alert>
 						)}
@@ -135,7 +161,7 @@ export default function LoginPage() {
 										onChange={(e) =>
 											setEmail(e.target.value)
 										}
-										className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -170,7 +196,7 @@ export default function LoginPage() {
 										onChange={(e) =>
 											setPassword(e.target.value)
 										}
-										className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
+										className="text-sm md:text-base pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
 										required
 										disabled={isLoading}
 									/>
@@ -253,7 +279,7 @@ export default function LoginPage() {
 						</Link>{" "}
 						and{" "}
 						<Link
-							href="/privacy"
+							href="/terms"
 							className="text-primary hover:text-primary/80 transition-colors"
 						>
 							Privacy Policy

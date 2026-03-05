@@ -286,7 +286,7 @@ export default function DashboardLayout({
 				<div className="lg:hidden h-16" />
 
 				{/* Content Area */}
-				<div className="flex-1 p-6">
+				<div className="flex-1 p-3">
 					<header className="mb-8">
 						<h1 className="text-3xl font-bold text-foreground">
 							Dashboard

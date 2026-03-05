@@ -12,7 +12,6 @@ export function useTheme() {
     setMounted(true);
   }, []);
 
-  // Helper to get the actual current theme (resolved from system if needed)
   const currentTheme = resolvedTheme || theme;
 
   return {

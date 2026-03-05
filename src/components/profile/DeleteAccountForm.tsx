@@ -58,7 +58,6 @@ export function DeleteAccountForm() {
 			dispatch(logout());
 			localStorage.removeItem("auth");
 
-			// Redirect to home
 			setTimeout(() => {
 				router.push("/");
 			}, 500);
@@ -131,7 +130,7 @@ export function DeleteAccountForm() {
 										id="password"
 										placeholder="Enter your password"
 										disabled={isLoading}
-										className="pr-10"
+										className="text-sm md:text-base pr-10"
 									/>
 									<button
 										type="button"

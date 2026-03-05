@@ -21,7 +21,6 @@ export function ThemeToggle() {
 			type="single"
 			value={theme}
 			onValueChange={(val) => val && setTheme(val)}
-			// Removed p-1, kept rounded-full, added overflow-hidden to contain circles (optional)
 			className="flex items-center h-8 rounded-full border border-border bg-muted gap-0 overflow-hidden"
 		>
 			<ToggleGroupItem

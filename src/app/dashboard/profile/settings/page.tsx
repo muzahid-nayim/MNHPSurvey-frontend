@@ -22,7 +22,7 @@ export default function ProfileSettingsPage() {
 	}
 
 	return (
-		<div className="container mx-auto py-8 px-4">
+		<div className="container mx-auto py-8 px-1">
 			{/* Header */}
 			<div className="mb-8">
 				<Link href="/dashboard/profile">

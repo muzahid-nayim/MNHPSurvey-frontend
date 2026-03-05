@@ -75,7 +75,7 @@ export function ResponseDataTable<TData, TValue>({
 	return (
 		<div className="space-y-4">
 			{/* Filter and Column Visibility Controls */}
-			<div className="flex items-center justify-between gap-4 flex-wrap">
+			<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
 				<Input
 					placeholder={filterPlaceholder}
 					value={
@@ -88,7 +88,7 @@ export function ResponseDataTable<TData, TValue>({
 							.getColumn(filterColumn)
 							?.setFilterValue(event.target.value)
 					}
-					className="max-w-sm"
+					className="w-full sm:max-w-sm"
 				/>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
@@ -173,12 +173,12 @@ export function ResponseDataTable<TData, TValue>({
 			</div>
 
 			{/* Pagination */}
-			<div className="flex items-center justify-between">
+			<div className="flex flex-col sm:flex-row items-center justify-between gap-3">
 				<p className="text-sm text-muted-foreground">
 					Page {table.getState().pagination.pageIndex + 1} of{" "}
 					{table.getPageCount()}
 				</p>
-				<div className="space-x-2">
+				<div className="flex gap-2">
 					<Button
 						variant="outline"
 						size="sm"

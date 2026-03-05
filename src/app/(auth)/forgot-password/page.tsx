@@ -85,17 +85,15 @@ function ForgotPasswordContent({
 	handleSubmit: (e: React.FormEvent) => void;
 }) {
 	return (
-		<div className="min-h-screen bg-linear-to-br from-background to-muted/30 dark:from-background dark:to-muted/20 flex items-center justify-center p-4">
-			<div className="w-full max-w-md">
+		<div className="min-h-screen flex items-center justify-center ">
+			<div className="w-full max-w-lg">
 				{/* Logo/Brand */}
 				<div className="text-center mb-8">
 					<Link
 						href="/"
 						className="inline-flex items-center space-x-2 mb-4"
 					>
-						<div className="flex items-center justify-center w-10 h-10 bg-linear-to-br from-gradient-l to-gradient-r  rounded-lg">
-							<SquarePen className="h-5 w-5 text-white" />
-						</div>
+						
 						<Logo />
 					</Link>
 					<p className="text-muted-foreground">Reset your password</p>
@@ -176,7 +174,7 @@ function ForgotPasswordContent({
 												onChange={(e) =>
 													setEmail(e.target.value)
 												}
-												className="pl-10 bg-background/50 border-border/50 focus:border-primary"
+												className="pl-10 bg-background/50 border-border/50 focus:border-primary text-sm md:text-base"
 												required
 												disabled={isLoading}
 											/>

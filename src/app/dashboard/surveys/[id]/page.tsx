@@ -76,15 +76,17 @@ export default function EditSurveyPage() {
 			) : (
 				// Show Survey Header
 				<SurveyHeader survey={survey} onEditClick={handleEditSurvey} />
+				
 			)}
 
 			{/* Questions Section - Hide edit form when showing survey edit */}
-			{!isEditingSurvey && survey && (
+			{!isEditingSurvey && survey && (<>
 				<QuestionsList
 					survey={survey}
 					surveyId={surveyId}
 					onSurveyUpdate={handleSurveyUpdate}
 				/>
+				</>
 			)}
 		</div>
 	);

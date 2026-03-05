@@ -37,7 +37,7 @@ import {
 } from "lucide-react";
 
 import QrCodeGenerator from "./QRCodeGenerator";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ButtonGroup } from "../ui/button-group";
 
 export function SurveyHeader({
@@ -60,7 +60,7 @@ export function SurveyHeader({
 		}
 	};
 	const [updateStatus] = useUpdateSurveyStatusMutation();
-
+	const [shareDialogOpen, setShareDialogOpen] = useState(false);
 	const surveyUrl = useMemo(() => {
 		return `${window.location.origin}/survey/${survey.id}`;
 	}, [survey.id]);
@@ -110,15 +110,15 @@ export function SurveyHeader({
 	};
 
 	return (
-		<div className="mb-8 rounded-lg border bg-card p-6 shadow-sm">
+		<div className="mb-8 rounded-lg border bg-card p-3 max-w-full shadow-sm">
 			{/* Header with title, description and status */}
 			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 				<div className="space-y-1">
-					<h1 className="text-3xl font-bold tracking-tight">
+					<h1 className="text-xl sm:text-3xl font-bold tracking-tight">
 						{survey?.title}
 					</h1>
 					{survey?.description && (
-						<p className="text-muted-foreground">
+						<p className="text-sm sm:text-base text-muted-foreground">
 							{survey?.description}
 						</p>
 					)}
@@ -137,12 +137,13 @@ export function SurveyHeader({
 			</div>
 
 			{/* Action Buttons */}
-			<div className="mt-6 flex flex-wrap items-center gap-2">
+			<div className="mt-6 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-2">
 				{survey?.status === "draft" && (
-					<ButtonGroup className="flex items-center">
+					<ButtonGroup className="flex flex-wrap items-center w-full sm:w-auto">
 						<Button
 							onClick={handlePublish}
-							className="gap-2 bg-primary hover:bg-primary/90"
+							size={"sm"}
+							className="gap-2 bg-primary hover:bg-primary/90 "
 						>
 							<Rocket className="h-4 w-4" />
 							Publish Survey
@@ -150,6 +151,7 @@ export function SurveyHeader({
 						<Button
 							variant="outline"
 							onClick={onEditClick}
+							size={"sm"}
 							className="gap-2"
 						>
 							<Pencil className="h-4 w-4" />
@@ -157,6 +159,7 @@ export function SurveyHeader({
 						</Button>
 						<Button
 							variant="destructive"
+							size={"sm"}
 							onClick={handleCloseStatus}
 							className="gap-2"
 						>
@@ -168,10 +171,12 @@ export function SurveyHeader({
 
 				{survey?.status === "active" && (
 					<>
-						<ButtonGroup className="flex items-center">
-							<Dialog>
+						<ButtonGroup className="flex flex-wrap items-center w-full sm:w-auto">
+							<Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
 								<DialogTrigger asChild>
-									<Button className="justify-start gap-2 bg-green-600 hover:bg-green-700">
+									<Button
+									size={"sm"}
+									 className="justify-start gap-2 bg-green-600 hover:bg-green-700">
 										<QrCode className="h-4 w-4" />
 										Share
 									</Button>
@@ -189,11 +194,13 @@ export function SurveyHeader({
 									<div className="flex flex-col items-center gap-4 py-2">
 										{/* Copy Link Button */}
 										<Button
+										size={"sm"}
 											onClick={() => {
 												copyToClipboard(
 													surveyUrl,
 													"Survey link copied!",
 												);
+												 setShareDialogOpen(false);
 											}}
 											variant="outline"
 											className="w-full justify-start gap-2"
@@ -207,6 +214,7 @@ export function SurveyHeader({
 											<QrCodeGenerator
 												text={surveyUrl}
 												showDownload
+												onDownload={() => setShareDialogOpen(false)}
 											/>
 										</div>
 									</div>
@@ -215,6 +223,7 @@ export function SurveyHeader({
 
 							<Button
 								variant="outline"
+								size={"sm"}
 								onClick={() => handleChangeStatus("draft")}
 							>
 								<Undo className="h-4 w-4" />
@@ -223,6 +232,7 @@ export function SurveyHeader({
 							<Button
 								variant="destructive"
 								onClick={handleCloseStatus}
+								size={"sm"}
 							>
 								<XCircle className="h-4 w-4" />
 								Close Survey
@@ -237,6 +247,7 @@ export function SurveyHeader({
 							variant="outline"
 							onClick={() => handleChangeStatus("draft")}
 							className="gap-2"
+							size={"sm"}
 						>
 							<RefreshCw className="h-4 w-4" />
 							Reopen as Draft
@@ -246,6 +257,7 @@ export function SurveyHeader({
 
 				<ButtonGroup>
 					<Button
+					size={"sm"}
 						onClick={() =>
 							router.push(
 								`/dashboard/surveys/${survey?.id}/responses`,
@@ -257,6 +269,7 @@ export function SurveyHeader({
 						View Responses
 					</Button>
 					<Button
+					size={"sm"}
 						variant="outline"
 						onClick={() => router.push("/dashboard/surveys")}
 						className="gap-2"
@@ -270,19 +283,19 @@ export function SurveyHeader({
 			{/* Status Note with Icon */}
 			<div className="mt-4">
 				{survey?.status === "draft" ? (
-					<p className="flex items-center gap-2 text-base text-orange-600">
+					<p className="flex items-center gap-2 text-xs sm:text-sm text-orange-600">
 						<Info className="h-4 w-4" />
 						Note: The survey is currently in draft mode and not
 						visible to respondents.
 					</p>
 				) : survey?.status === "closed" ? (
-					<p className="flex items-center gap-2 text-base text-red-600">
+					<p className="flex items-center gap-2 text-xs sm:text-sm text-red-600">
 						<Info className="h-4 w-4" />
 						Note: The survey is closed and no longer accepting
 						responses.
 					</p>
 				) : (
-					<p className="flex items-center gap-2 text-base text-green-600">
+					<p className="flex items-center gap-2 text-xs sm:text-sm text-green-600">
 						<Info className="h-4 w-4" />
 						Note: The survey is active and accepting responses.
 					</p>
