@@ -8,6 +8,10 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.5.1] - 2026-03-19
+### Update
+- Update some links in landing page.
+
 ## [0.5.0] - 2026-03-05
 ### Added
 - Terms & Conditions page with all survey types and legal information.

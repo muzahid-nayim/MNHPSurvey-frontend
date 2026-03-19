@@ -111,7 +111,7 @@ const CTA = () => {
 						Get Started Free
 					</Link>
 					<Link
-						href="/how-it-works"
+						href="/about"
 						className="px-8 py-4 bg-transparent text-primary font-semibold rounded-full border-2 border-primary hover:bg-primary/10 transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 					>
 						Learn More
