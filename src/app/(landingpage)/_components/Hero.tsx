@@ -98,7 +98,7 @@ const Hero = () => {
 						size="lg"
 						className="gap-2 group rounded-full px-8 font-semibold"
 					>
-						<Link href="/surveys/create">
+						<Link href="/dashboard/surveys/create">
 							Create a Survey
 							<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
 						</Link>
