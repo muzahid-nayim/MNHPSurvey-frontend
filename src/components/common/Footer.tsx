@@ -91,7 +91,7 @@ const Footer = () => {
 				{/* Bottom bar with copyright and legal links */}
 				<div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center text-xs text-muted-foreground">
 					<p>
-						© {new Date().getFullYear()} <Link className="underline text-primary" href={"https://github.com/muzahid-nayim"} >Muzahidul Islam</Link>. Built as a portfolio project.
+						© {new Date().getFullYear()} <Link className="underline text-primary" href={"https://github.com/muzahid-nayim"} >MNHP Survey</Link>. All rights reserved.
 					</p>
 					<div className="flex gap-4 mt-2 sm:mt-0">
 						<Link
