@@ -1,5 +1,6 @@
 // src/core/api/surveyApi.ts
 import { createApi } from "@reduxjs/toolkit/query/react";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { surveyBaseQuery } from "./baseQuery";
 import type {
 	Survey,
@@ -319,6 +320,145 @@ export const surveyApi = createApi({
 			providesTags: ["Response"],
 		}),
 
+		/**
+		 * Export survey responses as CSV or PDF.
+		 * Uses queryFn so the Blob never enters Redux state (keeps it serializable).
+		 */
+		exportResponses: builder.mutation<
+			{ success: true },
+			{
+				surveyId: string;
+				format: "csv" | "pdf";
+				filename: string;
+				rowLimit?: number | null;
+				includeSummary?: boolean;
+				includeResponses?: boolean;
+				chartStyle?: "none" | "bar" | "pie" | "both";
+			}
+		>({
+			async queryFn(args, _api, _extraOptions, baseQuery) {
+				const {
+					surveyId,
+					format,
+					filename,
+					rowLimit,
+					includeSummary = true,
+					includeResponses = true,
+					chartStyle = "bar",
+				} = args;
+
+				const asError = (
+					status: number,
+					data: unknown,
+				): { error: FetchBaseQueryError } => ({
+					error: { status, data },
+				});
+
+				// build query string by hand — easier to read than nesting params
+				const params = new URLSearchParams();
+				params.set("export_format", format);
+				params.set("include_summary", String(includeSummary));
+				params.set("include_responses", String(includeResponses));
+				params.set("chart_style", chartStyle);
+				if (rowLimit != null && rowLimit > 0) {
+					params.set("row_limit", String(rowLimit));
+				}
+
+				const result = await baseQuery({
+					url: `/${surveyId}/responses/export/?${params.toString()}`,
+					responseHandler: async (response) => {
+						if (!response.ok) {
+							const contentType =
+								response.headers.get("content-type") || "";
+							if (contentType.includes("application/json")) {
+								return {
+									ok: false as const,
+									status: response.status,
+									error: await response.json(),
+								};
+							}
+							const text = await response.text();
+							return {
+								ok: false as const,
+								status: response.status,
+								error: {
+									message:
+										text.slice(0, 200) ||
+										`Export failed (${response.status})`,
+								},
+							};
+						}
+
+						return {
+							ok: true as const,
+							blob: await response.blob(),
+						};
+					},
+				});
+
+				if (result.error) {
+					const status =
+						typeof result.error.status === "number"
+							? result.error.status
+							: 500;
+					const data = result.error.data as
+						| Blob
+						| {
+								ok?: false;
+								status?: number;
+								error?: unknown;
+						  }
+						| undefined;
+
+					if (data instanceof Blob) {
+						return asError(status, { message: "Export failed" });
+					}
+
+					if (
+						data &&
+						typeof data === "object" &&
+						data.ok === false
+					) {
+						return asError(
+							data.status ?? status,
+							data.error ?? { message: "Export failed" },
+						);
+					}
+
+					return asError(
+						status,
+						data ?? { message: "Export failed" },
+					);
+				}
+
+				const payload = result.data as
+					| { ok: true; blob: Blob }
+					| {
+							ok: false;
+							status: number;
+							error: unknown;
+					  };
+
+				if (!payload.ok) {
+					return asError(
+						payload.status,
+						payload.error ?? { message: "Export failed" },
+					);
+				}
+
+				const url = window.URL.createObjectURL(payload.blob);
+				const link = document.createElement("a");
+				link.href = url;
+				link.download = filename;
+				document.body.appendChild(link);
+				link.click();
+				link.remove();
+				window.URL.revokeObjectURL(url);
+
+				return { data: { success: true as const } };
+			},
+		}),
+
 		// ==========================================
 		// PUBLIC ENDPOINTS (No auth required)
 		// ==========================================
@@ -378,6 +518,7 @@ export const {
 	useGetResponsesQuery,
 	useGetResponseQuery,
 	useGetResponsesByQuestionQuery,
+	useExportResponsesMutation,
 	useGetTakeSurveyQuery,
 	useSubmitSurveyMutation,
 } = surveyApi;
