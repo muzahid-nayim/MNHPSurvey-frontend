@@ -8,6 +8,14 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.7.1] - 2026-07-24
+### Added
+- Homepage: How it works, Access types, Display modes, Use cases.
+- Replaced vanity stats with real product capabilities.
+
+### Changed
+- Dashboard sidebar restyle; Analytics points to surveys.
+
 ## [0.7.0] - 2026-07-24
 ### Added
 - Profile picture upload / change / remove on settings page.
