@@ -141,22 +141,22 @@ export default function DashboardLayout({
 	}
 
 	return (
-		<div className="min-h-screen bg-background flex">
+		<div className="flex min-h-screen min-w-0 overflow-x-hidden bg-background">
 			{/* Desktop Sidebar */}
-			<aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0">
-				<div className="flex flex-col flex-1 border-r border-border bg-card/50 backdrop-blur-sm">
+			<aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+				<div className="flex flex-1 flex-col border-r border-border bg-card/50 backdrop-blur-sm">
 					{/* Sidebar Header */}
-					<div className="flex items-center gap-3 p-6 border-b border-border">
+					<div className="flex items-center gap-3 border-b border-border p-6">
 						<Logo />
 					</div>
 
 					{/* User Info */}
-					<div className="p-4 border-b border-border ">
+					<div className="border-b border-border p-4">
 						<UserAvatar />
 					</div>
 
 					{/* Navigation */}
-					<nav className="flex-1 p-4 space-y-2">
+					<nav className="flex-1 space-y-2 p-4">
 						{navigation.map((item) => {
 							const Icon = item.icon;
 							return (
@@ -164,10 +164,10 @@ export default function DashboardLayout({
 									key={item.name}
 									href={item.href}
 									className={cn(
-										"group flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+										"group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
 										item.current
 											? "bg-primary text-primary-foreground shadow-sm"
-											: "text-muted-foreground hover:text-foreground hover:bg-accent",
+											: "text-muted-foreground hover:bg-accent hover:text-foreground",
 									)}
 								>
 									<Icon className="h-4 w-4" />
@@ -278,24 +278,26 @@ export default function DashboardLayout({
 			{/* Main Content */}
 			<main
 				className={cn(
-					"flex-1 flex flex-col min-h-screen transition-all duration-300",
+					"flex min-h-screen min-w-0 flex-1 flex-col overflow-x-hidden transition-all duration-300",
 					"lg:ml-64", // Account for sidebar on desktop
 				)}
 			>
-				{/* Mobile spacing */}
-				<div className="lg:hidden h-16" />
+				{/* Mobile spacing for fixed top bar */}
+				<div className="h-16 shrink-0 lg:hidden" />
 
-				{/* Content Area */}
-				<div className="flex-1 p-3">
-					<header className="mb-8">
-						<h1 className="text-3xl font-bold text-foreground">
-							Dashboard
-						</h1>
-						<p className="text-muted-foreground mt-2">
-							Welcome back, {user?.username}! Here&apos;s
-							what&apos;s happening today.
-						</p>
-					</header>
+				{/* Content Area — min-w-0 stops wide tables/charts from blowing the page */}
+				<div className="min-w-0 flex-1 overflow-x-hidden p-3 sm:p-4 lg:p-6">
+					{pathname === "/dashboard" && (
+						<header className="mb-6 sm:mb-8">
+							<h1 className="text-2xl font-bold text-foreground sm:text-3xl">
+								Dashboard
+							</h1>
+							<p className="mt-1 text-sm text-muted-foreground sm:mt-2 sm:text-base">
+								Welcome back, {user?.username}! Here&apos;s
+								what&apos;s happening today.
+							</p>
+						</header>
+					)}
 
 					{children}
 				</div>

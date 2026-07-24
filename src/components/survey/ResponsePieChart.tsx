@@ -40,72 +40,67 @@ export function ResponsePieChart({ question }: ResponsePieChartProps) {
 	}));
 
 	return (
-		<Card className="w-full hover:ring ring-ring">
-			<CardHeader>
-				<CardTitle className="text-base sm:text-lg">
+		<Card className="h-full w-full max-w-full overflow-hidden hover:ring ring-ring">
+			<CardHeader className="space-y-1 p-3 sm:p-6">
+				<CardTitle className="line-clamp-2 text-sm sm:text-base lg:text-lg">
 					{question.question_text}
 				</CardTitle>
-				<CardDescription>
+				<CardDescription className="text-xs sm:text-sm">
 					Total Answers: {question.total_answers} | Type:{" "}
 					{question.question_type}
 				</CardDescription>
 			</CardHeader>
-			<CardContent>
-				<div className="overflow-x-auto">
-					<div className="min-w-[280px]">
-						<ResponsiveContainer width="100%" height={300}>
-							<PieChart>
-								<Pie
-									data={chartData}
-									cx="50%"
-									cy="50%"
-									labelLine={false}
-									label={({ value }) => `${value}%`}
-									outerRadius={80}
-									dataKey="value"
-								>
-									{chartData.map((entry, index) => (
-										<Cell
-											key={`cell-${index}`}
-											fill={COLORS[index % COLORS.length]}
-										/>
-									))}
-								</Pie>
-								<Tooltip
-									formatter={(value, name, props) => {
-										if (name === "value") {
-											return `${value}%`;
-										}
-										return value;
-									}}
-									content={({ active, payload }) => {
-										if (
-											active &&
-											payload &&
-											payload.length
-										) {
-											const data = payload[0].payload;
-											return (
-												<div className="bg-white p-2 border border-gray-300 rounded shadow">
-													<p className="font-semibold">
-														{data.name}
-													</p>
-													<p className="text-sm">
-														{data.value}%
-													</p>
-													<p className="text-sm text-gray-600">
-														Count: {data.count}
-													</p>
-												</div>
-											);
-										}
-										return null;
-									}}
-								/>
-								<Legend />
-							</PieChart>
-						</ResponsiveContainer>
-					</div>{" "}
+			<CardContent className="p-2 pt-0 sm:p-6 sm:pt-0">
+				<div className="h-[200px] w-full min-w-0 sm:h-[260px] lg:h-[280px]">
+					<ResponsiveContainer width="100%" height="100%">
+						<PieChart>
+							<Pie
+								data={chartData}
+								cx="50%"
+								cy="42%"
+								labelLine={false}
+								label={({ value }) => `${value}%`}
+								outerRadius="55%"
+								dataKey="value"
+							>
+								{chartData.map((_, index) => (
+									<Cell
+										key={`cell-${index}`}
+										fill={COLORS[index % COLORS.length]}
+									/>
+								))}
+							</Pie>
+							<Tooltip
+								content={({ active, payload }) => {
+									if (active && payload?.length) {
+										const data = payload[0].payload;
+										return (
+											<div className="rounded border border-gray-300 bg-white p-2 shadow">
+												<p className="font-semibold">
+													{data.name}
+												</p>
+												<p className="text-sm">
+													{data.value}%
+												</p>
+												<p className="text-sm text-gray-600">
+													Count: {data.count}
+												</p>
+											</div>
+										);
+									}
+									return null;
+								}}
+							/>
+							<Legend
+								wrapperStyle={{ fontSize: 10 }}
+								formatter={(value: string) =>
+									value.length > 14
+										? `${value.slice(0, 13)}…`
+										: value
+								}
+							/>
+						</PieChart>
+					</ResponsiveContainer>
 				</div>
 			</CardContent>
 		</Card>

@@ -62,9 +62,7 @@ export default function SurveyResponsesPage() {
 			}).unwrap();
 
 			toast.success(
-				settings.format === "csv"
-					? "CSV downloaded"
-					: "PDF downloaded",
+				settings.format === "csv" ? "CSV downloaded" : "PDF downloaded",
 			);
 			setExportOpen(false);
 		} catch (err) {
@@ -92,17 +90,17 @@ export default function SurveyResponsesPage() {
 
 	if (isLoading) {
 		return (
-			<div className="container mx-auto py-6 sm:py-8 max-w-7xl px-4">
-				<Skeleton className="h-64 w-full rounded-lg" />
+			<div className="w-full min-w-0">
+				<Skeleton className="h-48 w-full rounded-lg sm:h-64" />
 			</div>
 		);
 	}
 
 	if (error) {
 		return (
-			<div className="container mx-auto py-8 max-w-7xl">
+			<div className="w-full min-w-0">
 				<Card>
-					<CardContent className="py-12 text-center text-red-500">
+					<CardContent className="py-10 text-center text-red-500">
 						Failed to load responses
 					</CardContent>
 				</Card>
@@ -112,9 +110,9 @@ export default function SurveyResponsesPage() {
 
 	if (!aggregatedResponses) {
 		return (
-			<div className="container mx-auto py-8 max-w-7xl">
+			<div className="w-full min-w-0">
 				<Card>
-					<CardContent className="py-12 text-center text-muted-foreground">
+					<CardContent className="py-10 text-center text-muted-foreground">
 						No response data available
 					</CardContent>
 				</Card>
@@ -123,97 +121,109 @@ export default function SurveyResponsesPage() {
 	}
 
 	return (
-		<div className="container mx-auto py-6 sm:py-8 max-w-7xl px-4">
-			{/* ── Header card — same style as survey detail ── */}
-			<div className="mb-8 rounded-lg border bg-card p-6 shadow-sm">
-				{/* Top row — title + actions */}
-				<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-					<div className="space-y-1">
-						<div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
-							<MessageSquareText className="h-4 w-4" />
-							Survey Responses
+		<div className="w-full min-w-0 max-w-full space-y-4 overflow-x-hidden sm:space-y-6">
+			{/* header */}
+			<div className="rounded-lg border bg-card p-3 shadow-sm sm:p-5 lg:p-6">
+				<div className="flex flex-col gap-3">
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+						<div className="min-w-0 flex-1">
+							<div className="mb-1 flex items-center gap-1.5 text-xs text-muted-foreground sm:text-sm">
+								<MessageSquareText className="h-3.5 w-3.5 shrink-0" />
+								Survey Responses
+							</div>
+							<h1 className="text-base font-bold tracking-tight wrap-break-word sm:text-2xl lg:text-3xl">
+								{aggregatedResponses.survey_title}
+							</h1>
 						</div>
-						<h1 className="text-xl sm:text-3xl font-bold tracking-tight">
-							{aggregatedResponses.survey_title}
-						</h1>
-					</div>
 
-					<div className="flex items-center gap-2 flex-wrap">
-						<Button
-							variant="outline"
-							className="gap-2"
-							onClick={() => setExportOpen(true)}
-							disabled={isExporting}
-						>
-							{isExporting ? (
-								<Loader2 className="h-4 w-4 animate-spin" />
-							) : (
-								<Download className="h-4 w-4" />
-							)}
-							Export
-						</Button>
-
-						<Link href={`/dashboard/surveys/${surveyId}`}>
-							<Button variant="outline" className="gap-2">
-								<ArrowUpRightIcon className="h-4 w-4" />
-								Back to Survey
+						<div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:shrink-0">
+							<Button
+								variant="outline"
+								size="sm"
+								className="w-full gap-1.5 sm:w-auto sm:h-10 sm:px-4"
+								onClick={() => setExportOpen(true)}
+								disabled={isExporting}
+							>
+								{isExporting ? (
+									<Loader2 className="h-4 w-4 animate-spin" />
+								) : (
+									<Download className="h-4 w-4" />
+								)}
+								Export
 							</Button>
-						</Link>
-					</div>
-				</div>
 
-				{/* Stat cards */}
-				<div className="mt-6 grid grid-cols-2 sm:grid-cols-2 gap-3 max-w-sm">
-					<div className="rounded-md border bg-muted/40 px-4 py-3">
-						<p className="text-xs text-muted-foreground">
-							Total Responses
-						</p>
-						<p className="text-2xl font-bold mt-0.5">
-							{aggregatedResponses.total_responses}
-						</p>
+							<Link
+								href={`/dashboard/surveys/${surveyId}`}
+								className="w-full sm:w-auto"
+							>
+								<Button
+									variant="outline"
+									size="sm"
+									className="w-full gap-1.5 sm:h-10 sm:px-4"
+								>
+									<ArrowUpRightIcon className="h-4 w-4" />
+									<span className="sm:hidden">Back</span>
+									<span className="hidden sm:inline">
+										Back to Survey
+									</span>
+								</Button>
+							</Link>
+						</div>
 					</div>
-					<div className="rounded-md border bg-muted/40 px-4 py-3">
-						<p className="text-xs text-muted-foreground">
-							Total Questions
-						</p>
-						<p className="text-2xl font-bold mt-0.5">
-							{aggregatedResponses.questions.length}
-						</p>
-					</div>
-				</div>
 
-				{/* Chart toggle */}
-				<div className="mt-6 flex items-center gap-2 flex-wrap">
-					<Button
-						variant={chartType === "bar" ? "default" : "outline"}
-						onClick={() => setChartType("bar")}
-						className="gap-2 h-8 text-xs px-2.5 sm:h-10 sm:text-sm sm:px-4"
-					>
-						<BarChart3 className="w-4 h-4" />
-						Bar Chart
-					</Button>
-					<Button
-						variant={chartType === "pie" ? "default" : "outline"}
-						onClick={() => setChartType("pie")}
-						className="gap-2 h-8 text-xs px-2.5 sm:h-10 sm:text-sm sm:px-4"
-					>
-						<PieChartIcon className="w-4 h-4" />
-						Pie Chart
-					</Button>
+					<div className="grid grid-cols-2 gap-2 sm:max-w-xs sm:gap-3">
+						<div className="rounded-md border bg-muted/40 px-3 py-2">
+							<p className="text-[11px] text-muted-foreground">
+								Responses
+							</p>
+							<p className="text-xl font-bold sm:text-2xl">
+								{aggregatedResponses.total_responses}
+							</p>
+						</div>
+						<div className="rounded-md border bg-muted/40 px-3 py-2">
+							<p className="text-[11px] text-muted-foreground">
+								Questions
+							</p>
+							<p className="text-xl font-bold sm:text-2xl">
+								{aggregatedResponses.questions.length}
+							</p>
+						</div>
+					</div>
+
+					<div className="grid grid-cols-2 gap-2 sm:flex sm:w-auto">
+						<Button
+							variant={chartType === "bar" ? "default" : "outline"}
+							size="sm"
+							onClick={() => setChartType("bar")}
+							className="gap-1.5 sm:h-10 sm:px-4"
+						>
+							<BarChart3 className="h-4 w-4" />
+							Bar
+						</Button>
+						<Button
+							variant={chartType === "pie" ? "default" : "outline"}
+							size="sm"
+							onClick={() => setChartType("pie")}
+							className="gap-1.5 sm:h-10 sm:px-4"
+						>
+							<PieChartIcon className="h-4 w-4" />
+							Pie
+						</Button>
+					</div>
 				</div>
 			</div>
 
-			{/* ── Charts grid ── */}
+			{/* charts */}
 			{aggregatedResponses.questions.length === 0 ? (
 				<Card>
-					<CardContent className="py-12 text-center text-muted-foreground">
+					<CardContent className="py-10 text-center text-muted-foreground">
 						No questions in this survey
 					</CardContent>
 				</Card>
 			) : (
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{aggregatedResponses.questions.map((question) => (
-						<div key={question.id}>
+						<div key={question.id} className="min-w-0 max-w-full">
 							{chartType === "bar" ? (
 								<ResponseBarChart question={question} />
 							) : (
@@ -224,7 +234,6 @@ export default function SurveyResponsesPage() {
 				</div>
 			)}
 
-			{/* ── Data table ── */}
 			{aggregatedResponses.questions.length > 0 && (
 				<ResponseDetailsTable
 					surveyId={surveyId}

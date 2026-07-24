@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -12,7 +13,6 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
 import {
 	Table,
 	TableBody,
@@ -36,6 +36,8 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 	filterPlaceholder?: string;
 	filterColumn?: string;
+	/** hide name + submitted_at on small screens */
+	compactMobile?: boolean;
 }
 
 export function ResponseDataTable<TData, TValue>({
@@ -43,12 +45,24 @@ export function ResponseDataTable<TData, TValue>({
 	data,
 	filterPlaceholder = "Filter by email...",
 	filterColumn = "email",
+	compactMobile = false,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
 		{},
 	);
+
+	useEffect(() => {
+		if (compactMobile) {
+			setColumnVisibility({
+				respondent_name: false,
+				submitted_at: false,
+			});
+		} else {
+			setColumnVisibility({});
+		}
+	}, [compactMobile]);
 
 	const table = useReactTable({
 		data,
@@ -73,9 +87,9 @@ export function ResponseDataTable<TData, TValue>({
 	});
 
 	return (
-		<div className="space-y-4">
+		<div className="min-w-0 max-w-full space-y-3 sm:space-y-4">
 			{/* Filter and Column Visibility Controls */}
-			<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+			<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
 				<Input
 					placeholder={filterPlaceholder}
 					value={
@@ -92,7 +106,11 @@ export function ResponseDataTable<TData, TValue>({
 				/>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="ml-auto">
+						<Button
+							variant="outline"
+							size="sm"
+							className="w-full sm:ml-auto sm:w-auto"
+						>
 							Columns <ChevronDown className="ml-2 h-4 w-4" />
 						</Button>
 					</DropdownMenuTrigger>
@@ -116,8 +134,8 @@ export function ResponseDataTable<TData, TValue>({
 				</DropdownMenu>
 			</div>
 
-			{/* Table */}
-			<div className="rounded-md border overflow-x-auto">
+			{/* Table scrolls inside — page itself should not grow sideways */}
+			<div className="max-w-full overflow-x-auto rounded-md border">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -173,15 +191,16 @@ export function ResponseDataTable<TData, TValue>({
 			</div>
 
 			{/* Pagination */}
-			<div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-				<p className="text-sm text-muted-foreground">
+			<div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-3">
+				<p className="text-xs text-muted-foreground sm:text-sm">
 					Page {table.getState().pagination.pageIndex + 1} of{" "}
-					{table.getPageCount()}
+					{table.getPageCount() || 1}
 				</p>
-				<div className="flex gap-2">
+				<div className="flex w-full gap-2 sm:w-auto">
 					<Button
 						variant="outline"
 						size="sm"
+						className="flex-1 sm:flex-none"
 						onClick={() => table.previousPage()}
 						disabled={!table.getCanPreviousPage()}
 					>
@@ -190,6 +209,7 @@ export function ResponseDataTable<TData, TValue>({
 					<Button
 						variant="outline"
 						size="sm"
+						className="flex-1 sm:flex-none"
 						onClick={() => table.nextPage()}
 						disabled={!table.getCanNextPage()}
 					>
