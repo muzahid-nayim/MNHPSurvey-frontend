@@ -1,102 +1,123 @@
 "use client";
+
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ProfileInfoCard } from "@/components/profile/ProfileInfoCard";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useGetProfileQuery } from "@/core/api/authApi";
+import {
+	FileText,
+	LayoutDashboard,
+	Settings,
+	ShieldCheck,
+} from "lucide-react";
 
 export default function ProfilePage() {
-	// const { isAuthenticated, user, loading } = useSelector(
-	// 	(state: RootState) => state.auth
-	// );
-
 	const { data: user, isLoading: loading } = useGetProfileQuery();
-
-	console.log("user data in profile page:", user);
 
 	if (loading) {
 		return (
-			<div className="flex items-center justify-center min-h-screen">
+			<div className="flex min-h-[40vh] items-center justify-center">
 				<LoadingSpinner size="lg" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="container mx-auto py-8 px-1">
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold">Profile</h1>
-				<p className="text-muted-foreground mt-2">
-					Manage your account and view your activity
+		<div className="w-full min-w-0 max-w-5xl space-y-5 sm:space-y-6">
+			<div>
+				<h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+					Profile
+				</h1>
+				<p className="mt-1 text-sm text-muted-foreground sm:text-base">
+					Your account overview and quick links
 				</p>
 			</div>
 
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{/* Main Profile Card */}
-				<div className="lg:col-span-2">
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
+				<div className="min-w-0 lg:col-span-2">
 					{user && <ProfileInfoCard user={user} />}
 				</div>
 
-				{/* Quick Stats */}
 				<div className="space-y-4">
-					{/* Account Status */}
 					<Card>
 						<CardHeader className="pb-3">
-							<CardTitle className="text-sm">
-								Account Status
+							<CardTitle className="flex items-center gap-2 text-sm">
+								<ShieldCheck className="h-4 w-4 text-primary" />
+								Account status
 							</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-2">
-							<div className="flex items-center justify-between">
+						<CardContent className="space-y-3">
+							<div className="flex items-center justify-between gap-2">
 								<span className="text-sm text-muted-foreground">
-									Email Verification
+									Email
 								</span>
 								{user?.is_email_verified ? (
-									<Badge className="bg-green-600">
+									<Badge className="bg-emerald-600 hover:bg-emerald-600">
 										Verified
 									</Badge>
 								) : (
 									<Badge variant="outline">Pending</Badge>
 								)}
 							</div>
-							<div className="flex items-center justify-between">
+							<div className="flex items-center justify-between gap-2">
 								<span className="text-sm text-muted-foreground">
-									Account Status
+									Status
 								</span>
-								<Badge className="bg-blue-600">Active</Badge>
+								<Badge variant="secondary">Active</Badge>
 							</div>
 						</CardContent>
 					</Card>
 
-					{/* Quick Links */}
 					<Card>
 						<CardHeader className="pb-3">
-							<CardTitle className="text-sm">Resources</CardTitle>
+							<CardTitle className="text-sm">Quick links</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-2">
-							<Link
+							<QuickLink
 								href="/dashboard"
-								className="block text-sm text-blue-600 hover:underline"
-							>
-								← Back to Dashboard
-							</Link>
-							<Link
+								icon={<LayoutDashboard className="h-4 w-4" />}
+								label="Dashboard"
+							/>
+							<QuickLink
 								href="/dashboard/surveys"
-								className="block text-sm text-blue-600 hover:underline"
-							>
-								View Surveys
-							</Link>
-							<Link
+								icon={<FileText className="h-4 w-4" />}
+								label="My surveys"
+							/>
+							<QuickLink
 								href="/dashboard/profile/settings"
-								className="block text-sm text-blue-600 hover:underline"
-							>
-								Settings →
-							</Link>
+								icon={<Settings className="h-4 w-4" />}
+								label="Settings"
+							/>
 						</CardContent>
 					</Card>
 				</div>
 			</div>
 		</div>
+	);
+}
+
+function QuickLink({
+	href,
+	icon,
+	label,
+}: {
+	href: string;
+	icon: ReactNode;
+	label: string;
+}) {
+	return (
+		<Link href={href} className="block">
+			<Button
+				variant="ghost"
+				className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-sm"
+			>
+				<span className="text-muted-foreground">{icon}</span>
+				{label}
+			</Button>
+		</Link>
 	);
 }

@@ -1,5 +1,7 @@
 "use client";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+import type { ReactNode } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	Card,
 	CardContent,
@@ -9,9 +11,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User } from "@/core/api/authApi";
-import { Edit2, Shield } from "lucide-react";
+import type { User } from "@/core/api/authApi";
+import { CalendarDays, Edit2, Mail, Shield, UserRound } from "lucide-react";
 import Link from "next/link";
+import { getDisplayName, getUserInitials } from "./profileUtils";
 
 interface ProfileInfoCardProps {
 	user: User | null;
@@ -20,10 +23,6 @@ interface ProfileInfoCardProps {
 export function ProfileInfoCard({ user }: ProfileInfoCardProps) {
 	if (!user) return null;
 
-	const initials = `${user.first_name?.[0] || user.username[0]}${
-		user.last_name?.[0] || user.username[1]
-	}`.toUpperCase();
-
 	const joinDate = new Date(user.created_at).toLocaleDateString("en-US", {
 		year: "numeric",
 		month: "long",
@@ -31,101 +30,108 @@ export function ProfileInfoCard({ user }: ProfileInfoCardProps) {
 	});
 
 	return (
-		<Card>
-			<CardHeader className="pb-3">
-				<CardTitle>Profile Information</CardTitle>
-				<CardDescription>
-					View and manage your account details
-				</CardDescription>
+		<Card className="overflow-hidden">
+			{/* soft top band */}
+			<div className="h-20 bg-linear-to-r from-primary/20 via-primary/10 to-transparent sm:h-24" />
+
+			<CardHeader className="-mt-12 space-y-0 pb-4 sm:-mt-14">
+				<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+					<div className="flex items-end gap-3 sm:gap-4">
+						<Avatar className="h-20 w-20 border-4 border-card shadow-sm sm:h-24 sm:w-24">
+							<AvatarImage
+								src={user.avatar || undefined}
+								alt={getDisplayName(user)}
+								className="object-cover"
+							/>
+							<AvatarFallback className="bg-primary text-lg font-semibold text-primary-foreground sm:text-xl">
+								{getUserInitials(user)}
+							</AvatarFallback>
+						</Avatar>
+						<div className="min-w-0 pb-1">
+							<CardTitle className="truncate text-xl sm:text-2xl">
+								{getDisplayName(user)}
+							</CardTitle>
+							<CardDescription className="mt-0.5 truncate">
+								@{user.username}
+							</CardDescription>
+						</div>
+					</div>
+
+					<div className="flex flex-wrap items-center gap-2">
+						{user.is_email_verified ? (
+							<Badge className="gap-1 bg-emerald-600 hover:bg-emerald-600">
+								<Shield className="h-3 w-3" />
+								Verified
+							</Badge>
+						) : (
+							<Badge variant="outline" className="gap-1">
+								<Shield className="h-3 w-3" />
+								Not verified
+							</Badge>
+						)}
+						<Link href="/dashboard/profile/settings">
+							<Button size="sm" className="gap-1.5">
+								<Edit2 className="h-3.5 w-3.5" />
+								Edit profile
+							</Button>
+						</Link>
+					</div>
+				</div>
 			</CardHeader>
-			<CardContent className="space-y-6">
-				{/* Profile Header */}
-				<div className="flex items-start gap-4 pb-6 border-b">
-					<Avatar className="h-20 w-20">
-						<AvatarFallback className="bg-linear-to-br from-blue-500  text-white text-lg font-semibold">
-							{initials}
-						</AvatarFallback>
-					</Avatar>
-					<div className="flex-1">
-						<div className="space-y-1">
-							<p className="text-lg font-semibold">
-								{user.first_name && user.last_name
-									? `${user.first_name} ${user.last_name}`
-									: user.username}
-							</p>
-							<p className="text-sm text-muted-foreground">
-								{user.email}
-							</p>
-						</div>
-						<div className="flex items-center gap-2 mt-3">
-							{user.is_email_verified ? (
-								<Badge
-									variant="default"
-									className="bg-green-600 hover:bg-green-700 gap-1"
-								>
-									<Shield className="h-3 w-3" />
-									Verified
-								</Badge>
-							) : (
-								<Badge variant="outline" className="gap-1">
-									<Shield className="h-3 w-3" />
-									Not Verified
-								</Badge>
-							)}
-						</div>
-					</div>
-				</div>
 
-				{/* Account Details */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					<div>
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-							Username
-						</p>
-						<p className="text-sm font-medium mt-1">
-							{user.username}
-						</p>
+			<CardContent className="space-y-5 pt-0">
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					<InfoRow
+						icon={<Mail className="h-4 w-4" />}
+						label="Email"
+						value={user.email}
+					/>
+					<InfoRow
+						icon={<UserRound className="h-4 w-4" />}
+						label="Username"
+						value={user.username}
+					/>
+					<InfoRow
+						icon={<UserRound className="h-4 w-4" />}
+						label="First name"
+						value={user.first_name || "—"}
+					/>
+					<InfoRow
+						icon={<UserRound className="h-4 w-4" />}
+						label="Last name"
+						value={user.last_name || "—"}
+					/>
+					<div className="sm:col-span-2">
+						<InfoRow
+							icon={<CalendarDays className="h-4 w-4" />}
+							label="Member since"
+							value={joinDate}
+						/>
 					</div>
-					<div>
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-							Email
-						</p>
-						<p className="text-sm font-medium mt-1">{user.email}</p>
-					</div>
-					<div>
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-							First Name
-						</p>
-						<p className="text-sm font-medium mt-1">
-							{user.first_name || "-"}
-						</p>
-					</div>
-					<div>
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-							Last Name
-						</p>
-						<p className="text-sm font-medium mt-1">
-							{user.last_name || "-"}
-						</p>
-					</div>
-					<div className="col-span-full">
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-							Member Since
-						</p>
-						<p className="text-sm font-medium mt-1">{joinDate}</p>
-					</div>
-				</div>
-
-				{/* Action Buttons */}
-				<div className="flex flex-col sm:flex-row gap-2 pt-4 border-t">
-					<Link href="/dashboard/profile/settings" className="flex-1">
-						<Button variant="default" className="w-full gap-2">
-							<Edit2 className="h-4 w-4" />
-							Edit Profile
-						</Button>
-					</Link>
 				</div>
 			</CardContent>
 		</Card>
+	);
+}
+
+function InfoRow({
+	icon,
+	label,
+	value,
+}: {
+	icon: ReactNode;
+	label: string;
+	value: string;
+}) {
+	return (
+		<div className="flex items-start gap-3 rounded-lg border bg-muted/30 px-3 py-2.5">
+			<span className="mt-0.5 text-muted-foreground">{icon}</span>
+			<div className="min-w-0">
+				<p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+					{label}
+				</p>
+				<p className="truncate text-sm font-medium">{value}</p>
+			</div>
+		</div>
 	);
 }

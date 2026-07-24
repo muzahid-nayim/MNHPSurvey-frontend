@@ -8,6 +8,11 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR** version `0.Y.0`: Increment for backward-compatible additions (new features, enhancements).
 - **PATCH** version `0.0.Z`: Increment for backward-compatible bug fixes and documentation tweaks.
 
+## [0.7.0] - 2026-07-24
+### Added
+- Profile picture upload / change / remove on settings page.
+- Improved profile and settings page UI.
+
 ## [0.6.1] - 2026-07-24
 ### Fixed
 - Fix some UI issue in response bar and pie charts.

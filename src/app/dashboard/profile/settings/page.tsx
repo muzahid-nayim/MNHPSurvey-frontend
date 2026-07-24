@@ -1,66 +1,64 @@
 "use client";
-import { RootState } from "@/core/store";
-import { useSelector } from "react-redux";
+
+import { useGetProfileQuery } from "@/core/api/authApi";
+import { AvatarUploadCard } from "@/components/profile/AvatarUploadCard";
 import { EditProfileForm } from "@/components/profile/EditProfileForm";
 import { ChangePasswordForm } from "@/components/profile/ChangePasswordForm";
 import { DeleteAccountForm } from "@/components/profile/DeleteAccountForm";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function ProfileSettingsPage() {
-	const { user, loading } = useSelector((state: RootState) => state.auth);
+	const { data: user, isLoading } = useGetProfileQuery();
 
-	if (loading) {
+	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center min-h-screen">
+			<div className="flex min-h-[40vh] items-center justify-center">
 				<LoadingSpinner size="lg" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="container mx-auto py-8 px-1">
-			{/* Header */}
-			<div className="mb-8">
+		<div className="w-full min-w-0 max-w-5xl space-y-5 sm:space-y-6">
+			<div>
 				<Link href="/dashboard/profile">
-					<Button variant="ghost" className="gap-2 mb-4">
+					<Button variant="ghost" size="sm" className="mb-2 gap-1.5 px-0 sm:px-2">
 						<ChevronLeft className="h-4 w-4" />
-						Back to Profile
+						Back to profile
 					</Button>
 				</Link>
-				<h1 className="text-3xl font-bold">Settings</h1>
-				<p className="text-muted-foreground mt-2">
-					Manage your account settings and security preferences
+				<h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+					Settings
+				</h1>
+				<p className="mt-1 text-sm text-muted-foreground sm:text-base">
+					Update your photo, personal details, and security
 				</p>
 			</div>
 
-			{/* Settings Grid */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				{/* Edit Profile */}
-				<div className="lg:col-span-1">
-					<EditProfileForm user={user} />
-				</div>
+			{/* photo first — most visible change */}
+			{user && <AvatarUploadCard user={user} />}
 
-				{/* Change Password */}
-				<div className="lg:col-span-1">
-					<ChangePasswordForm />
-				</div>
-
-				{/* Delete Account - Full Width */}
-				<div className="lg:col-span-2">
-					<DeleteAccountForm />
-				</div>
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+				<EditProfileForm user={user ?? null} />
+				<ChangePasswordForm />
 			</div>
 
-			{/* Info Box */}
-				<Card className="text-sm p-5 mt-5">
-					<strong>Security Tip:</strong> Keep your password secure and
-					change it regularly. Never share your login credentials with
-					anyone.
-				</Card>
+			<DeleteAccountForm />
+
+			<Card className="border-dashed">
+				<CardContent className="flex gap-3 p-4 text-sm text-muted-foreground">
+					<Shield className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+					<p>
+						<strong className="text-foreground">Security tip:</strong>{" "}
+						Use a strong unique password and never share your login
+						details with anyone.
+					</p>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

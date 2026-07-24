@@ -66,9 +66,11 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Edit Profile</CardTitle>
+				<CardTitle className="text-base sm:text-lg">
+					Personal details
+				</CardTitle>
 				<CardDescription>
-					Update your personal information
+					Update your name and username
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
@@ -94,72 +96,71 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 							id="username"
 							placeholder="Enter your username"
 							disabled={isLoading}
-							className="text-sm md:text-base "
 						/>
 						{errors.username && (
-							<p className="text-sm text-red-500 flex items-center gap-1">
+							<p className="flex items-center gap-1 text-sm text-red-500">
 								<AlertCircle className="h-3 w-3" />
 								{errors.username.message}
 							</p>
 						)}
 					</div>
 
-					{/* First Name */}
-					<div className="space-y-2">
-						<Label htmlFor="first_name">First Name</Label>
-						<Input
-							{...register("first_name", {
-								maxLength: {
-									value: 150,
-									message:
-										"First name must be less than 150 characters",
-								},
-							})}
-							type="text"
-							id="first_name"
-							placeholder="Enter your first name (optional)"
-							disabled={isLoading}
-							className="text-sm md:text-base "
-						/>
-						{errors.first_name && (
-							<p className="text-sm text-red-500 flex items-center gap-1">
-								<AlertCircle className="h-3 w-3" />
-								{errors.first_name.message}
-							</p>
-						)}
-					</div>
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+						{/* First Name */}
+						<div className="space-y-2">
+							<Label htmlFor="first_name">First name</Label>
+							<Input
+								{...register("first_name", {
+									maxLength: {
+										value: 150,
+										message:
+											"First name must be less than 150 characters",
+									},
+								})}
+								type="text"
+								id="first_name"
+								placeholder="Optional"
+								disabled={isLoading}
+							/>
+							{errors.first_name && (
+								<p className="flex items-center gap-1 text-sm text-red-500">
+									<AlertCircle className="h-3 w-3" />
+									{errors.first_name.message}
+								</p>
+							)}
+						</div>
 
-					{/* Last Name */}
-					<div className="space-y-2">
-						<Label htmlFor="last_name">Last Name</Label>
-						<Input
-							{...register("last_name", {
-								maxLength: {
-									value: 150,
-									message:
-										"Last name must be less than 150 characters",
-								},
-							})}
-							type="text"
-							id="last_name"
-							placeholder="Enter your last name (optional)"
-							disabled={isLoading}
-							className="text-sm md:text-base "
-						/>
-						{errors.last_name && (
-							<p className="text-sm text-red-500 flex items-center gap-1">
-								<AlertCircle className="h-3 w-3" />
-								{errors.last_name.message}
-							</p>
-						)}
+						{/* Last Name */}
+						<div className="space-y-2">
+							<Label htmlFor="last_name">Last name</Label>
+							<Input
+								{...register("last_name", {
+									maxLength: {
+										value: 150,
+										message:
+											"Last name must be less than 150 characters",
+									},
+								})}
+								type="text"
+								id="last_name"
+								placeholder="Optional"
+								disabled={isLoading}
+							/>
+							{errors.last_name && (
+								<p className="flex items-center gap-1 text-sm text-red-500">
+									<AlertCircle className="h-3 w-3" />
+									{errors.last_name.message}
+								</p>
+							)}
+						</div>
 					</div>
 
 					<Button
 						type="submit"
 						disabled={isLoading}
-						className="w-full"
+						className="w-full sm:w-auto"
 					>
-						{isLoading ? "Saving..." : "Save Changes"}
+						{isLoading ? "Saving..." : "Save changes"}
 					</Button>
 				</form>
 			</CardContent>

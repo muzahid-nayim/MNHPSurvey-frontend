@@ -20,6 +20,7 @@ import { useLogoutMutation } from "@/core/api/authApi";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { RootState } from "@/core/store";
+import { getUserInitials } from "@/components/profile/profileUtils";
 
 export function UserAvatar() {
 	const { user } = useSelector((state: RootState) => state.auth);
@@ -75,13 +76,12 @@ export function UserAvatar() {
 					<div className="flex items-center gap-2">
 						<Avatar className="h-10 w-10">
 							<AvatarImage
-								src={
-									"https://avatars.githubusercontent.com/u/97093397?v=4"
-								}
+								src={user.avatar || undefined}
 								alt={user.username}
+								className="object-cover"
 							/>
-							<AvatarFallback className="bg-linear-to-br from-blue-500  text-white font-semibold">
-								{user.username.substring(0, 2).toUpperCase()}
+							<AvatarFallback className="bg-primary font-semibold text-primary-foreground">
+								{getUserInitials(user)}
 							</AvatarFallback>
 						</Avatar>
 						<ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180" />

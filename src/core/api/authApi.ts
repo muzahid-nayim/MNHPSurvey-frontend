@@ -11,6 +11,7 @@ export interface User {
 	last_name?: string;
 	is_email_verified: boolean;
 	created_at: string;
+	avatar?: string | null;
 }
 
 export interface LoginRequest {
@@ -168,6 +169,25 @@ export const authApi = createApi({
 			}),
 			invalidatesTags: ["User"],
 		}),
+		uploadAvatar: builder.mutation<User, File>({
+			query: (file) => {
+				const body = new FormData();
+				body.append("avatar", file);
+				return {
+					url: "/profile/avatar/",
+					method: "POST",
+					body,
+				};
+			},
+			invalidatesTags: ["User"],
+		}),
+		removeAvatar: builder.mutation<User, void>({
+			query: () => ({
+				url: "/profile/avatar/",
+				method: "DELETE",
+			}),
+			invalidatesTags: ["User"],
+		}),
 		deleteAccount: builder.mutation<
 			{ message: string },
 			DeleteAccountRequest
@@ -193,5 +213,7 @@ export const {
 	useChangePasswordMutation,
 	useGetProfileQuery,
 	useUpdateProfileMutation,
+	useUploadAvatarMutation,
+	useRemoveAvatarMutation,
 	useDeleteAccountMutation,
 } = authApi;
