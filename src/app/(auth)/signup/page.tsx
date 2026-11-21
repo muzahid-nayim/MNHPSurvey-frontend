@@ -112,7 +112,7 @@ export default function RegisterPage() {
 			}).unwrap();
 			// router.push("/verify-email");
 			router.push(
-				`/verify-email-sent?email=${encodeURIComponent(formState.email)}`,
+				`/login`,
 			);
 		} catch (_: unknown) {
 			// console.error("Registration failed:", err);
